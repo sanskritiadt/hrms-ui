@@ -1,35 +1,71 @@
 import axios from "axios";
-import React from "react";
-import './App.css'
+import React, { useState } from "react";
+import './Hrmscss/App.css'
 
 export default function Empfunc() {
+  const [employees, setEmployees] = useState([]);
 
-  const [employees, setEmployees] = React.useState([]);
-
+  const token = localStorage.getItem("response-token")
   React.useEffect(() => {
-    axios.get("/employee/getAllEmp").then((response) => {
+
+    axios.get("/hrms/employee/getAllEmp", {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then((response) => {
       setEmployees(response.data);
-    });
+    }).catch(err => console.log(err))
   }, []);
 
-
   if (!employees) return null;
+  // "employeeId": 3,
+  // "createdAt": "13:10:49.55",
+  // "updatedAt": "13:11:09.865",
+  // "isActive": true,
+  // "designation": "Senior Java Developer",
+  // "dob": "02-09-1987",
+  // "email": "mukeshchandalwar.adt@gmail.com",
+  // "firstName": "Mukesh",
+  // "lastName": "Chandalwar",
+  // "gender": "M",
+  // "isEmailVerified": true,
+  // "joinDate": "19-11-2022",
+  // "maritalStatus": "",
+  // "mobileNo": 9764552941,
+  // "password": "$2a$10$fkIZDP7xlmKjhCrPGRzmo./3RSshzU2xxQyGNfmEBH4A6tvB8kssu",
+  // "username": "mukesh",
+  // "salary": 25000.0,
+  // "bankName": "SBI BANK",
+  // "accountNumber": "784896355",
+  // "ifscCode": "DIKE5D6E5F6DE"
 
   return (
-    <div>
-      <table border='2' className="table table-striped">
-        <thead className="head" style={{ backgroundColor: "lightblue" }}>
-          <tr styles={{ width: '50%' }}>
-            <th styles={{ width: '50%' }}>EmpID</th>
-            <th styles={{ width: '50%' }}>Mobile No</th>
-            <th styles={{ width: '50%' }}>EmailID</th>
-            <th styles={{ width: '50%' }}>Designation</th>
-            <th styles={{ width: '50%' }}>JoinDate</th>
-            <th styles={{ width: '50%' }}>Gender</th>
-            <th styles={{ width: '50%' }}>DOB</th>
-            <th styles={{ width: '50%' }}>MaritalStatus</th>
-            <th styles={{ width: '50%' }}>LastName</th>
-            <th styles={{ width: '50%' }} >FirstName</th>
+    <div className="table-responsive-sm">
+      <table border='2' className="table table-striped table-bordered">
+        <thead className="head">
+          <tr className="table-danger table-striped">
+            <th>employeeId</th>
+            <th>Created At</th>
+            <th >Updated At</th>
+            <th>isActive</th>
+            <th>designation</th>
+            <th>DOB</th>
+            <th>email</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>MaritalStatus</th>
+            <th>gender</th>
+            <th>isEmailVerified</th>
+            <th>joinDate</th>
+            <th>mobileNo</th>
+            <th>password</th>
+            <th>username</th>
+            <th>salary</th>
+            <th>bankName</th>
+            <th>accountNumber</th>
+            <th>ifscCode</th>
+
+
           </tr>
         </thead>
         <tbody className="body">
@@ -37,18 +73,27 @@ export default function Empfunc() {
           {employees.map((employee) => (
             // display a <div> element with the employees.emailId and employees.designation
             // parent element needs to have a unique key
-            <tr key={employee.empId}>
-              <td>{employee.empId}</td>
-              <td>{employee.mobileNo}</td>
-              <td>{employee.emailId}</td>
+            <tr key={employee.employeeId}>
+              <td>{employee.employeeId}</td>
+              <td>{employee.createdAt}</td>
+              <td>{employee.updatedAt}</td>
+              <td>{employee.isActive}</td>
               <td>{employee.designation}</td>
-              <td>{employee.joinDate}</td>
-              <td>{employee.gender}</td>
               <td>{employee.dob}</td>
+              <td>{employee.email}</td>
+              <td>{employee.firstName}</td>
+              <td>{employee.lastName}</td>
               <td>{employee.maritalStatus}</td>
-              <td>{employee.lname}</td>
-              <td>{employee.fname}</td>
-
+              <td>{employee.gender}</td>
+              <td>{String(employee.isEmailVerified)}</td>
+              <td>{employee.joinDate}</td>
+              <td>{employee.mobileNo}</td>
+              <td>{employee.password}</td>
+              <td>{employee.username}</td>
+              <td>{employee.salary}</td>
+              <td>{employee.bankName}</td>
+              <td>{employee.accountNumber}</td>
+              <td>{employee.ifscCode}</td>
             </tr>
           ))}
         </tbody>

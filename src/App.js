@@ -1,10 +1,11 @@
 import React from "react";
-import './App.css'
-import Navbar from "./navbar";
+import './Hrmscss/App.css'
+import Approuter from "./Approuter";
+
 export default function App() {
   return (
-    <>
-   <Navbar></Navbar>
-    </>
+    <div className="App">
+      <Approuter></Approuter>
+    </div>
   );
 }
