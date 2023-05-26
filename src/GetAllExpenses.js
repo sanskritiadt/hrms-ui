@@ -2,16 +2,15 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import './Hrmscss/App.css'
 import { Button } from "react-bootstrap";
+import { toast } from 'react-toastify';
 
 const Getallexpenses = () => {
   const token = localStorage.getItem("response-token")
   const [expenseItems, setExpenseItems] = useState([]);
-  let Navigate = useNavigate();
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-
+  let Navigate = useNavigate();
 
   useEffect(() => {
     axios.get("/expenseManagement/getAllExpenses", {
@@ -21,9 +20,10 @@ const Getallexpenses = () => {
     }).then((response) => {
       console.log(response.data)
       setExpenseItems(response.data);
+      toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
     }).catch(error => {
       console.log(error);
-      alert('error occured try after sometime')
+      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
     })
   }, []);
 
@@ -38,13 +38,16 @@ const Getallexpenses = () => {
       headers: {
         'Authorization': `Bearer ${token}`
       }
-    }
-    ).then((response) => {
+    }).then((response) => {
       console.log(response.data);
       expenseItems.length = 0;
       setExpenseItems(response.data);
+      toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
       Navigate('/Getallexpenses')
-    }).catch((error) => { alert(error.message) })
+    }).catch((error) => {
+      console.log(error);
+      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+    })
   }
 
   if (!expenseItems) return null;
@@ -113,6 +116,7 @@ const Getallexpenses = () => {
           </tbody>
         </table>
       </div>
+
     </div>
   )
 }

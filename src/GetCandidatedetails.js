@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
+import { Link } from "react-router-dom";
 import './Hrmscss/App.css'
+import {toast } from 'react-toastify';
 
 export default function CandidateDetails() {
 
@@ -14,9 +16,10 @@ export default function CandidateDetails() {
             }
         }).then((response) => {
             setCandidate(response.data);
+            toast.success(" Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
         }).catch(error => {
             console.log("error occoured", error)
-            alert("something went wrong please try after sometime.")
+            toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
         })
     }, []);
 
@@ -60,7 +63,7 @@ export default function CandidateDetails() {
                         // display a <div> element with the employees.emailId and employees.designation
                         // parent element needs to have a unique key
                         <tr key={Candidate.candidateId}>
-                            <td>{Candidate.candidateId}</td>
+                            <td><Link to={`/EditCandidate/${Candidate.candidateId}`} className="Candidate-id">{Candidate.candidateId}</Link></td>
                             <td>{Candidate.candidateName}</td>
                             <td>{Candidate.emailId}</td>
                             <td>{Candidate.contactNo}</td>

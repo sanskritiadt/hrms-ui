@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
 import React from 'react'
+import {toast } from 'react-toastify';
+
 // import { CreatePostitionSchema } from './Validations/createpositionyup'
 const CreatePositionformik = () => {
     const formik = useFormik({
@@ -25,15 +27,14 @@ const CreatePositionformik = () => {
                 remote: values.remote
             }).then((response) => {
                 console.log(response)
-                alert("position created successfully.")
+                toast.success("position created successfully.", { position: 'top-center', theme: "colored" })
             }).catch((error) => {
                 console.log(error)
-                alert("error occured in creating position try after sometime.")
+                toast.error("error occured in creating position try after sometime.", { position: 'top-center', theme: "colored" })
             })
             Action.resetForm();
         },
     })
-
     return (
         <div><div className='container pt-3'>
             <div className='row'>
@@ -196,7 +197,8 @@ const CreatePositionformik = () => {
                     </div>
                 </div>
             </div>
-        </div></div>
+        </div>
+        </div>
     )
 }
 

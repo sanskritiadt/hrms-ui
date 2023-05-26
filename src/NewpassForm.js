@@ -101,9 +101,10 @@ import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Formik, Field, ErrorMessage } from "formik";
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 const PasswordForm = ({ token, email, type }) => {
   const navigate = useNavigate();
@@ -122,31 +123,32 @@ const PasswordForm = ({ token, email, type }) => {
   })
 
   const onSubmit = (values, { setSubmitting, resetForm }) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const token = urlParams.get("token");
-  const email = urlParams.get("email");
-  axios
-    .post(`api/auth/password/reset`, {
-      email: email,
-      password: values.password,
-      confirmPassword: values.confirmPassword,
-      token: token
-    })
-    .then((response) => {
-      console.log(response.data);
-      alert ("password change successfully")
-      navigate('/Login');
-      // handle successful response
-    })
-    .catch((error) => {
-      console.error(error);
-      // handle error
-    })
-    .finally(() => {
-      setSubmitting(false);
-      resetForm();
-    });
-};
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const email = urlParams.get("email");
+    axios
+      .post(`api/auth/password/reset`, {
+        email: email,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        token: token
+      })
+      .then((response) => {
+        console.log(response.data);
+        toast.success("Password change successfully.", { position: "top-center", theme: "colored" })
+        navigate('/Login');
+        // handle successful response
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Error found in change Password!!", { position: "top-center", theme: "colored" })
+        // handle error
+      })
+      .finally(() => {
+        setSubmitting(false);
+        resetForm();
+      });
+  };
 
 
   return (
@@ -155,7 +157,7 @@ const PasswordForm = ({ token, email, type }) => {
         <Col md={{ span: 6, offset: 3 }}>
           <h3>{type === "new-password" ? "Create" : "Reset"} Password</h3>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-            {({ isSubmitting,handleSubmit }) => (
+            {({ isSubmitting, handleSubmit }) => (
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="password">
                   <Form.Label>New Password</Form.Label>

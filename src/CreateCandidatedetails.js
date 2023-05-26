@@ -14,9 +14,9 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import { useFormik } from 'formik';
 import { CandidateSchema } from './Validations/Candidate'
+import { toast } from 'react-toastify';
 
 export default function InterviewCandidate() {
     const token = localStorage.getItem("response-token");
@@ -55,10 +55,10 @@ export default function InterviewCandidate() {
             })
                 .then((response) => {
                     console.log(response.data)
-                    alert("Interview details successfully created !!")
+                    toast.success("Candidate details successfully created !!", { position: 'top-center', theme: "colored" })
                 }).catch((err) => {
                     console.log(err)
-                    alert("cannot show the interview details values!!")
+                    toast.error("Cannot show the Candidate details values!!", { position: 'top-center', theme: "colored" })
                 })
             action.resetForm();
         },
@@ -72,7 +72,7 @@ export default function InterviewCandidate() {
         <>
             <div className='container pt-3'>
                 <div className='row'>
-                    <div className='col-lg-8 col-md-10 mx-auto'>
+                    <div className='col-lg-8 col-md-8 mx-auto'>
                         <div className='card border-0 shadow'>
                             <div className='card-body'>
                                 <form className='container py-3  mb-3' onSubmit={formik.handleSubmit} >
@@ -310,6 +310,7 @@ export default function InterviewCandidate() {
                     </div>
                 </div>
             </div>
+           
         </>
     )
 }

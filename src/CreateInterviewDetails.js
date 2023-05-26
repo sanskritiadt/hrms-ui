@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
+import { toast } from 'react-toastify'
+
 const CreateInterview = () => {
     const token = localStorage.getItem("response-token")
     const [data, setData] = useState({
@@ -54,13 +56,13 @@ const CreateInterview = () => {
         }
         ).then(response => {
             console.log(response.data);
-            alert("interview details has been created successfully.")
+            toast.success("interview details has been created successfully.", { position: 'top-center', theme: "colored" })
         }).catch(error => {
             console.log(error);
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
-            alert("error found try after sometime.")
+            toast.error("error found try after sometime.", { position: 'top-center', theme: "colored" })
         })
     }
     // {
@@ -94,7 +96,7 @@ const CreateInterview = () => {
     function radiobutton1(e) {
         console.log(str2bool(e.target.value));
         // Here we can send the data to further processing (Action/Store/Rest)
-        data.offerReleased = str2bool(e.target.value); 
+        data.offerReleased = str2bool(e.target.value);
     }
     function radiobutton2(e) {
         console.log(str2bool(e.target.value));
@@ -121,7 +123,7 @@ const CreateInterview = () => {
     return (
         <div className='container pt-3'>
             <div className='row'>
-                <div className='col-lg-8 col-md-10 mx-auto'>
+                <div className='col-sm-10 mx-auto'>
                     <div className='card border-0 shadow'>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' >
@@ -155,7 +157,7 @@ const CreateInterview = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='marks'>Marks</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.marks}
-                                            type="number" step='0.1' className="form-control"  
+                                            type="number" step='0.1' className="form-control"
                                             id="marks" />
                                     </div>
                                 </div>
@@ -188,7 +190,7 @@ const CreateInterview = () => {
                                             id="notes" />
                                     </div>
                                 </div>
-                               
+
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="notes">Work Exp In Years</label>
                                     <div className="col-sm-10">
@@ -284,11 +286,11 @@ const CreateInterview = () => {
                                     <legend className="col-form-label col-sm-2 pt-0">Type</legend>
                                     <div className="col-sm-10">
                                         <div className="form-check form-check-inline">
-                                            <input  onChange={(e) => { handle(e) }} value="Outbound" className="form-check-input" type="radio" name="type" id="type" />
+                                            <input onChange={(e) => { handle(e) }} value="Inbound" className="form-check-input" type="radio" name="type" id="type" />
                                             <label className="form-check-label" htmlFor="inlineRadio1">Inbound</label>
                                         </div>
                                         <div className="form-check form-check-inline">
-                                            <input onChange={(e) => { handle(e) }} value="Outbound"className="form-check-input" type="radio" name="type" id="type" />
+                                            <input onChange={(e) => { handle(e) }} value="Outbound" className="form-check-input" type="radio" name="type" id="type" />
                                             <label className="form-check-label" htmlFor="inlineRadio2">Outbound</label>
                                         </div>
                                     </div>
@@ -313,13 +315,13 @@ const CreateInterview = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                        <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='date'>Date</label>
-                                        <div className="col-sm-10">
-                                            <input onChange={(e) => { handle(e) }} value={data.date}
-                                                type="date" className="form-control"
-                                                id="date" />
-                                        </div>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='date'>Date</label>
+                                    <div className="col-sm-10">
+                                        <input onChange={(e) => { handle(e) }} value={data.date}
+                                            type="date" className="form-control"
+                                            id="date" />
                                     </div>
+                                </div>
                                 <div className="d-grid gap-2 col-6 mx-auto">
                                     <button className="btn btn-outline-danger" type="submit" onClick={(e) => { submit(e) }}>Submit</button>
                                 </div>

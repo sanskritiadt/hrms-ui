@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const EditExpenses = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -18,7 +19,11 @@ const EditExpenses = () => {
     });
 
     useEffect(() => {
-        axios.get(`/expenseManagement/getExpenseById/${id}`).then(res => {
+        axios.get(`/expenseManagement/getExpenseById/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(res => {
             setData(res.data)
             console.log(res.data.gst)
         }).catch(error => console.log(error))
@@ -54,33 +59,38 @@ const EditExpenses = () => {
             }
         }).then(response => {
             console.log(response.data)
-            alert("data has been updated successfully!!")
+            toast.success("data has been updated successfully!!", { position: "top-center", theme: 'colored' })
             navigate('/Getallexpenses');
         }).catch(error => {
             console.log(error)
-            alert("error happened try after sometime.")
+            toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
         })
     }
- 
+    // function handleradio(e) {
+    //     const val = e.target.value
+
+
+    //     console.log(val)
+    // }
     return (
         <div className='container pt-3'>
             <div className='row'>
-                <div className='col-lg-8 col-md-10 mx-auto'>
+                <div className=' col-md-8 mx-auto'>
                     <div className='card border-0 shadow'>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={handleSubmit}>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='description'>ID:</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='id'>ID:</label>
                                     <div className="col-sm-10">
-                                        <input disabled value={data.id}
+                                        <input disabled value={data.id || ''}
                                             type="text" className="form-control"
-                                            id="description" />
+                                            id="id" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='amount'>Amount</label>
                                     <div className="col-sm-10">
-                                        <input value={data.amount}
+                                        <input value={data.amount || ''}
                                             onChange={e => setData({ ...data, amount: e.target.value })}
                                             type="number"
                                             id="amount"
@@ -91,7 +101,7 @@ const EditExpenses = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='description'>Description</label>
                                     <div className="col-sm-10">
-                                        <input value={data.description}
+                                        <input value={data.description || ''}
                                             onChange={e => setData({ ...data, description: e.target.value })}
                                             type="text" className="form-control"
                                             id="description" />
@@ -100,7 +110,7 @@ const EditExpenses = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='paymentDate'>Payment Date</label>
                                     <div className="col-sm-10">
-                                        <input value={data.paymentDate}
+                                        <input value={data.paymentDate || ''}
                                             onChange={e => setData({ ...data, paymentDate: e.target.value })}
                                             type="date" className="form-control"
                                             id="paymentDate" />
@@ -109,7 +119,7 @@ const EditExpenses = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="paymentMode">Payment Mode</label>
                                     <div className="col-sm-10">
-                                        <input value={data.paymentMode}
+                                        <input value={data.paymentMode || ''}
                                             onChange={e => setData({ ...data, paymentMode: e.target.value })}
                                             type="text" className="form-control"
                                             placeholder='enter your Payment Mode.'
@@ -119,7 +129,7 @@ const EditExpenses = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="createdBy">Created By</label>
                                     <div className="col-sm-10">
-                                        <input value={data.createdBy}
+                                        <input value={data.createdBy || ''}
                                             onChange={e => setData({ ...data, createdBy: e.target.value })}
                                             type="text" className="form-control"
                                             placeholder='created By'
@@ -129,7 +139,7 @@ const EditExpenses = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="category">Category</label>
                                     <div className="col-sm-10">
-                                        <input value={data.category}
+                                        <input value={data.category || ''}
                                             onChange={e => setData({ ...data, category: e.target.value })}
                                             type="text" className="form-control"
                                             placeholder='enter the expense type.'
@@ -140,11 +150,11 @@ const EditExpenses = () => {
                                     <legend className="col-form-label col-sm-2 pt-0">GST</legend>
                                     <div className="col-sm-10">
                                         <div className="form-check form-check-inline">
-                                            <input onChange={e => setData({ ...data, amount: e.target.value })} value={data.gst} className="form-check-input" type="radio" name="inlineRadioOptions" id="gst" />
+                                            <input checked={data.gst === true} onChange={e => setData({ ...data, gst: true })} value={true || ''} className="form-check-input" type="radio" name="inlineRadioOptions" id="gst" />
                                             <label className="form-check-label" htmlFor="inlineRadio1">Yes</label>
                                         </div>
                                         <div className="form-check form-check-inline">
-                                            <input onChange={e => setData({ ...data, amount: e.target.value })} value={data.gst} className="form-check-input" type="radio" name="inlineRadioOptions" id="gst" />
+                                            <input checked={data.gst === false} onChange={e => setData({ ...data, gst: false })} value={false || ''} className="form-check-input" type="radio" name="inlineRadioOptions" id="gst" />
                                             <label className="form-check-label" htmlFor="inlineRadio2">No</label>
                                         </div>
                                     </div>
@@ -152,7 +162,7 @@ const EditExpenses = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Paid By</label>
                                     <div className="col-sm-10">
-                                        <input value={data.paidBy}
+                                        <input value={data.paidBy || ''}
                                             onChange={e => setData({ ...data, paidBy: e.target.value })}
                                             type="text" className="form-control"
                                             placeholder='paid By'
@@ -162,7 +172,7 @@ const EditExpenses = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Comments</label>
                                     <div className="col-sm-10">
-                                        <input value={data.comments}
+                                        <input value={data.comments || ''}
                                             onChange={e => setData({ ...data, comments: e.target.value })}
                                             type="text" className="form-control"
                                             placeholder='enter your comments'

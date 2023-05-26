@@ -1,8 +1,6 @@
 import *  as yup from 'yup'
 export const CreatePostitionSchema = yup.object().shape({
     techid: yup.string().matches(/^[0-99]+$/, 'Must be only digits').required('Techid is required'),
-    positionopendate: yup.date().required('Open date is required').min(yup.ref('today'), 'Open date cannot be in the past'),
-    positionclosedate: yup.date().required('Close date is required').min(yup.ref('positionopendate'), 'Close date cannot be before open date'),
     status: yup.string().required('Status is required.'),
     experienceInYear: yup.string().matches(/^[0-9]+$/, 'Must be only digits').required('experience is required'),
     positionType: yup.string().required('position type is required'),

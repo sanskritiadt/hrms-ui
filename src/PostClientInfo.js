@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
- export default function Saveclientinfo() {
+import {toast } from 'react-toastify';
+
+export default function Saveclientinfo() {
   const token = localStorage.getItem("response-token");
   const [data, setData] = useState({
     Companyname: "",
@@ -11,13 +12,13 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
     Cperson: "",
     GST: "",
   });
-// "companyName":"Wipro",
-// "address": " WIPRO Enterprises Pvt Ltd (Branch Office) in Dewas Naka Indore, ",
-// "phone":8028440011,
-// "mailto:email":"reachus@wipro.com",
-// "contactPerson":"abc",
-// "gstin":"29GYFUDG1314R9Z6" 
-  
+  // "companyName":"Wipro",
+  // "address": " WIPRO Enterprises Pvt Ltd (Branch Office) in Dewas Naka Indore, ",
+  // "phone":8028440011,
+  // "mailto:email":"reachus@wipro.com",
+  // "contactPerson":"abc",
+  // "gstin":"29GYFUDG1314R9Z6" 
+
   function submit(e) {
     e.preventDefault();
     axios.post(`/expenseManagement/clientInfo/saveClientInfo`, {
@@ -26,21 +27,21 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
       phone: data.number,
       email: data.Email,
       contactPerson: data.Cperson,
-      gstin: data.GST 
-      
-    } ,{
-      headers: {
-          'Authorization': `Bearer ${token}`
-      }
-    }        
-      ).then((response) => {
-     console.log(response);
-        alert("Client info created Successfully!!")
-      }).catch((err) => {
-        console.log(err)
-        alert("cannot generate client info!!")
+      gstin: data.GST
 
-      })
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
+    ).then((response) => {
+      console.log(response);
+      toast.success("Client info created Successfully!!", { position: "top-center", theme: "colored" })
+    }).catch((err) => {
+      console.log(err)
+      toast.error("cannot generate client info!!", { position: "top-center", theme: "colored" })
+
+    })
   }
   function handle(e) {
     const newdata = { ...data };
@@ -81,7 +82,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
                     <div className="col-sm-10">
                       <input onChange={(e) => { handle(e) }} value={data.number}
                         type="number" className="form-control"
-                        id="number"   placeholder='Enter Phone Number...'/>
+                        id="number" placeholder='Enter Phone Number...' />
                     </div>
                   </div>
 
@@ -120,7 +121,6 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
                   <div className="d-grid gap-2 col-6 mx-auto">
                     <button className="btn btn-outline-danger" type="submit">Submit</button>
                   </div>
-
                 </form>
               </div>
             </div>

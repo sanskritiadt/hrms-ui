@@ -158,19 +158,23 @@
 // export default Payslipdetails
 import React, { useState } from 'react'
 import axios from 'axios';
-import './Hrmscss/PaySlip.css'
+import './Hrmscss/PaySlip.css';
+import { toast } from 'react-toastify';
+//import { useSelector } from 'react-redux';
 
 function PaySlip() {
     const empID = localStorage.getItem("EmpID");
     const token = localStorage.getItem("response-token")
-    const [data, setData] = useState()
+    const [data, setData] = useState();
     const [year, setYear] = useState();
-    const [adhoc, setadhoc] = useState()
-    const [month, setMonth] = useState({})
+    const [adhoc, setadhoc] = useState();
+    const [month, setMonth] = useState({});
+    // const empid = useSelector((state) => state.data.empID);
     console.log(month);
     console.log(data)
     console.log(year);
     console.log(adhoc);
+    // console.log(empid);
     const handleMonth = (event) => {
         setData(event.target.value);
     }
@@ -190,11 +194,11 @@ function PaySlip() {
         })
             .then(response => {
                 console.log(response.data)
-                alert("data found successfully.")
+                toast.success("data found successfully.", { position: "top-center", theme: "colored" })
                 setMonth(response.data)
             }).catch(error => {
                 console.log("error occured", error)
-                alert("error occured in getting details please try after sometime.")
+                toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" })
             })
     }
 
@@ -203,7 +207,6 @@ function PaySlip() {
             <div className="container mt-5 mb-5">
                 <div className="row">
                     <div className="col-md-6">
-
                         <form onSubmit={handleSubmit}>
                             <div className="mb-3">
                                 <label htmlFor="year" className="form-label">Select your year:</label>

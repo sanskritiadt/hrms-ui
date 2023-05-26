@@ -7,7 +7,7 @@ import { faClock, faUsers, faMoneyBillAlt, faCalendarAlt } from '@fortawesome/fr
 
 
 
-function HomePage() {
+function HomePage2() {
   return (
     <>
       <Container fluid className="d-flex flex-column min-vh-100">
@@ -101,5 +101,5 @@ function HomePage() {
 
 }
 
-export default HomePage;
+export default HomePage2;
 

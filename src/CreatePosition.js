@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Select from 'react-select';
+import { toast } from 'react-toastify'
+
 export default function CreatePosition() {
     const token = localStorage.getItem("response-token")
     const [data, setData] = useState({
-        techid: "",
+        positionName: "",
+        techStack: "",
+        vacancy: "",
         positionopendate: "",
         positionclosedate: "",
         status: "",
@@ -11,21 +16,15 @@ export default function CreatePosition() {
         positionType: "",
         remote: ""
     });
-    // {
-    //     "uiid" : 8,
-    //     "techid" : 2,
-    //     "positionopendate" : "31-09-2022",
-    //     "positionclosedate" : "31-10-2022",
-    //     "status" : "Available",
-    //     "experienceInYear" : 6.0,
-    //     "remote" : true,
-    //     "positionType" : "Contract"
+    const [selectedValue, setSelectedValue] = useState([]);
+    console.log(selectedValue);
 
-    // }
     function submit(e) {
         e.preventDefault();
         axios.post(`/hrms/interview/savePosition`, {
-            techid: parseInt(data.techid),
+            positionName: data.positionName,
+            techStack: selectedValue,
+            vacancy: data.vacancy,
             positionopendate: data.positionopendate,
             positionclosedate: data.positionclosedate,
             status: data.status,
@@ -38,16 +37,23 @@ export default function CreatePosition() {
             }
         })
             .then((response) => {
-                console.log(response.data)
-                alert("position created successfully!!")
-            }).catch((err) => {
-                console.log(err)
-                alert("cannot create the position values!!")
+                console.log(response.data);
+                toast.success("position created successfully!!", { position: 'top-center', theme: "colored" })
+            }).catch((error) => {
+                console.log(error);
+                toast.error("cannot create the position values!!", { position: 'top-center', theme: "colored" })
 
             })
 
     }
-
+    const multiselectop = [
+        { label: "Java", value: "Java" },
+        { label: "Spring", value: "Spring" },
+        { label: "SpringBoot", value: "SpringBoot" },
+        { label: "MySQL", value: "MySQL" },
+        { label: "React", value: "React" },
+        { label: "Angular", value: "Angular" },
+    ];
     var str2bool = (value) => {
         if (value && typeof value === "string") {
             if (value.toLowerCase() === "true") return true;
@@ -55,6 +61,10 @@ export default function CreatePosition() {
         }
         return value;
     }
+    const handleChange = (e) => {
+        setSelectedValue(Array.isArray(e) ? e.map(x => x.value) : []);
+        console.log(e)
+    };
     function radiobut(e) {
         console.log(str2bool(e.target.value));
         // Here we can send the data to further processing (Action/Store/Rest)
@@ -70,10 +80,51 @@ export default function CreatePosition() {
         <>
             <div className='container pt-3'>
                 <div className='row'>
-                    <div className='col-lg-8 col-md-10 mx-auto'>
+                    <div className='col-md-8 mx-auto' >
                         <div className='card border-0 shadow'>
                             <div className='card-body'>
                                 <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
+                                    <div className="row mb-3">
+                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='positionName'>Position-Name</label>
+                                        <div className="col-sm-10">
+                                            <input onChange={(e) => { handle(e) }} value={data.positionName}
+                                                type="text"
+                                                id="positionName"
+                                                placeholder='enter your positionName'
+                                                className="form-control" />
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='positionName'>Tech-Stack</label>
+                                        <div className="col-sm-10">
+                                            <Select
+                                                isMulti
+                                                name="positionName"
+                                                options={multiselectop}
+                                                id='positionName'
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                                onChange={handleChange}
+                                                value={multiselectop.filter(obj => selectedValue.includes(obj.value))}
+
+                                            />
+                                            {/* <input onChange={(e) => { handle(e) }} value={data.techStack}
+                                                type="text"
+                                                id="techStack"
+                                                placeholder='enter your techStack'
+                                                className="form-control" /> */}
+                                        </div>
+                                    </div>
+                                    <div className="row mb-3">
+                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='vacancy'>Vacancy</label>
+                                        <div className="col-sm-10">
+                                            <input onChange={(e) => { handle(e) }} value={data.vacancy}
+                                                type="number"
+                                                id="vacancy"
+                                                placeholder='enter your vacancy'
+                                                className="form-control" />
+                                        </div>
+                                    </div>
                                     <div className="row mb-3">
                                         <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='experienceInYear'>Experience in years</label>
                                         <div className="col-sm-10">
@@ -84,7 +135,6 @@ export default function CreatePosition() {
                                                 className="form-control" />
                                         </div>
                                     </div>
-
                                     <div className="row mb-3">
                                         <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='positionopendate'>Position open date</label>
                                         <div className="col-sm-10">
@@ -93,7 +143,6 @@ export default function CreatePosition() {
                                                 id="positionopendate" />
                                         </div>
                                     </div>
-
                                     <div className="row mb-3">
                                         <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='positionclosedate'>Position close date</label>
                                         <div className="col-sm-10">
@@ -102,34 +151,31 @@ export default function CreatePosition() {
                                                 id="positionclosedate" />
                                         </div>
                                     </div>
-
                                     <div className="row mb-3">
-                                        <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="positionType">Position type</label>
+                                        <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="positionType">Position type:</label>
                                         <div className="col-sm-10">
+                                            <select id="positionType" value={data.positionType} onChange={(e) => { handle(e) }} className="form-select">
+                                                <option defaultValue>Select your position type</option>
+                                                <option value="Permanent">Permanent</option>
+                                                <option value="Contractual">Contractual</option>
+                                                <option value="Traineeship">Traineeship</option>
+                                            </select>
+                                        </div>
+                                        {/* <div className="col-sm-10">
                                             <input onChange={(e) => { handle(e) }} value={data.positionType}
                                                 type="text" className="form-control"
                                                 placeholder='enter your position type'
                                                 id="positionType" />
-                                        </div>
+                                        </div> */}
                                     </div>
-
                                     <div className="row mb-3">
                                         <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Status</label>
                                         <div className="col-sm-10">
-                                            <input onChange={(e) => { handle(e) }} value={data.status}
-                                                type="text" className="form-control"
-                                                placeholder='enter your status'
-                                                id="status" />
-                                        </div>
-                                    </div>
-
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Tech Id</label>
-                                        <div className="col-sm-10">
-                                            <input onChange={(e) => { handle(e) }} value={data.techid}
-                                                type="number" className="form-control"
-                                                placeholder='enter your tech id'
-                                                id="techid" />
+                                            <select id="status" value={data.status} onChange={(e) => { handle(e) }} className="form-select">
+                                                <option defaultValue>Select your status type</option>
+                                                <option value="Available">Available</option>
+                                                <option value="Not Available"> Not Available</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <fieldset className="row mb-3">
@@ -146,7 +192,6 @@ export default function CreatePosition() {
                                             </div>
                                         </div>
                                     </fieldset>
-
                                     <div className="d-grid gap-2 col-6 mx-auto">
                                         <button className="btn btn-outline-danger" type="submit">Submit</button>
                                     </div>

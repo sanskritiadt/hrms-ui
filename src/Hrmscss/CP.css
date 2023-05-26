@@ -28,14 +28,8 @@
   }
   
   .changepassword-form button[type="submit"] {
-    /* background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer; */
-    background: linear-gradient(180deg, #4a90e2, #2a62b1);
+  
+  background: linear-gradient(180deg, #4a90e2, #2a62b1);
   border: none;
   border-radius: 10px;
   color: #fff;

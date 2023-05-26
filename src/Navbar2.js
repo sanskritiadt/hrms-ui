@@ -1,32 +1,27 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap';
 import logoImg from './Images/logo.png'
 import './Hrmscss/navabr2.css'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function AppNavbar() {
   const [dropdownOpen, setDropdownOpen] = useState(null);
-  const token = localStorage.getItem("response-token")
+  const token = localStorage.getItem("response-token");
+  const empId = localStorage.getItem("EmpID")
 
   function checkStatus() {
-    const EmpID = localStorage.getItem("EmpID")
-    axios.post(`/payroll/timeSheet/checkStatus/${EmpID}`, {},
+    axios.post(`/payroll/timeSheet/checkStatus/${empId}`, {},
       {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       }
     ).then(res => {
-      console.log(res.data)
-      if (res.data.timeSheetStatus) {
-        alert("please checkin!!")
-      } else {
-        alert("please checkout!!")
-      }
+      console.log(res.data);
     }).catch(err => {
       console.log(err)
-      alert("error found in check status!!")
     })
   }
 
@@ -49,11 +44,11 @@ function AppNavbar() {
     }).then(res => {
       localStorage.clear();
       console.log(res.data);
-      alert("logout successful!!")
+      toast.success('Logout-Successfull.', { position: "top-center", theme: "colored" });
 
     }).catch(error => {
       localStorage.clear();
-      alert("error")
+      toast.error('server error Cannot Logout.', { position: "top-center", theme: "colored" });
       console.log(error.response.data);
       console.log(error.response.status);
       console.log(error.response.headers);
@@ -62,7 +57,7 @@ function AppNavbar() {
   }
   const handleDropdownOpen = (id) => {
     setDropdownOpen(id);
-  };  
+  };
 
   const handleDropdownClose = () => {
     setDropdownOpen(null);
@@ -70,7 +65,6 @@ function AppNavbar() {
 
   return (
     <div className='main'>
-
       <Navbar expand="lg" className="navbar navbar-light bg-light">
         <Container fluid>
           <Navbar.Brand href="/">
@@ -87,13 +81,13 @@ function AppNavbar() {
             <Nav className="mr-auto">
               {/* <NavLink className="nav-link " to="/">Homepage</NavLink> */}
               {/* <NavLink className="nav-link  " to="/RegisterUser">Register User</NavLink> */}
-              <NavLink className="nav-link" onClick={checkStatus} to="/TimeSheet">TimeSheet</NavLink>
-
+              <NavLink className="nav-link" onClick={checkStatus} as={Link} to="/TimeSheet">TimeSheet</NavLink>
               {[
                 {
                   title: 'Employee Management', links: [
                     { href: '/empfunc', text: 'Employee Details' },
                     { href: '/positiondetails', text: 'Employee Position' },
+                    { href: './GetAllEmpAttendance', text: 'Employee Attendence' }
                   ]
                 },
                 {
@@ -129,7 +123,7 @@ function AppNavbar() {
                   onMouseEnter={() => handleDropdownOpen(index)}
                   onMouseLeave={handleDropdownClose}>
                   {item.links.map((link, linkIndex) => (
-                    <NavDropdown.Item key={linkIndex} href={link.href}>{link.text}</NavDropdown.Item>
+                    <NavDropdown.Item key={linkIndex} as={Link} to={link.href}>{link.text}</NavDropdown.Item>
                   ))}
                 </NavDropdown>
               ))}
@@ -141,7 +135,6 @@ function AppNavbar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
     </div>
   );
 }

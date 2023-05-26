@@ -1,22 +1,26 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 import './Hrmscss/App.css'
 
 export default function Empfunc() {
-  const [employees, setEmployees] = useState([]);
 
+  const [employees, setEmployees] = useState([]);
   const token = localStorage.getItem("response-token")
   React.useEffect(() => {
-
-    axios.get("/hrms/employee/getAllEmp", {
+    axios.get(`/hrms/employee/getAllEmp`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     }).then((response) => {
       setEmployees(response.data);
-    }).catch(err => console.log(err))
+      toast.success("data found successfully.", { position: 'top-center', theme: "colored", closeOnClick: true })
+    }).catch(error => {
+      console.log(error)
+      toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
+    })
   }, []);
-
   if (!employees) return null;
   // "employeeId": 3,
   // "createdAt": "13:10:49.55",
@@ -45,8 +49,6 @@ export default function Empfunc() {
         <thead className="head">
           <tr className="table-danger table-striped">
             <th>employeeId</th>
-            <th>Created At</th>
-            <th >Updated At</th>
             <th>isActive</th>
             <th>designation</th>
             <th>DOB</th>
@@ -58,7 +60,6 @@ export default function Empfunc() {
             <th>isEmailVerified</th>
             <th>joinDate</th>
             <th>mobileNo</th>
-            <th>password</th>
             <th>username</th>
             <th>salary</th>
             <th>bankName</th>
@@ -74,10 +75,8 @@ export default function Empfunc() {
             // display a <div> element with the employees.emailId and employees.designation
             // parent element needs to have a unique key
             <tr key={employee.employeeId}>
-              <td>{employee.employeeId}</td>
-              <td>{employee.createdAt}</td>
-              <td>{employee.updatedAt}</td>
-              <td>{employee.isActive}</td>
+              <td><Link to={`/EditEmployee/${employee.employeeId}`} className="Candidate-id">{employee.employeeId}</Link></td>
+              <td>{String(employee.isActive)}</td>
               <td>{employee.designation}</td>
               <td>{employee.dob}</td>
               <td>{employee.email}</td>
@@ -88,7 +87,6 @@ export default function Empfunc() {
               <td>{String(employee.isEmailVerified)}</td>
               <td>{employee.joinDate}</td>
               <td>{employee.mobileNo}</td>
-              <td>{employee.password}</td>
               <td>{employee.username}</td>
               <td>{employee.salary}</td>
               <td>{employee.bankName}</td>

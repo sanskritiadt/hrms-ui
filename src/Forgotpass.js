@@ -3,6 +3,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import './Hrmscss/FPF.css';
+import {toast } from 'react-toastify';
 
 function ForgotPassword1() {
   const formik = useFormik({
@@ -26,9 +27,10 @@ function ForgotPassword1() {
         });
         const result = await response.json();
         console.log(result);
-        alert('Email reset link successfully sent');
+        toast.success('Email reset link successfully sent', { position: 'top-center', theme: "colored" });
       } catch (error) {
         console.error(error);
+        toast.error("Error happend try after sometime.", { position: "top-center", theme: 'colored' })
       } finally {
         setSubmitting(false);
       }
@@ -63,6 +65,7 @@ function ForgotPassword1() {
           </button>
         </form>
       </div>
+  
     </div>
   );
 }

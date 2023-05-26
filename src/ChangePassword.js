@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Alert, Container } from 'react-bootstrap';
 import './Hrmscss/CP.css'
+import { toast } from 'react-toastify';
 
 const ChangepasswordForm = () => {
     const token = localStorage.getItem("response-token")
@@ -13,12 +14,11 @@ const ChangepasswordForm = () => {
         newPassword: '',
         showPassword: false
     };
-
     const handleSubmit = (values, { setStatus, resetForm }) => {
         axios.post('/api/user/password/update', {
             oldPassword: values.oldPassword,
             newPassword: values.newPassword
-        },{
+        }, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -26,14 +26,13 @@ const ChangepasswordForm = () => {
             setStatus(response.data.message);
             resetForm(initialValues)
             console.log(response.data);
-            alert("password changed successfully.")
+            toast.success("password changed successfully.", { position: 'top-center', theme: "colored" })
 
         }).catch((errors) => {
             console.log(errors);
-            alert('error!!')
+            toast.error('error!!', { position: 'top-center', theme: "colored" })
         })
     }
-
     const validationSchema = Yup.object().shape({
         oldPassword: Yup.string().required('old  password is required.'),
         newPassword: Yup.string().required('New password is required.')
@@ -41,7 +40,6 @@ const ChangepasswordForm = () => {
             .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
                 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.')
     });
-
     return (
         <Container>
             <Formik
@@ -75,9 +73,7 @@ const ChangepasswordForm = () => {
             </Formik>
         </Container>
     );
-
 };
-
 export default ChangepasswordForm;
 
 

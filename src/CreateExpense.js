@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
+import {toast } from 'react-toastify';
 const CreateExpense = () => {
     const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
@@ -34,10 +35,10 @@ const CreateExpense = () => {
         }
         ).then((response) => {
             console.log(response.data)
-            alert("expense data created successfully!!")
+            toast.success("expense data created successfully!!", { position: 'top-center', theme: "colored" })
         }).catch((err) => {
             console.log(err)
-            alert("error occured.")
+            toast.error("error occured try after sometime.", { position: 'top-center', theme: "colored" })
 
         })
     }
@@ -75,7 +76,7 @@ const CreateExpense = () => {
     return (
         <div className='container pt-3'>
             <div className='row'>
-                <div className='col-lg-8 col-md-10 mx-auto'>
+                <div className='col-md-8 mx-auto'>
                     <div className='card border-0 shadow'>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
