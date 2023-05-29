@@ -3,17 +3,16 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import './Hrmscss/Login.css';
 import './Hrmscss/App.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-import { toast } from 'react-toastify';
 
 
-// const LoginSchema = Yup.object().shape({
-//     email: Yup.string().email('Invalid email').required(' Email is Required'),
-//     password: Yup.string().required('Password is required.')
-//         .min(8, 'Password must be at least 8 characters long.')
-// });
-
+const LoginSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required(' Email is Required'),
+    password: Yup.string().required('Password is required.')
+            .min(8, 'Password must be at least 8 characters long.')
+});
 
 const Login = () => {
     const navigate = useNavigate();
@@ -29,11 +28,11 @@ const Login = () => {
                 },
             })
             .then((response) => {
-                localStorage.setItem('response-token', response.data.jwtAuthenticationResponse.accessToken);
-                localStorage.setItem('refresh-token', response.data.jwtAuthenticationResponse.refreshToken);
+                localStorage.setItem('response-token',response.data.jwtAuthenticationResponse.accessToken);
+                localStorage.setItem('refresh-token',response.data.jwtAuthenticationResponse.refreshToken);
                 localStorage.setItem('EmpID', response.data.employeeId);
                 console.log(response.data.jwtAuthenticationResponse.accessToken);
-                toast.success('Login-Successfull.', { position: "top-center", theme: "colored" });
+                alert('login successfull');
                 navigate('/');
             })
             .catch((error) => {
@@ -42,7 +41,7 @@ const Login = () => {
                 console.log(error.response.data);
                 console.log(error.response.status);
                 console.log(error.response.headers);
-                toast.error('server error Cannot Login!!', { position: "top-center", theme: "colored" });
+                alert(error.response.data.error.message);
             });
     };
 
@@ -58,16 +57,15 @@ const Login = () => {
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                                 <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                             </svg>
-
                             <Formik
                                 initialValues={{ email: '', password: '' }}
-                                // validationSchema={LoginSchema}
+                                validationSchema={LoginSchema}
                                 onSubmit={handleSubmit}
                             >
                                 {({ isSubmitting }) => (
                                     <Form>
                                         <Field
-                                            type="email"
+                                            type="text"
                                             name="email"
                                             placeholder="Enter email"
                                             className="form-control my-4 py-2 border border-light"
@@ -76,7 +74,6 @@ const Login = () => {
                                         <Field
                                             type="password"
                                             name="password"
-
                                             placeholder="Enter password"
                                             className="form-control my-4 py-2 border border-light"
                                         />
@@ -89,9 +86,9 @@ const Login = () => {
                                             >
                                                 {isSubmitting ? 'Logging in...' : 'Login'}
                                             </button>
-                                            <Link to="/Forgotpassword" className="nav-link pt-2 fp"><i className="fas fa-lock"></i> Forget password</Link>
-                                            <Link to="/ChangepasswordForm" className="nav-link pt-2 cp"><i className="fas fa-key"></i> Change password</Link>
-                                            <Link to="/RegisterUser" className="nav-link pt-2 ru"><i className="fas fa-user-plus"></i> Register User</Link>
+                                            <Link to="/Forgotpassword" className="nav-link pt-2 "><i className="fas fa-lock"></i> Forget password</Link>
+                                            <Link to="/ChangepasswordForm" className="nav-link pt-2 "><i className="fas fa-key"></i> Change password</Link>
+                                            <Link to="/RegisterUser" className="nav-link pt-2 "><i className="fas fa-user-plus"></i> Register User</Link>
 
                                         </div>
                                     </Form>
@@ -101,7 +98,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
 
     );
 }

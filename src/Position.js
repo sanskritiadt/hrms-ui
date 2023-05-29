@@ -1,32 +1,57 @@
 import axios from "axios";
 import React from "react";
-import './App.css'
+import { toast } from 'react-toastify';
+
 export default function PositionDetails() {
 
     const [positions, setPosition] = React.useState([]);
+    const token = localStorage.getItem("response-token")
 
     React.useEffect(() => {
-    axios.get("/intervPosition/getAllPosition").then((response) => {
-        setPosition(response.data);
-    });
-  }, []);
+        axios.get("/hrms/interview/getAllPositionNew", {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then((response) => {
+            setPosition(response.data);
+            toast.success("data found successfully.", { position: "top-center", theme: "colored" })
+        }).catch(error => {
+            console.log("error occoured", error)
+            toast.error("something went wrong please try after sometime.", { position: "top-center", theme: "colored" })
+        })
+    }, []);
 
 
     if (!positions) return null;
-
+    //  {
+    //         "uiid": 1,
+    //         "positionName": "Java Developer",
+    //         "techStack": [
+    //             "Java",
+    //             "SpringBoot"
+    //         ],
+    //         "positionopendate": "2023-05-01",
+    //         "positionclosedate": "2023-05-31",
+    //         "status": "Available",
+    //         "experienceInYear": 1.5,
+    //         "remote": true,
+    //         "positionType": "Contractual",
+    //         "vacancy": 3
+    //     }
     return (
-        <div>
-            <table border='2' className="table table-striped">
-                <thead className="head" style={{ backgroundColor: "lightblue" }}>
-                    <tr styles={{ width: '50%' }}>
-                        <th styles={{ width: '50%' }}>ID</th>
-                        <th styles={{ width: '50%' }}>TECHID</th>
-                        <th styles={{ width: '50%' }}>POSITION OPEN DATE</th>
-                        <th styles={{ width: '50%' }}>POSITION CLOSE DATE</th>
-                        <th styles={{ width: '50%' }}>STATUS</th>
-                        <th styles={{ width: '50%' }}>EXPERIENCE IN YEAR</th>
-                        <th styles={{ width: '50%' }}>REMOTE</th>
-                        <th styles={{ width: '50%' }}>POSITION TYPE</th>
+        <div className="table-responsive-sm">
+            <table border='2' className="table table-striped table-bordered">
+                <thead className="head">
+                    <tr className="table-danger table-striped">
+                        <th>ID</th>
+                        <th>TECH STACK</th>
+                        <th>VACANCY</th>
+                        <th>POSITION OPEN DATE</th>
+                        <th>POSITION CLOSE DATE</th>
+                        <th>STATUS</th>
+                        <th>EXPERIENCE IN YEAR</th>
+                        <th>REMOTE</th>
+                        <th>POSITION TYPE</th>
                     </tr>
                 </thead>
                 <tbody className="body">
@@ -34,14 +59,15 @@ export default function PositionDetails() {
                     {positions.map((position) => (
                         // display a <div> element with the employees.emailId and employees.designation
                         // parent element needs to have a unique key
-                        <tr key={position.id}>
-                            <td>{position.id}</td>
-                            <td>{position.techId}</td>
-                            <td>{position.positionOpenDate}</td>
-                            <td>{position.positionCloseDate}</td>
+                        <tr key={position.uiid}>
+                            <td>{position.uiid}</td>
+                            <td>{position.techStack.join(",")}</td>
+                            <td>{position.vacancy}</td>
+                            <td>{position.positionopendate}</td>
+                            <td>{position.positionclosedate}</td>
                             <td>{position.status}</td>
                             <td>{position.experienceInYear}</td>
-                            <td>{position.remote}</td>
+                            <td>{String(position.remote)}</td>
                             <td>{position.positionType}</td>
                         </tr>
                     ))}
