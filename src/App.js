@@ -1,10 +1,11 @@
 import React from "react";
-import './App.css'
-import Navbar from "./navbar";
+import Approuter from "./Approuter";
+import { ToastContainer } from "react-toastify";
 export default function App() {
   return (
-    <>
-   <Navbar></Navbar>
-    </>
+    <div className="App">
+      <Approuter></Approuter>
+      <ToastContainer/>
+    </div>
   );
 }
