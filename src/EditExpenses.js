@@ -19,7 +19,7 @@ const EditExpenses = () => {
     });
 
     useEffect(() => {
-        axios.get(`/expenseManagement/getExpenseById/${id}`, {
+        axios.get(`/expensemanagement/getExpenseById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -43,7 +43,7 @@ const EditExpenses = () => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.put(`/expenseManagement/updateExpense/${id}`, {
+        axios.put(`/expensemanagement/updateExpense/${id}`, {
             amount: parseInt(data.amount),
             description: data.description,
             paymentMode: data.paymentMode,

@@ -19,7 +19,7 @@ function EditClient() {
         phone: ""
     });
     useEffect(() => {
-        axios.get(`/expenseManagement/clientInfo/getClientInfoById/${id}`, {
+        axios.get(`/expensemanagement/clientInfo/getClientInfoById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -33,7 +33,7 @@ function EditClient() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.put(`/expenseManagement/clientInfo/updateClientInfo/${id}`, {
+        axios.put(`/expensemanagement/clientInfo/updateClientInfo/${id}`, {
             id: data.id,
             address: data.address,
             companyName: data.companyName,
