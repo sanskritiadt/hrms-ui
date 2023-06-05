@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
-import {toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 const Capex = () => {
     const token = localStorage.getItem("response-token")
     const [data, setData] = useState({
@@ -17,7 +17,7 @@ const Capex = () => {
 
     function submit(e) {
         e.preventDefault();
-        axios.post(`/expenseManagement/capExDetails/createCapExDetails`, {
+        axios.post(`/expensemanagement/capExDetails/createCapExDetails`, {
             date: data.date,
             expenseDetails: data.expenseDetails,
             gstBill: data.gstBill,
