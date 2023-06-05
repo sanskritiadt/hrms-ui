@@ -13,7 +13,7 @@ const Getallexpenses = () => {
   let Navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("/expenseManagement/getAllExpenses", {
+    axios.get("/expensemanagement/getAllExpenses", {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -34,7 +34,7 @@ const Getallexpenses = () => {
 
   const getExpenseByDate = (e) => {
     e.preventDefault();
-    axios.get(`/expenseManagement/getExpenseByDateRange?startDate=${startDate}&endDate=${endDate}`, {
+    axios.get(`/expensemanagement/getExpenseByDateRange?startDate=${startDate}&endDate=${endDate}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

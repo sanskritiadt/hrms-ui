@@ -19,18 +19,18 @@ export default function SaveClientFormik() {
         validationSchema: clientInfoSchema,
         onSubmit: (values, action) => {
             console.log(values)
-            axios.post(`/expenseManagement/clientInfo/saveClientInfo`, {
+            axios.post(`/expensemanagement/clientInfo/saveClientInfo`, {
                 companyName: values.Companyname,
                 address: values.Address,
                 phone: values.number,
                 email: values.Email,
                 contactPerson: values.Cperson,
                 gstin: values.GST
-            },{
+            }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-              }  )
+            })
                 .then((response) => {
                     console.log(response);
                     toast.success("clientInfo created Successfully !!", { position: 'top-center', theme: "colored" });
