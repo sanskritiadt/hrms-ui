@@ -44,6 +44,7 @@ export default function PositionDetails() {
                 <thead className="head">
                     <tr className="table-danger table-striped">
                         <th>ID</th>
+                        <th>POSITION NAME</th>
                         <th>TECH STACK</th>
                         <th>VACANCY</th>
                         <th>POSITION OPEN DATE</th>
@@ -61,6 +62,7 @@ export default function PositionDetails() {
                         // parent element needs to have a unique key
                         <tr key={position.uiid}>
                             <td>{position.uiid}</td>
+                            <td>{position.positionName}</td>
                             <td>{position.techStack.join(",")}</td>
                             <td>{position.vacancy}</td>
                             <td>{position.positionopendate}</td>
