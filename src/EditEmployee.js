@@ -96,7 +96,7 @@ const EditEmployee = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='isEmailVerified'>isEmailVerified</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='isEmailVerified'>Email Verified</label>
                                     <div className="col-sm-10">
                                         <input disabled value={data.isEmailVerified || ''}
                                             type="text" className="form-control"
@@ -132,7 +132,7 @@ const EditEmployee = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="dob">dob</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="dob">DOB</label>
                                     <div className="col-sm-10">
                                         <input value={data.dob || ''}
                                             onChange={e => setData({ ...data, dob: e.target.value })}
@@ -146,7 +146,7 @@ const EditEmployee = () => {
                                         <input value={data.mobileNo || ''}
                                             onChange={e => setData({ ...data, mobileNo: e.target.value })}
                                             type="number" className="form-control"
-                                            placeholder='enter your highest Qualification.'
+                                            placeholder='enter your mobile number. .'
                                             id="mobileNo" />
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@ const EditEmployee = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='maritalStatus'>MaritalStatus</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='maritalStatus'>Marital Status</label>
                                     <div className="col-sm-10">
                                         <input value={data.maritalStatus || ''}
                                             onChange={e => setData({ ...data, maritalStatus: e.target.value })}
@@ -203,7 +203,7 @@ const EditEmployee = () => {
                                 </fieldset> */}
                                 {/* The first input element is a radio button for "Yes" and is checked if data.isActive is true. The value prop is also set to data.isActive so that the value of the radio button matches the value in the state. The onChange handler updates the isActive value in the state when this radio button is selected.*/}
                                 <fieldset className="row mb-3">
-                                    <legend className="col-form-label col-sm-2 pt-0">IsActive</legend>
+                                    <legend className="col-form-label col-sm-2 pt-0">Active</legend>
                                     <div className="col-sm-10">
                                         <div className="form-check form-check-inline">
                                             <input checked={data.isActive === true} value={true || ''} onChange={e => setData({ ...data, isActive: true })} className="form-check-input" type="radio" name="inlineRadioOptions" id="true" />
@@ -243,7 +243,7 @@ const EditEmployee = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="ifscCode">ifscCode</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="ifscCode">IFSC Code</label>
                                     <div className="col-sm-10">
                                         <input value={data.ifscCode || ''}
                                             onChange={e => setData({ ...data, ifscCode: e.target.value })}
