@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
-import {toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 const CreateExpense = () => {
     const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
@@ -18,7 +18,7 @@ const CreateExpense = () => {
 
     function submit(e) {
         e.preventDefault();
-        axios.post(`/expenseManagement/createExpenses`, {
+        axios.post(`/expensemanagement/createExpenses`, {
             amount: parseInt(data.amount),
             description: data.description,
             paymentMode: data.paymentMode,

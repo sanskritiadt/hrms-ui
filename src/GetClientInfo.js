@@ -14,7 +14,7 @@ function ClientInfoTable() {
 
     useEffect(() => {
         // Fetch the client information from the server when the component mounts
-        axios.get('/expenseManagement/clientInfo/getAllClientInfo', {
+        axios.get('/expensemanagement/clientInfo/getAllClientInfo', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
