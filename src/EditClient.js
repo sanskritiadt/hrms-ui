@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Hrmscss/App.css';
+import handleAuthError from './CommonErrorHandling';
+
 
 
 function EditClient() {
@@ -26,7 +28,8 @@ function EditClient() {
         }).then(response => {
             console.log(response.data);
             setData(response.data);
-        }).catch(error => {
+        }).catch((error) => {
+            handleAuthError(error);
             console.log(error);
         })
     }, [id]);
@@ -46,17 +49,16 @@ function EditClient() {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            toast.success("data has been updated successfully!!", { position: "top-center", theme: 'colored' });
+            toast.success("Data has been updated successfully!!", { position: "top-center", theme: 'colored' });
             console.log(response.data);
             navigate('/Getclientinfo');
         }).catch(error => {
+            handleAuthError(error);
             console.log(error);
-            toast.error("error occured try after sometime.", { position: "top-center", theme: 'colored' });
+            // toast.error("error occured try after sometime.", { position: "top-center", theme: 'colored' });
         })
 
     }
-
-
     return (
         <div className='container pt-3'>
             <div className='row'>

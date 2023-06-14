@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 export default function Saveclientinfo() {
   const token = localStorage.getItem("response-token");
@@ -37,10 +38,10 @@ export default function Saveclientinfo() {
     ).then((response) => {
       console.log(response);
       toast.success("Client info created Successfully!!", { position: "top-center", theme: "colored" })
-    }).catch((err) => {
-      console.log(err)
-      toast.error("cannot generate client info!!", { position: "top-center", theme: "colored" })
-
+    }).catch((error) => {
+      handleAuthError(error);
+      console.log(error);
+      // toast.error("cannot generate client info!!", { position: "top-center", theme: "colored" })
     })
   }
   function handle(e) {

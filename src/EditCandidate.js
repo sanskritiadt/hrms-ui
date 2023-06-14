@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
+
 
 const EditCandidate = () => {
     const { id } = useParams();
@@ -30,6 +32,7 @@ const EditCandidate = () => {
                 setData(response.data)
                 console.log(response);
             }).catch((error) => {
+                handleAuthError(error);
                 console.log(error);
                 console.log(error.response.data)
             })
@@ -69,8 +72,9 @@ const EditCandidate = () => {
             toast.success("Candidate data has been updated successfully.", { position: 'top-center', theme: "colored" });
             navigate('/getcandidate');
         }).catch((error) => {
+            handleAuthError(error);
             console.log(error);
-            toast.error("Something Bad happened try after sometime.", { position: 'top-center', theme: "colored" })
+            // toast.error("Something Bad happened try after sometime.", { position: 'top-center', theme: "colored" })
         })
     }
 
@@ -84,9 +88,10 @@ const EditCandidate = () => {
                 console.log(response)
                 toast.success("Candidate Data Deleted successfully.", { position: 'top-center', theme: "colored" });
                 navigate('/getcandidate');
-            }).catch(error => {
+            }).catch((error) => {
+                handleAuthError(error);
                 console.log(error);
-                toast.error("Cannot delete Candidate Details Try after sometime.", { position: 'top-center', theme: "colored" })
+                // toast.error("Cannot delete Candidate Details Try after sometime.", { position: 'top-center', theme: "colored" })
             })
     }
 

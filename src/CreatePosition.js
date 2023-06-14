@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
+
 
 export default function CreatePosition() {
     const token = localStorage.getItem("response-token")
@@ -35,16 +37,15 @@ export default function CreatePosition() {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
+        }).then((response) => {
+            console.log(response.data);
+            toast.success("Position created successfully!!", { position: 'top-center', theme: "colored" })
+        }).catch((error) => {
+            handleAuthError(error);
+            console.log(error);
+            // toast.error("cannot create the position values!!", { position: 'top-center', theme: "colored" })
+
         })
-            .then((response) => {
-                console.log(response.data);
-                toast.success("position created successfully!!", { position: 'top-center', theme: "colored" })
-            }).catch((error) => {
-                console.log(error);
-                toast.error("cannot create the position values!!", { position: 'top-center', theme: "colored" })
-
-            })
-
     }
     const multiselectop = [
         { label: "Java", value: "Java" },
@@ -65,11 +66,13 @@ export default function CreatePosition() {
         setSelectedValue(Array.isArray(e) ? e.map(x => x.value) : []);
         console.log(e)
     };
+
     function radiobut(e) {
         console.log(str2bool(e.target.value));
         // Here we can send the data to further processing (Action/Store/Rest)
         data.remote = str2bool(e.target.value);
     }
+
     function handle(e) {
         const newdata = { ...data };
         newdata[e.target.id] = e.target.value;

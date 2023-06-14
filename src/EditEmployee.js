@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 const EditEmployee = () => {
     const { id } = useParams()
@@ -47,9 +48,10 @@ const EditEmployee = () => {
         }).then(response => {
             console.log(response.data)
             setData(response.data)
-        }).catch(error =>
-            console.log(error.response.data)
-        )
+        }).catch((error) => {
+            handleAuthError(error);
+            console.log(error)
+        })
     }, [])
     function handleSubmit(e) {
         e.preventDefault();
@@ -75,9 +77,10 @@ const EditEmployee = () => {
             console.log(response.data);
             toast.success("Candidate data has been updated successfully.", { position: 'top-center', theme: "colored" });
             navigate('/empfunc');
-        }).catch(error => {
+        }).catch((error) => {
+            // handleAuthError(error);
             console.log(error.response.data);
-            toast.error("Something Bad happened try after sometime.", { position: 'top-center', theme: "colored" })
+            toast.error("Error, try after sometime.", { position: 'top-center', theme: "colored" })
         })
     }
     return (
