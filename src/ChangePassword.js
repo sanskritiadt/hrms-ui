@@ -26,7 +26,7 @@ const ChangepasswordForm = () => {
             setStatus(response.data.message);
             resetForm(initialValues)
             console.log(response.data);
-            toast.success("password changed successfully.", { position: 'top-center', theme: "colored" })
+            toast.success("Password changed successfully.", { position: 'top-center', theme: "colored" })
 
         }).catch((errors) => {
             console.log(errors);

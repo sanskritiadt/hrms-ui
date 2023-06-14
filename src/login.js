@@ -42,7 +42,7 @@ const Login = () => {
                 console.log(error.response.data);
                 console.log(error.response.status);
                 console.log(error.response.headers);
-                toast.error('server error Cannot Login!!', { position: "top-center", theme: "colored" });
+                toast.error('Server error Cannot Login!!', { position: "top-center", theme: "colored" });
             });
     };
 

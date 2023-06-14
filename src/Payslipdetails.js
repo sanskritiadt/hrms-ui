@@ -194,11 +194,11 @@ function PaySlip() {
         })
             .then(response => {
                 console.log(response.data)
-                toast.success("data found successfully.", { position: "top-center", theme: "colored" })
+                toast.success("Data found successfully.", { position: "top-center", theme: "colored" })
                 setMonth(response.data)
             }).catch(error => {
                 console.log("error occured", error)
-                toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" })
+                toast.error("Error occured try after sometime.", { position: "top-center", theme: "colored" })
             })
     }
 

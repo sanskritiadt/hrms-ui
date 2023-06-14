@@ -5,6 +5,7 @@ import './Hrmscss/ExampleTable.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import handleAuthError from './CommonErrorHandling';
 
 //******** USe Prototype obj */
 
@@ -24,10 +25,11 @@ function ClientInfoTable() {
             toast.success("Client data found successfully!!", { position: "top-center", theme: 'colored' })
 
         })
-            .catch(error => {
+            .catch((error) => {
+                handleAuthError(error);
                 console.log(error);
-                toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
-            });
+                // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+            })
     }, []);
 
     // Otherwise, render the client information in a table

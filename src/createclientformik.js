@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import { clientInfoSchema } from './Validations/createclientyup'
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 export default function SaveClientFormik() {
     const token = localStorage.getItem("response-token")
@@ -33,10 +34,11 @@ export default function SaveClientFormik() {
             })
                 .then((response) => {
                     console.log(response);
-                    toast.success("clientInfo created Successfully !!", { position: 'top-center', theme: "colored" });
-                }).catch((err) => {
-                    console.log(err);
-                    toast.error("Cannot create client !!", { position: 'top-center', theme: "colored" });
+                    toast.success("Client info created Successfully !!", { position: 'top-center', theme: "colored" });
+                }).catch((error) => {
+                    handleAuthError(error);
+                    console.log(error);
+                    // toast.error("Cannot create client !!", { position: 'top-center', theme: "colored" });
                 })
             action.resetForm();
         },
