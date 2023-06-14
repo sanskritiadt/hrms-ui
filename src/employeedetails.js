@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
-import './Hrmscss/App.css'
+import './Hrmscss/App.css';
+import handleAuthError from './CommonErrorHandling';
 
 export default function Empfunc() {
 
@@ -15,10 +16,11 @@ export default function Empfunc() {
       }
     }).then((response) => {
       setEmployees(response.data);
-      toast.success("data found successfully.", { position: 'top-center', theme: "colored", closeOnClick: true })
-    }).catch(error => {
-      console.log(error)
-      toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
+      toast.success("Data found successfully.", { position: 'top-center', theme: "colored", closeOnClick: true })
+    }).catch((error) => {
+      console.log(error);
+      handleAuthError(error);
+      // toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
     })
   }, []);
   if (!employees) return null;

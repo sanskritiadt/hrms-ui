@@ -2,6 +2,8 @@ import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
+
 const Capex = () => {
     const token = localStorage.getItem("response-token")
     const [data, setData] = useState({
@@ -31,12 +33,13 @@ const Capex = () => {
             }
         }).then(response => {
             console.log(response.data);
-            toast.success("data has been created successfully.", { position: 'top-center', theme: "colored" })
-        }).catch(error => {
+            toast.success("Data has been created successfully.", { position: 'top-center', theme: "colored" })
+        }).catch((error) => {
+            handleAuthError(error);
             console.log(error);
-            toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
-        })
-    }
+            // toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
+        });
+    };
     function handle(e) {
         const newdata = { ...data };
         newdata[e.target.id] = e.target.value;

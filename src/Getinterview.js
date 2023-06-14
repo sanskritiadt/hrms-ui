@@ -3,6 +3,7 @@ import React from "react";
 import './Hrmscss/App.css'
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 export default function Getinterviewdetails() {
 
@@ -17,8 +18,9 @@ export default function Getinterviewdetails() {
             setPosition(response.data);
             toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
         }).catch((error) => {
+            handleAuthError(error);
             console.log("error occured", error)
-            toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
+            // toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
         })
     }, []);
 
@@ -77,16 +79,16 @@ export default function Getinterviewdetails() {
                 </thead>
                 <tbody className="body">
                     {/* map over the employees array */}
-                    {positions.map((position) => (
+                    {positions.map(position => (
                         // display a <div> element with the employees.emailId and employees.designation
                         // parent element needs to have a unique key
                         <tr key={position.interviewId}>
                             <td><Link to={`/EditInterviewDetails/${position.interviewId}/${position.rounds}`} className="Candidate-id">{position.interviewId}</Link></td>
                             <td><Link to={`/EditInterviewDetails/${position.interviewId}/${position.rounds}`} className="Candidate-id">{position.rounds}
                             </Link></td>
-                            <td>{position.tech_id}</td>
-                            <td>{position.position_id}</td>
-                            <td>{position.candidate_id}</td>
+                            <td>{position.tech_id.techId}</td>
+                            <td>{position.position_id.positionId}</td>
+                            <td>{position.candidate_id.candidateId}</td>
                             <td>{position.marks}</td>
                             <td>{position.communication}</td>
                             <td>{position.enthusiasm}</td>

@@ -2,7 +2,8 @@ import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
 import './Hrmscss/App.css'
-import {toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling'
 
 export default function CandidateDetails() {
 
@@ -16,10 +17,11 @@ export default function CandidateDetails() {
             }
         }).then((response) => {
             setCandidate(response.data);
-            toast.success(" Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
-        }).catch(error => {
+            toast.success("Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
+        }).catch((error) => {
+            handleAuthError(error);
             console.log("error occoured", error)
-            toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
+            // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
         })
     }, []);
 

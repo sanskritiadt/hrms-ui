@@ -31,10 +31,10 @@ const LeaveForm = () => {
                 }
             });
             console.log(response.data);
-            toast.success("leave request sent successfully.", { position: "top-center", theme: "colored" });
+            toast.success("Leave request sent successfully.", { position: "top-center", theme: "colored" });
         } catch (error) {
             console.error(error);
-            toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" });
+            toast.error("Error occured try after sometime.", { position: "top-center", theme: "colored" });
         }
     };
 

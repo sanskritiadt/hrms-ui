@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
+
 const CreateExpense = () => {
     const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
@@ -35,14 +37,13 @@ const CreateExpense = () => {
         }
         ).then((response) => {
             console.log(response.data)
-            toast.success("expense data created successfully!!", { position: 'top-center', theme: "colored" })
-        }).catch((err) => {
-            console.log(err)
-            toast.error("error occured try after sometime.", { position: 'top-center', theme: "colored" })
-
+            toast.success("Expense data created successfully!!", { position: 'top-center', theme: "colored" })
+        }).catch((error) => {
+            console.log(error);
+            handleAuthError(error);
+            // toast.error("error occured try after sometime.", { position: 'top-center', theme: "colored" })
         })
     }
-
     var str2bool = (value) => {
         if (value && typeof value === "string") {
             if (value.toLowerCase() === "true") return true;

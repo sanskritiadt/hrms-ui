@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 export default function PositionDetails() {
 
@@ -14,10 +15,11 @@ export default function PositionDetails() {
             }
         }).then((response) => {
             setPosition(response.data);
-            toast.success("data found successfully.", { position: "top-center", theme: "colored" })
+            toast.success("Data found successfully.", { position: "top-center", theme: "colored" })
         }).catch(error => {
-            console.log("error occoured", error)
-            toast.error("something went wrong please try after sometime.", { position: "top-center", theme: "colored" })
+            console.log("error occoured", error);
+            handleAuthError(error);
+            // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: "colored" })
         })
     }, []);
 

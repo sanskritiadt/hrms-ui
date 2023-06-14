@@ -17,6 +17,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { CandidateSchema } from './Validations/Candidate'
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 export default function InterviewCandidate() {
     const token = localStorage.getItem("response-token");
@@ -52,14 +53,14 @@ export default function InterviewCandidate() {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
+            }).then((response) => {
+                console.log(response.data)
+                toast.success("Candidate details successfully created !!", { position: 'top-center', theme: "colored" })
+            }).catch((error) => {
+                console.log(error);
+                handleAuthError(error);
+                // toast.error("Cannot show the Candidate details values!!", { position: 'top-center', theme: "colored" })
             })
-                .then((response) => {
-                    console.log(response.data)
-                    toast.success("Candidate details successfully created !!", { position: 'top-center', theme: "colored" })
-                }).catch((err) => {
-                    console.log(err)
-                    toast.error("Cannot show the Candidate details values!!", { position: 'top-center', theme: "colored" })
-                })
             action.resetForm();
         },
     });
@@ -295,7 +296,7 @@ export default function InterviewCandidate() {
                                                 ) : null}
 
                                                 <label className="form-check-label" htmlFor="inlineRadio1">
-                                                    NO
+                                                    No
                                                 </label>
                                             </div>
                                         </div>
@@ -310,7 +311,7 @@ export default function InterviewCandidate() {
                     </div>
                 </div>
             </div>
-           
+
         </>
     )
 }
