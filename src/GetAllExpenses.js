@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling'
 
 const Getallexpenses = () => {
   const token = localStorage.getItem("response-token")
@@ -21,9 +22,10 @@ const Getallexpenses = () => {
       console.log(response.data)
       setExpenseItems(response.data);
       toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
-    }).catch(error => {
+    }).catch((error) => {
+      handleAuthError(error);
       console.log(error);
-      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+      // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
     })
   }, []);
 
@@ -42,11 +44,12 @@ const Getallexpenses = () => {
       console.log(response.data);
       expenseItems.length = 0;
       setExpenseItems(response.data);
-      toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
+      toast.success("Data found successfully!!", { position: "top-center", theme: 'colored' })
       Navigate('/Getallexpenses')
     }).catch((error) => {
+      handleAuthError(error);
       console.log(error);
-      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+      // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
     })
   }
 
@@ -101,7 +104,7 @@ const Getallexpenses = () => {
               // display a <div> element with the employees.emailId and employees.designation
               // parent element needs to have a unique key
               <tr key={expenseItem.id}>
-                <td><Link to={`/editexpenses/${expenseItem.id}`} className="expense-id">{expenseItem.id}</Link></td>
+                <td><Link to={`/editexpenses/${expenseItem.id}`} className="Candidate-id">{expenseItem.id}</Link></td>
                 <td>{expenseItem.paymentDate}</td>
                 <td>{expenseItem.paymentMode}</td>
                 <td>{expenseItem.paidBy}</td>

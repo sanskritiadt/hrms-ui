@@ -109,7 +109,7 @@ const TimeSheet = () => {
             toast.success("Data found successfully.", { position: "top-center", theme: "colored" })
         }).catch(error => {
             console.log(error.response.data)
-            toast.error("error found.", { position: "top-center", theme: "colored" })
+            toast.error("Error, try after sometime", { position: "top-center", theme: "colored" })
         })
     }
 

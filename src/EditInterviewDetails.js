@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 const EditInterviewDetails = () => {
     const token = localStorage.getItem("response-token")
@@ -40,15 +41,16 @@ const EditInterviewDetails = () => {
                 console.log(response.data);
                 setData(response.data);
             }).catch(error => {
+                handleAuthError(error);
                 console.log(error)
             })
     }, [id, id2]);
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.put(`/hrms/interview/updateInterviewDetails`, {
+        axios.put(`/hrms/interview/updateInterviewByIdAndRound`, {
             interviewId: data.interviewId,
-            tech_id: data.tech_id,
+            tech_id: data.tech_id.techId,
             marks: data.marks,
             communication: data.communication,
             enthusiasm: data.enthusiasm,
@@ -59,26 +61,26 @@ const EditInterviewDetails = () => {
             candidateName: data.candidateName,
             source: data.source,
             offerAccepted: data.offerAccepted,
-            position_id: data.position_id,
+            position_id: data.position_id.positionId,
             type: data.type,
             date: data.date,
             screeningRound: data.screeningRound,
             clientName: data.clientName,
             rounds: data.rounds,
             selected: data.selected,
-            candidate_id: data.candidate_id
+            candidate_id: data.candidate_id.candidateId
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
             console.log(response.data);
-            toast.success("data has been updated successfully!!", { position: "top-center", theme: 'colored' });
+            toast.success("Interview details has been updated successfully.", { position: "top-center", theme: 'colored' });
             navigate('/getinterviewdetails')
         }).catch(error => {
             console.log(error.response.data);
             console.log(error);
-            toast.error("error occured try after sometime.", { position: "top-center", theme: 'colored' });
+            // toast.error("error occured try after sometime.", { position: "top-center", theme: 'colored' });
         })
     }
     return (
@@ -98,34 +100,37 @@ const EditInterviewDetails = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='tech_id'>tech_id:</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='techId'>TechId</label>
                                     <div className="col-sm-10">
-                                        <input value={data.tech_id || ''}
-                                            onChange={e => setData({ ...data, tech_id: e.target.value })}
+                                        <input value={data.tech_id.techId || ''}
+                                            // onChange={e => setData({ ...data, techId: e.target.value })}
+                                            onChange={e => setData({ ...data, tech_id: { ...data.tech_id, techId: e.target.value } })}
                                             type="number" className="form-control"
-                                            id="tech_id" />
+                                            id="techId" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='candidate_id'>candidate_id:</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='candidateId'>CandidateId</label>
                                     <div className="col-sm-10">
-                                        <input value={data.candidate_id || ''}
-                                            onChange={e => setData({ ...data, candidate_id: e.target.value })}
+                                        <input value={data.candidate_id.candidateId || ''}
+                                            // onChange={e => setData({ ...data, candidateId: e.target.value })}
+                                            onChange={e => setData({ ...data, candidate_id: { ...data.candidate_id, candidateId: e.target.value } })}
                                             type="number" className="form-control"
-                                            id="tech_id" />
+                                            id="candidateId" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='position_id'>position_id:</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='positionId'>PositionId</label>
                                     <div className="col-sm-10">
-                                        <input value={data.position_id || ''}
-                                            onChange={e => setData({ ...data, position_id: e.target.value })}
+                                        <input value={data.position_id.positionId || ''}
+                                            //  onChange={e => setData({ ...data, positionId: e.target.value })}
+                                            onChange={e => setData({ ...data, position_id: { ...data.position_id, positionId: e.target.value } })}
                                             type="number" className="form-control"
-                                            id="position_id" />
+                                            id="positionId" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='marks'>marks</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='marks'>Marks</label>
                                     <div className="col-sm-10">
                                         <input value={data.marks || ''}
                                             onChange={e => setData({ ...data, marks: e.target.value })}
@@ -134,7 +139,7 @@ const EditInterviewDetails = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='communication'>communication</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='communication'>Communication</label>
                                     <div className="col-sm-10">
                                         <input value={data.communication || ''}
                                             onChange={e => setData({ ...data, communication: e.target.value })}
@@ -144,7 +149,7 @@ const EditInterviewDetails = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='enthusiasm'>enthusiasm</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='enthusiasm'>Enthusiasm</label>
                                     <div className="col-sm-10">
                                         <input value={data.enthusiasm || ''}
                                             onChange={e => setData({ ...data, enthusiasm: e.target.value })}
@@ -153,7 +158,7 @@ const EditInterviewDetails = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='notes'>notes</label>
+                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='notes'>Notes</label>
                                     <div className="col-sm-10">
                                         <input value={data.notes || ''}
                                             onChange={e => setData({ ...data, notes: e.target.value })}
@@ -217,11 +222,11 @@ const EditInterviewDetails = () => {
                                         <input value={data.rounds || ''}
                                             onChange={e => setData({ ...data, rounds: e.target.value })}
                                             type="number " className="form-control"
-                                            id="rounds" />
+                                            id="rounds" min="0" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="clientName">clientName</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="clientName">ClientName</label>
                                     <div className="col-sm-10">
                                         <input value={data.clientName || ''}
                                             onChange={e => setData({ ...data, clientName: e.target.value })}

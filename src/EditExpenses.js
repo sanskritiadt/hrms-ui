@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 const EditExpenses = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -26,7 +27,11 @@ const EditExpenses = () => {
         }).then(res => {
             setData(res.data)
             console.log(res.data.gst)
-        }).catch(error => console.log(error))
+        }).catch((error) => {
+            handleAuthError(error);
+            console.log(error)
+        })
+
     }, [])
 
     // {
@@ -58,12 +63,13 @@ const EditExpenses = () => {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            console.log(response.data)
-            toast.success("data has been updated successfully!!", { position: "top-center", theme: 'colored' })
+            console.log(response.data);
+            toast.success("Data has been updated successfully!!", { position: "top-center", theme: 'colored' });
             navigate('/Getallexpenses');
-        }).catch(error => {
+        }).catch((error) => {
+            handleAuthError(error);
             console.log(error)
-            toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+            // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
         })
     }
     // function handleradio(e) {

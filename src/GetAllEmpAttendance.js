@@ -1,10 +1,10 @@
 import axios from 'axios'
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
 
 const GetAllEmpAttendance = () => {
-    const token = localStorage.getItem("response-token")
-    const empid = localStorage.getItem("EmpID")
+    const token = localStorage.getItem("response-token");
     const [getAttendence, setAttendence] = useState({
         fromDate: "",
         toDate: ""
@@ -17,12 +17,13 @@ const GetAllEmpAttendance = () => {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            toast.success("data found succesfully.", { position: "top-center", theme: "colored" });
+            toast.success("Data found succesfully.", { position: "top-center", theme: "colored" });
             console.log(response.data)
             setData(response.data);
-        }).catch(error => {
-            toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" });
-            console.log("error happend", error)
+        }).catch((error) => {
+            handleAuthError(error);
+            // toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" });
+            console.log(error);
         })
 
     }
@@ -80,7 +81,7 @@ const GetAllEmpAttendance = () => {
                 <table border='2' className="table table-striped table-bordered">
                     <thead className="head">
                         <tr className="table-danger table-striped">
-                            <th>TIMESHEET ID</th>
+                            <th>EMPLOYEE NAME</th>
                             <th>EMPLOYEE ID</th>
                             <th>CHECK OUT</th>
                             <th>CHECK IN</th>
@@ -99,7 +100,7 @@ const GetAllEmpAttendance = () => {
                             // display a <div> element with the employees.emailId and employees.designation
                             // parent element needs to have a unique key
                             <tr key={getDataa.timeSheetId}>
-                                <td>{getDataa.timeSheetId}</td>
+                                <td>{getDataa.employeeName}</td>
                                 <td>{getDataa.employeeId}</td>
                                 <td>{getDataa.checkOut}</td>
                                 <td>{getDataa.checkIn}</td>

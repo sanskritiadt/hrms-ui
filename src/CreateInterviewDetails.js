@@ -1,11 +1,14 @@
 import axios from 'axios';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+import handleAuthError from './CommonErrorHandling';
+
 
 const CreateInterview = () => {
     const token = localStorage.getItem("response-token")
     const [data, setData] = useState({
+        interviewId: "",
         tech_id: "",
         marks: "",
         communication: "",
@@ -14,7 +17,6 @@ const CreateInterview = () => {
         offerReleased: "",
         workExInYears: "",
         interviewerName: "",
-        candidateName: "",
         source: "",
         offerAccepted: "",
         screeningRound: "",
@@ -26,10 +28,49 @@ const CreateInterview = () => {
         position_id: "",
         candidate_id: ""
     });
+    const [technology, setTechnology] = useState([]);
+    const [position, setPosition] = useState([]);
+    const [candidate, setCandidate] = useState([]);
 
+    useEffect(() => {
+        axios.get(`/hrms/interview/alltech`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+            // console.log(response.data);
+            setTechnology(response.data);
+        }).catch(error => {
+            console.log(error)
+        });
+        axios.get(`/hrms/interviewCandidate/allInterviewCandidate`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+            // console.log(response.data);
+            setCandidate(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+        axios.get(`/hrms/interview/getAllPositionNew`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+            // console.log(response.data);
+            setPosition(response.data);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, [])
+    console.log(technology);
+    console.log(candidate);
+    console.log(position);
     function submit(e) {
         e.preventDefault();
-        axios.post(`/hrms/interview/saveInterviewDetails`, {
+        axios.post(`/hrms/interview/saveInterviewNew`, {
+            interviewId: parseInt(data.interviewId),
             tech_id: parseInt(data.tech_id),
             marks: parseInt(data.marks),
             communication: parseInt(data.communication),
@@ -38,7 +79,6 @@ const CreateInterview = () => {
             offerReleased: data.offerReleased,
             workExInYears: parseInt(data.workExInYears),
             interviewerName: data.interviewerName,
-            candidateName: data.candidateName,
             source: data.source,
             offerAccepted: data.offerAccepted,
             screeningRound: data.screeningRound,
@@ -56,13 +96,14 @@ const CreateInterview = () => {
         }
         ).then(response => {
             console.log(response.data);
-            toast.success("interview details has been created successfully.", { position: 'top-center', theme: "colored" })
-        }).catch(error => {
+            toast.success(response.data, { position: 'top-center', theme: "colored" })
+        }).catch((error) => {
             console.log(error);
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
-            toast.error("error found try after sometime.", { position: 'top-center', theme: "colored" })
+            handleAuthError(error);
+            // toast.error(error.response.data, { position: 'top-center', theme: "colored" })
         })
     }
     // {
@@ -128,36 +169,65 @@ const CreateInterview = () => {
                         <div className='card-body'>
                             <form className='container py-3  mb-3' >
                                 <div className="row mb-3">
-                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='tech_id'>Tech Id</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='interviewId'>Interview Id</label>
                                     <div className="col-sm-10">
-                                        <input required onChange={(e) => { handle(e) }} value={data.tech_id}
-                                            type="number"
+                                        <input required onChange={(e) => { handle(e) }} value={data.interviewId}
+                                            type="number" className="form-control"
+                                            placeholder='enter the interview Id.'
+                                            id="interviewId" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="notes">Rounds</label>
+                                    <div className="col-sm-10">
+                                        <input required onChange={(e) => { handle(e) }} value={data.rounds}
+                                            type="number" className="form-control"
+                                            placeholder='enter the number of  Rounds.'
+                                            id="rounds" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='candidate_id'>Candidate Name</label>
+                                    <div className="col-sm-10">
+                                        <select required onChange={(e) => { handle(e) }} value={candidate.candidateId}
+                                            className="form-control"
+                                            id="candidate_id">
+                                            <option defaultValue>Select Candidate</option>
+                                            {candidate.map(user => (
+                                                <option key={user.candidateId} value={user.candidateId}>{user.candidateName}</option>))}</select>
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='tech_id'>Technology</label>
+                                    <div className="col-sm-10">
+                                        <select required onChange={(e) => { handle(e) }} value={technology.techId}
                                             id="tech_id"
-                                            step='0.1'
-                                            className="form-control" />
+                                            className="form-control">
+                                            <option defaultValue>Select Technology</option>
+                                            {technology.map(tech => (
+                                                <option key={tech.techId} value={tech.techId}>{tech.description}</option>
+                                            ))}</select>
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='position_id'>Position Id</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='position_id'>Position Name</label>
                                     <div className="col-sm-10">
-                                        <input required onChange={(e) => { handle(e) }} value={data.position_id}
-                                            type="number" step='0.1' className="form-control"
-                                            id="position_id" />
+                                        <select required onChange={(e) => { handle(e) }} value={position.uiid}
+                                            className="form-control"
+                                            id="position_id" >
+                                            <option defaultValue>Select Position Name</option>
+                                            {position.map(pos => (
+                                                <option key={pos.uiid} value={pos.uiid}>{pos.positionName} ({pos.experienceInYear}yrs)</option>
+                                            ))}</select>
                                     </div>
                                 </div>
-                                <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='candidate_id'>Candidate Id</label>
-                                    <div className="col-sm-10">
-                                        <input required onChange={(e) => { handle(e) }} value={data.candidate_id}
-                                            type="number" step='0.1' className="form-control"
-                                            id="candidate_id" />
-                                    </div>
-                                </div>
+
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='marks'>Marks</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.marks}
                                             type="number" step='0.1' className="form-control"
+                                            placeholder='enter marks in number..'
                                             id="marks" />
                                     </div>
                                 </div>
@@ -167,6 +237,7 @@ const CreateInterview = () => {
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.communication}
                                             type="number" step='0.1' className="form-control"
+                                            placeholder='enter communication marks...'
                                             id="communication" />
                                     </div>
                                 </div>
@@ -176,6 +247,7 @@ const CreateInterview = () => {
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.enthusiasm}
                                             type="number" className="form-control"
+                                            placeholder='enter enthusiasm marks...'
                                             step='0.1'
                                             id="enthusiasm" />
                                     </div>
@@ -207,15 +279,6 @@ const CreateInterview = () => {
                                             type="text" className="form-control"
                                             placeholder='enter interviewer Name'
                                             id="interviewerName" />
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="candidateName">Candidate Name</label>
-                                    <div className="col-sm-10">
-                                        <input required onChange={(e) => { handle(e) }} value={data.candidateName}
-                                            type="text" className="form-control"
-                                            placeholder='enter candidate Name'
-                                            id="candidateName" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
@@ -305,15 +368,7 @@ const CreateInterview = () => {
                                             id="clientName" />
                                     </div>
                                 </div>
-                                <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="notes">Rounds</label>
-                                    <div className="col-sm-10">
-                                        <input required onChange={(e) => { handle(e) }} value={data.rounds}
-                                            type="number" className="form-control"
-                                            placeholder='enter the number of  Rounds.'
-                                            id="rounds" />
-                                    </div>
-                                </div>
+
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='date'>Date</label>
                                     <div className="col-sm-10">
