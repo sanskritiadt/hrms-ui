@@ -32,7 +32,9 @@ const Login = () => {
                 localStorage.setItem('response-token', response.data.jwtAuthenticationResponse.accessToken);
                 localStorage.setItem('refresh-token', response.data.jwtAuthenticationResponse.refreshToken);
                 localStorage.setItem('EmpID', response.data.employeeId);
+                localStorage.setItem('roleArray', response.data.roles.length);
                 console.log(response.data.jwtAuthenticationResponse.accessToken);
+                console.log('role', response.data.roles.length);
                 toast.success('Login-Successfull.', { position: "top-center", theme: "colored" });
                 navigate('/');
             })
