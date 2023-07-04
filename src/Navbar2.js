@@ -95,12 +95,15 @@ function AppNavbar() {
                     { href: '/Capex', text: ' Create Capital Expense' },
                     { href: '/Getallexpenses', text: 'Get Expense Details' },
                     { href: '/createExpense', text: 'Create Expense' },
+                    {href:'./EmployeeExpense', text:'Employee Expense'}
                   ]
                 },
                 {
                   title: 'Partner', links: [
                     { href: '/Getclientinfo', text: 'Get Client Info' },
                     { href: '/createClientformik', text: 'Create Client' },
+                    {href:'./CreateProjEng' ,text:'Create Project Engagement'},
+                    {href:'/GetAllPrEngagement',text:'Get all Project Engagement'}
                   ]
                 },
                 {

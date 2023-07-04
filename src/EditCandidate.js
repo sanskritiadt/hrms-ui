@@ -78,6 +78,8 @@ const EditCandidate = () => {
         })
     }
 
+
+    
     function HandleDelete() {
         axios.delete(`/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
