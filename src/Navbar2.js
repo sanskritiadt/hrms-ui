@@ -87,7 +87,9 @@ function AppNavbar() {
                   title: 'Employee Management', links: [
                     { href: '/empfunc', text: 'Employee Details' },
                     { href: '/positiondetails', text: 'Employee Position' },
-                    { href: './GetAllEmpAttendance', text: 'Employee Attendence' }
+                    { href: './GetAllEmpAttendance', text: 'Employee Attendence' },
+                    {href:'/GetAllAssets' ,text:'Get Employee Assets'},
+                    {href:'/CreateEmpAssets',text:'Create Employee Assets'}
                   ]
                 },
                 {
@@ -95,7 +97,7 @@ function AppNavbar() {
                     { href: '/Capex', text: ' Create Capital Expense' },
                     { href: '/Getallexpenses', text: 'Get Expense Details' },
                     { href: '/createExpense', text: 'Create Expense' },
-                    {href:'./EmployeeExpense', text:'Employee Expense'}
+                    { href:'./EmployeeExpense', text:'Employee Expense'}
                   ]
                 },
                 {

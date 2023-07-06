@@ -32,7 +32,10 @@ import LeaveTest from './Leave';
 import EmployeeExpense from "./EmployeeExpense";
 import CreateProjEng from './CreateProjEng';
 import GetAllPrEngagement from './GetAllProjEng';
-import EditprojEng from './EditprojEng'
+import EditprojEng from './EditprojEng';
+import GetAllAssets from "./GetAllAssets";
+import CreateEmpAssets from "./CreateEmpAssets";
+import EditAssets from "./EditAssets";
 import { Route, Routes } from "react-router-dom";
 
 export const UserContext = createContext();
@@ -74,6 +77,9 @@ const Approuter = () => {
                 <Route path="/CreateProjEng" element={<CreateProjEng/>}/>
                 <Route path="/GetAllPrEngagement" element={<GetAllPrEngagement/>}/>
                 <Route path="/EditprojEng/:id" element={<EditprojEng/>}/>
+                <Route path="/GetAllAssets" element={<GetAllAssets/>}/>
+                <Route path="/CreateEmpAssets" element={<CreateEmpAssets/>}/>
+                <Route path="/EditAssets/:id" element={<EditAssets/>}/>
             </Routes>
         </div>
 
