@@ -55,7 +55,7 @@ export default function InterviewCandidate() {
                 }
             }).then((response) => {
                 console.log(response.data)
-                toast.success(response.data, { position: 'top-center', theme: "colored" })
+                toast.success("Candidate details successfully created !!", { position: 'top-center', theme: "colored" })
             }).catch((error) => {
                 console.log(error);
                 handleAuthError(error);

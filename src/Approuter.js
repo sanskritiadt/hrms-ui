@@ -29,6 +29,10 @@ import GetAllEmpAttendance from './GetAllEmpAttendance'
 import EditCandidate from './EditCandidate';
 import EditInterviewDetails from './EditInterviewDetails';
 import LeaveTest from './Leave';
+import EmployeeExpense from "./EmployeeExpense";
+import CreateProjEng from './CreateProjEng';
+import GetAllPrEngagement from './GetAllProjEng';
+import EditprojEng from './EditprojEng'
 import { Route, Routes } from "react-router-dom";
 
 export const UserContext = createContext();
@@ -66,6 +70,10 @@ const Approuter = () => {
                 <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
                 <Route path='/getcandidate' element={<CandidateDetails />} />
                 <Route path='/createCandidate' element={<InterviewCandidate />} />
+                <Route path="/EmployeeExpense" element={<EmployeeExpense/>}/>
+                <Route path="/CreateProjEng" element={<CreateProjEng/>}/>
+                <Route path="/GetAllPrEngagement" element={<GetAllPrEngagement/>}/>
+                <Route path="/EditprojEng/:id" element={<EditprojEng/>}/>
             </Routes>
         </div>
 
