@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 
@@ -8,7 +8,9 @@ const TimeSheet = () => {
     const [checkindisable, setcheckinDisable] = useState(false);
     const [checkoutdisable, setcheckoutDisable] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
-    const [getDate, setNewDate] = useState([])
+    const [getDate, setNewDate] = useState([]);
+    const [latitude,setLatitude] = useState('');
+    const [longitude,setLongitude] = useState('');
     const token = localStorage.getItem("response-token");
     const empId = localStorage.getItem("EmpID");
 
@@ -16,10 +18,18 @@ const TimeSheet = () => {
         fromDate: "",
         toDate: ""
     })
+//HRMS-94
+    useEffect(()=> {
+        navigator.geolocation.getCurrentPosition((position)=>{
+            console.log(position);
+            setLatitude(position.coords.latitude); 
+            setLongitude(position.coords.longitude);
+        })
+        },[])
 
     const checkIn = (e) => {
         e.preventDefault()
-        axios.post(`payroll/timeSheet/checkIn/${empId}`, {},
+        axios.post(`payroll/timeSheet/checkIn/${empId}?Latitude=${latitude}&Longitude=${longitude}`, {},
             {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -29,14 +39,14 @@ const TimeSheet = () => {
                 toast.success(response.data, { position: "top-center", theme: "colored" })
                 setcheckinDisable(true);
             }).catch(error => {
-                toast.error("Error found try after sometime.", { position: "top-center", theme: "colored" })
+                toast.error("error", { position: "top-center", theme: "colored" })
+                // alert(latitude,longitude)
                 console.log(error)
             })
     }
-
     const checkOut = (e) => {
         e.preventDefault()
-        axios.put(`payroll/timeSheet/checkOut/${empId}`, {}, {
+        axios.put(`payroll/timeSheet/checkOut/${empId}?Latitude=${latitude}&Longitude=${longitude}`, {}, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -45,7 +55,8 @@ const TimeSheet = () => {
             toast.success(response.data, { position: "top-center", theme: "colored" })
             setcheckoutDisable(true)
         }).catch(error => {
-            toast.error("Error found try after sometime.", { position: "top-center", theme: "colored" })
+            toast.error("error", { position: "top-center", theme: "colored" })
+            // alert(latitude,longitude)
             console.log(error)
         })
     }
@@ -85,7 +96,6 @@ const TimeSheet = () => {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-
             })
             .then((response) => {
                 setIsPaused(!isPaused);
