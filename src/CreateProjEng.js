@@ -72,7 +72,7 @@ const CreateProjEng = () => {
                             <div className="row mb-3">
                                 <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='projectName'>Project Name</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.projectName}
+                                    <input onChange={(e) => { handle(e) }} value={data.projectName || ''}
                                         type="text"
                                         id="projectName"
                                        placeholder='Enter project name'
@@ -83,7 +83,7 @@ const CreateProjEng = () => {
                             <div className="row mb-3">
                                 <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectDescription'>Project Description</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.projectDescription}
+                                    <input onChange={(e) => { handle(e) }} value={data.projectDescription || ''}
                                         type="text" className="form-control"
                                         id="projectDescription" />
                                 </div>
@@ -91,7 +91,7 @@ const CreateProjEng = () => {
                             <div className="row mb-3">
                                 <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='engagedEmployee'>Engaged Employee</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.engagedEmployee}
+                                    <input onChange={(e) => { handle(e) }} value={data.engagedEmployee || ''}
                                         type="text" className="form-control"
                                         id="engagedEmployee" />
                                 </div>
@@ -100,7 +100,7 @@ const CreateProjEng = () => {
                             <div className="row mb-3">
                                 <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='startDate'>Start Date</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.startDate}
+                                    <input onChange={(e) => { handle(e) }} value={data.startDate || ''}
                                         type="date" className="form-control"
                                         id="startDate" />
                                 </div>
@@ -108,7 +108,7 @@ const CreateProjEng = () => {
                             <div className="row mb-3">
                                 <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='endDate'>End Date</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.endDate}
+                                    <input onChange={(e) => { handle(e) }} value={data.endDate || ''}
                                         type="date" className="form-control"
                                         id="endDate" />
                                 </div>
