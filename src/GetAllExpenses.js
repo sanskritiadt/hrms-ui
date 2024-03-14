@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { toast } from 'react-toastify';
-import handleAuthError from './CommonErrorHandling'
-
+import './Hrmscss/App.css'
 const Getallexpenses = () => {
   const token = localStorage.getItem("response-token")
   const [expenseItems, setExpenseItems] = useState([]);
@@ -14,7 +13,7 @@ const Getallexpenses = () => {
   let Navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("/expensemanagement/getAllExpenses", {
+    axios.get("/apigateway/expensemanagement/getAllExpenses", {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -22,10 +21,9 @@ const Getallexpenses = () => {
       console.log(response.data)
       setExpenseItems(response.data);
       toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
-    }).catch((error) => {
-      handleAuthError(error);
+    }).catch(error => {
       console.log(error);
-      // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
     })
   }, []);
 
@@ -36,7 +34,7 @@ const Getallexpenses = () => {
 
   const getExpenseByDate = (e) => {
     e.preventDefault();
-    axios.get(`/expensemanagement/getExpenseByDateRange?startDate=${startDate}&endDate=${endDate}`, {
+    axios.get(`/apigateway/expensemanagement/getExpenseByDateRange?startDate=${startDate}&endDate=${endDate}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -44,20 +42,28 @@ const Getallexpenses = () => {
       console.log(response.data);
       expenseItems.length = 0;
       setExpenseItems(response.data);
-      toast.success("Data found successfully!!", { position: "top-center", theme: 'colored' })
+      toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
       Navigate('/Getallexpenses')
     }).catch((error) => {
-      handleAuthError(error);
       console.log(error);
-      // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
     })
   }
 
   if (!expenseItems) return null;
 
   return (
-    <div>
+    <div><nav    aria-label="breadcrumb"   style={{ "--bs-breadcrumb-divider": "'>>'" }} >
+        <ol className="breadcrumb" style={{  color: "white" }}>
+        
+            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
+            <li className="breadcrumb-item"><a href="">Expense</a></li>
+            <li className="breadcrumb-item active" aria-current="page">Get ALL Expense Details</li>
+        </ol>
+    </nav>
+    <div style={{ margin:'25px 100px  ',  width:'820px',height:'750px'}}>
       <div className="row">
+      <h1  className='Heading1' >Get All Expense </h1>
         <div className=" col-lg-12 container pt-2">
           <form onSubmit={getExpenseByDate} >
             <div className="mb-2 d-grid gap-1 d-md-flex justify-content-center ">
@@ -74,7 +80,7 @@ const Getallexpenses = () => {
 
                 type="date" name="end-date" className="form-control"
                 id="endDate" />
-              <button className="btn btn-primary pb-1">Search</button>
+              <Button type='submit' variant="outline-primary">Search</Button>
             </div>
           </form>
         </div>
@@ -93,7 +99,7 @@ const Getallexpenses = () => {
               <th styles={{ width: '50%' }}>Category</th>
               <th styles={{ width: '50%' }}>GST</th>
               <th styles={{ width: '50%' }}>Comments</th>
-              <th><Button className="btn btn-primary" type='submit' onClick={routeCreateExpense}>
+              <th><Button  variant="outline-primary" type='submit' onClick={routeCreateExpense}>
                 Create exp
               </Button></th>
             </tr>
@@ -104,7 +110,7 @@ const Getallexpenses = () => {
               // display a <div> element with the employees.emailId and employees.designation
               // parent element needs to have a unique key
               <tr key={expenseItem.id}>
-                <td><Link to={`/editexpenses/${expenseItem.id}`} className="Candidate-id">{expenseItem.id}</Link></td>
+                <td><Link to={`/editexpenses/${expenseItem.id}`} className="expense-id">{expenseItem.id}</Link></td>
                 <td>{expenseItem.paymentDate}</td>
                 <td>{expenseItem.paymentMode}</td>
                 <td>{expenseItem.paidBy}</td>
@@ -120,6 +126,7 @@ const Getallexpenses = () => {
         </table>
       </div>
 
+    </div>
     </div>
   )
 }

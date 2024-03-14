@@ -3,13 +3,15 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-
+import { Link } from 'react-router-dom';
 
 const CreateInterview = () => {
-    const token = localStorage.getItem("response-token")
+    const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
         interviewId: "",
         tech_id: "",
+        position_id: "",
+        candidate_id: "",
         marks: "",
         communication: "",
         enthusiasm: "",
@@ -25,15 +27,34 @@ const CreateInterview = () => {
         clientName: "",
         rounds: "",
         date: "",
-        position_id: "",
-        candidate_id: ""
+        status:""
+       
     });
     const [technology, setTechnology] = useState([]);
     const [position, setPosition] = useState([]);
     const [candidate, setCandidate] = useState([]);
+    
+    // "interviewId":3,
+    // "rounds":2,
+    // "candidate_id":123,
+    // "tech_id":1,
+    // "position_id":1,
+    // "marks":40,
+    // "communication":10,
+    // "enthusiasm":10,
+    // "notes":"good",
+    // "offerReleased":true,
+    // "workExInYears":3.5,
+    // "interviewerName":"Siddharth",
+    // "source":"LinkedIn",
+    // "offerAccepted":true,
+    // "type":"Inbound",
+    // "date":"2007-12-03",
+    // "clientName":"seuwehuyg",
+    // "status":"Accepted"
 
     useEffect(() => {
-        axios.get(`/hrms/interview/alltech`, {
+        axios.get(`/apigateway/hrms/interview/alltech`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -43,7 +64,7 @@ const CreateInterview = () => {
         }).catch(error => {
             console.log(error)
         });
-        axios.get(`/hrms/interviewCandidate/allInterviewCandidate`, {
+        axios.get(`/apigateway/hrms/interviewCandidate/allInterviewCandidate`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -53,7 +74,7 @@ const CreateInterview = () => {
         }).catch(error => {
             console.log(error);
         });
-        axios.get(`/hrms/interview/getAllPositionNew`, {
+        axios.get(`/apigateway/hrms/interview/getAllPositionNew`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -69,7 +90,7 @@ const CreateInterview = () => {
     console.log(position);
     function submit(e) {
         e.preventDefault();
-        axios.post(`/hrms/interview/saveInterviewNew`, {
+        axios.post(`/apigateway/hrms/interview/saveInterviewNew`, {
             interviewId: parseInt(data.interviewId),
             tech_id: parseInt(data.tech_id),
             marks: parseInt(data.marks),
@@ -81,14 +102,13 @@ const CreateInterview = () => {
             interviewerName: data.interviewerName,
             source: data.source,
             offerAccepted: data.offerAccepted,
-            screeningRound: data.screeningRound,
-            selected: data.selected,
             type: data.type,
             clientName: data.clientName,
             rounds: parseInt(data.rounds),
             date: data.date,
             position_id: parseInt(data.position_id),
-            candidate_id: parseInt(data.candidate_id)
+            candidate_id: parseInt(data.candidate_id),
+            status:data.status
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -106,27 +126,6 @@ const CreateInterview = () => {
             // toast.error(error.response.data, { position: 'top-center', theme: "colored" })
         })
     }
-    // {
-    //     "marks": 84,
-    //     "communication": 67,
-    //     "enthusiasm": 3,
-    //     "notes": "Good",
-    //     "offerReleased": true,
-    //     "workExInYears": 2.5,
-    //     "interviewerName": "Sunali",    
-    //     "candidateName": "Ankit",
-    //     "source": "Hirect",
-    //     "offerAccepted": true,
-    //     "screeningRound": false,
-    //     "selected": true,
-    //     "type": "Inbound",
-    //     "clientName": "nescafe",
-    //     "rounds": 3,
-    //     "date": "2007-12-03",
-    //     "tech_id": 2,
-    //     "position_id": 28,
-    //     "candidate_id": 1
-    // }
     var str2bool = (value) => {
         if (value && typeof value === "string") {
             if (value.toLowerCase() === "true") return true;
@@ -144,16 +143,16 @@ const CreateInterview = () => {
         // Here we can send the data to further processing (Action/Store/Rest)
         data.offerAccepted = str2bool(e.target.value);
     }
-    function radiobutton3(e) {
-        console.log(str2bool(e.target.value));
-        // Here we can send the data to further processing (Action/Store/Rest)
-        data.selected = str2bool(e.target.value);
-    }
-    function radiobutton4(e) {
-        console.log(str2bool(e.target.value));
-        // Here we can send the data to further processing (Action/Store/Rest)
-        data.screeningRound = str2bool(e.target.value);
-    }
+    // function radiobutton3(e) {
+    //     console.log(str2bool(e.target.value));
+    //     // Here we can send the data to further processing (Action/Store/Rest)
+    //     data.selected = str2bool(e.target.value);
+    // }
+    // function radiobutton4(e) {
+    //     console.log(str2bool(e.target.value));
+    //     // Here we can send the data to further processing (Action/Store/Rest)
+    //     data.screeningRound = str2bool(e.target.value);
+    // }
 
     function handle(e) {
         const newdata = { ...data };
@@ -162,17 +161,25 @@ const CreateInterview = () => {
         console.log(newdata);
     }
     return (
+        <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+        <ol className="breadcrumb" style={{  color: "white" }}>
+        
+            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
+            <li className="breadcrumb-item"><a href="">Hiring</a></li>
+            <li className="breadcrumb-item active" aria-current="page">Create Interview</li>
+        </ol>
+    </nav>
         <div className='container pt-3'>
             <div className='row'>
                 <div className='col-sm-10 mx-auto'>
-                    <div className='card border-0 shadow'>
+                    <div className='card border-0 shadow'style={{width:'700px',height:'1500px'}}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' >
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='interviewId'>Interview Id</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.interviewId}
-                                            type="number" className="form-control"
+                                            type="text" className="form-control"
                                             placeholder='enter the interview Id.'
                                             id="interviewId" />
                                     </div>
@@ -181,7 +188,7 @@ const CreateInterview = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="notes">Rounds</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.rounds}
-                                            type="number" className="form-control"
+                                            type="text" className="form-control"
                                             placeholder='enter the number of  Rounds.'
                                             id="rounds" />
                                     </div>
@@ -226,7 +233,7 @@ const CreateInterview = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='marks'>Marks</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.marks}
-                                            type="number" step='0.1' className="form-control"
+                                            type="text" className="form-control"
                                             placeholder='enter marks in number..'
                                             id="marks" />
                                     </div>
@@ -236,7 +243,7 @@ const CreateInterview = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='communication'>Communication</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.communication}
-                                            type="number" step='0.1' className="form-control"
+                                            type="text"  className="form-control"
                                             placeholder='enter communication marks...'
                                             id="communication" />
                                     </div>
@@ -246,9 +253,9 @@ const CreateInterview = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="enthusiasm">Enthusiasm</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.enthusiasm}
-                                            type="number" className="form-control"
+                                            type="text" className="form-control"
                                             placeholder='enter enthusiasm marks...'
-                                            step='0.1'
+                                          
                                             id="enthusiasm" />
                                     </div>
                                 </div>
@@ -267,7 +274,7 @@ const CreateInterview = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="notes">Work Exp In Years</label>
                                     <div className="col-sm-10">
                                         <input required onChange={(e) => { handle(e) }} value={data.workExInYears}
-                                            type="number" className="form-control"
+                                            type="text" className="form-control"
                                             placeholder='enter your work experience in years.'
                                             id="workExInYears" />
                                     </div>
@@ -290,7 +297,7 @@ const CreateInterview = () => {
                                             id="source" />
                                     </div>
                                 </div>
-                                <fieldset className="row mb-3">
+                                {/* <fieldset className="row mb-3">
                                     <legend className="col-form-label col-sm-2 pt-0">Screening Round</legend>
                                     <div className="col-sm-10">
 
@@ -303,8 +310,8 @@ const CreateInterview = () => {
                                             <label className="form-check-label" htmlFor="inlineRadio2">No</label>
                                         </div>
                                     </div>
-                                </fieldset>
-                                <fieldset className="row mb-3">
+                                </fieldset> */}
+                                {/* <fieldset className="row mb-3">
                                     <legend className="col-form-label col-sm-2 pt-0">Selected</legend>
                                     <div className="col-sm-10">
                                         <div className="form-check form-check-inline">
@@ -316,8 +323,7 @@ const CreateInterview = () => {
                                             <label className="form-check-label" htmlFor="inlineRadio2">No</label>
                                         </div>
                                     </div>
-                                </fieldset>
-
+                                </fieldset> */}
                                 <fieldset className="row mb-3">
                                     <legend className="col-form-label col-sm-2 pt-0">Offer Released</legend>
                                     <div className="col-sm-10">
@@ -358,7 +364,17 @@ const CreateInterview = () => {
                                         </div>
                                     </div>
                                 </fieldset>
-
+                                <div className="row mb-3">
+                                        <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Status</label>
+                                        <div className="col-sm-10">
+                                            <select id="status" value={data.status} onChange={(e) => { handle(e) }} className="form-select">
+                                                <option defaultValue>Select your status type</option>
+                                                <option value="Accepted">Accepted</option>
+                                                <option value="Rejected">Rejected</option>
+                                                <option value="Pending">Pending</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="clientName">Client Name</label>
                                     <div className="col-sm-10">
@@ -385,6 +401,7 @@ const CreateInterview = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 }

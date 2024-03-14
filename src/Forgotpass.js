@@ -17,7 +17,7 @@ function ForgotPassword1() {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const response = await fetch('api/auth/password/resetlink', {
+        const response = await fetch(`/apigateway/api/auth/password/resetlink`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function ForgotPassword1() {
   });
 
   return (
-    <div className="forgot-password-container">
+    <div className="forgot-password-container" style={{margin:'0px 15rem'}}>
       <div className="forgot-password-box">
         <h2 className="forgot-password-title">Forgot Password</h2>
         <form onSubmit={formik.handleSubmit}>

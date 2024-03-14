@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React from "react";
 import Empfunc from './employeedetails';
 import EditEmployee from "./EditEmployee";
 import PositionDetails from './Position';
@@ -29,21 +29,25 @@ import GetAllEmpAttendance from './GetAllEmpAttendance'
 import EditCandidate from './EditCandidate';
 import EditInterviewDetails from './EditInterviewDetails';
 import LeaveTest from './Leave';
-import EmployeeExpense from "./EmployeeExpense";
-import CreateProjEng from './CreateProjEng';
-import GetAllPrEngagement from './GetAllProjEng';
-import EditprojEng from './EditprojEng';
-import GetAllAssets from "./GetAllAssets";
-import CreateEmpAssets from "./CreateEmpAssets";
-import EditAssets from "./EditAssets";
 import { Route, Routes } from "react-router-dom";
+ import SideBar from './SideBarComponents/SideBar'
+import GetAllPrEngagement from "./GetAllPrEngagement";
+import EmployeeSalary from "./EmployeeSalary";
+import HolidayCalender from "./HolidayCalender";
+import EditHolidayCalender from "./EditHolidayCalender";
+import EditAssets from './EditAssets';
+import GetAllAssets from './GetAllAssets';
+import CreateEmpAssets from './CreateEmpAssets';
+import CreateProjEng from './CreateProjEng';
+import EditprojEng from "./EditprojEng";
+import SearchEmpAssets from "./SearchEmpAssets";
 
-export const UserContext = createContext();
 const Approuter = () => {
     return (
         <div>
             <AppNavbar></AppNavbar>
-            <Routes>
+              <SideBar>         
+               <Routes>
                 <Route path="/" element={<HomePage2 />} />
                 <Route path="/Leave" element={<LeaveTest />} />
                 <Route path='/Login' element={<Login />} />
@@ -73,16 +77,27 @@ const Approuter = () => {
                 <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
                 <Route path='/getcandidate' element={<CandidateDetails />} />
                 <Route path='/createCandidate' element={<InterviewCandidate />} />
-                <Route path="/EmployeeExpense" element={<EmployeeExpense/>}/>
-                <Route path="/CreateProjEng" element={<CreateProjEng/>}/>
-                <Route path="/GetAllPrEngagement" element={<GetAllPrEngagement/>}/>
-                <Route path="/EditprojEng/:id" element={<EditprojEng/>}/>
+                <Route path='/GetAllPrEngagement' element={<GetAllPrEngagement/>} />
+                <Route path='/EditprojEng/:id' element={<EditprojEng/>} />
+                <Route path='/CreateProjEng' element={<CreateProjEng/>} />
+                <Route path ='/EmployeeSalary' element={<EmployeeSalary/>} />
+                <Route path ='/HolidayCalender' element={<HolidayCalender/> }/>
+                <Route path ='/EditHolidayCalender' element={<EditHolidayCalender/> }/>
                 <Route path="/GetAllAssets" element={<GetAllAssets/>}/>
                 <Route path="/CreateEmpAssets" element={<CreateEmpAssets/>}/>
                 <Route path="/EditAssets/:id" element={<EditAssets/>}/>
-            </Routes>
+                <Route path="/SearchEmpAssets" element={<SearchEmpAssets/>}/>
+          </Routes>
+     
+   
+        
+              </SideBar>  
+
         </div>
 
     )
 }
 export default Approuter;
+
+
+

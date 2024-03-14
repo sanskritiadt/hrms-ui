@@ -25,14 +25,15 @@ const EditInterviewDetails = () => {
         position_id: "",
         type: "",
         date: "",
-        screeningRound: "",
+        // screeningRound: "",
         clientName: "",
         rounds: "",
-        selected: "",
-        candidate_id: ""
+        // selected: "",
+        candidate_id: "",
+        status:""
     });
     useEffect(() => {
-        axios.get(`/hrms/interview/getInterviewDetailByIdAndRound?interviewId=${id}&round=${id2}`,
+        axios.get(`/apigateway/hrms/interview/getInterviewDetailByIdAndRound?interviewId=${id}&round=${id2}`,
             {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -48,7 +49,7 @@ const EditInterviewDetails = () => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.put(`/hrms/interview/updateInterviewByIdAndRound`, {
+        axios.put(`/apigateway/hrms/interview/updateInterviewByIdAndRound`, {
             interviewId: data.interviewId,
             tech_id: data.tech_id.techId,
             marks: data.marks,
@@ -64,11 +65,12 @@ const EditInterviewDetails = () => {
             position_id: data.position_id.positionId,
             type: data.type,
             date: data.date,
-            screeningRound: data.screeningRound,
+            // screeningRound: data.screeningRound,
             clientName: data.clientName,
             rounds: data.rounds,
-            selected: data.selected,
-            candidate_id: data.candidate_id.candidateId
+            // selected: data.selected,
+            candidate_id: data.candidate_id.candidateId,
+            status : data.status
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -87,7 +89,7 @@ const EditInterviewDetails = () => {
         <div className='container pt-3'>
             <div className='row'>
                 <div className='col-lg-8 col-md-10 mx-auto'>
-                    <div className='card border-0 shadow'>
+                    <div className='card border-0 shadow'style={{  marginLeft:'100px',width:'800px',height:'1550PX'}}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={handleSubmit}>
 
@@ -263,7 +265,7 @@ const EditInterviewDetails = () => {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <fieldset className="row mb-3">
+                                {/* <fieldset className="row mb-3">
                                     <legend className="col-form-label col-sm-2 pt-0">Screening Round</legend>
                                     <div className="col-sm-10">
                                         <div className="form-check form-check-inline">
@@ -275,8 +277,8 @@ const EditInterviewDetails = () => {
                                             <label className="form-check-label" htmlFor="false">No</label>
                                         </div>
                                     </div>
-                                </fieldset>
-                                <fieldset className="row mb-3">
+                                </fieldset> */}
+                                {/* <fieldset className="row mb-3">
                                     <legend className="col-form-label col-sm-2 pt-0">Selected</legend>
                                     <div className="col-sm-10">
                                         <div className="form-check form-check-inline">
@@ -289,7 +291,19 @@ const EditInterviewDetails = () => {
                                             <label className="form-check-label" htmlFor="false">No</label>
                                         </div>
                                     </div>
-                                </fieldset>
+                                </fieldset> */}
+
+                                <div className="row mb-3">
+                                        <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Status</label>
+                                        <div className="col-sm-10">
+                                            <select id="status" value={data.status || ''}  onChange={e => setData({ ...data, status: e.target.value })}className="form-select">
+                                                <option defaultValue>Select your status type</option>
+                                                <option value="Accepted">Accepted</option>
+                                                <option value="Rejected">Rejected</option>
+                                                <option value="Pending">Pending</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 <fieldset className="row mb-3">
                                     <legend className="col-form-label col-sm-2 pt-0">Type</legend>

@@ -24,7 +24,7 @@ const EditAssets = () => {
     })
 
     useEffect(() => {
-        axios.get(`/hrms/masterAsset/GetAssetById/${id}`, {
+        axios.get(`/apigateway/hrms/masterAsset/GetAssetById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -37,7 +37,7 @@ const EditAssets = () => {
     }, [token, id])
     function submit(e) {
         e.preventDefault();
-        axios.put(`/hrms/masterAsset/updateMasterAssetbyid`, {
+        axios.put(`/apigateway/hrms/masterAsset/updateMasterAssetbyid`, {
             id:asset.id,
             assetUser: asset.assetUser,
             assetName: asset.assetName,
@@ -88,7 +88,7 @@ function handle(){
         <div className='container pt-3'>
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
-                    <div className='card border-0 shadow'>
+                    <div className='card border-0 shadow'style={{width:'700px',height:'1060px'}}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                             <div className="row mb-3">
@@ -99,7 +99,7 @@ function handle(){
                                             id="assetId"
                                             placeholder='Enter asset Id'
                                             className="form-control" />
-                                    </div>
+                                    </div>                                                                                                          
                                 </div>
                                 <div className="row mb-3">
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='assetUser'>Asset User</label>
