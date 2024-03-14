@@ -86,11 +86,13 @@ const Registerformik = () => {
     };
 
     const handleSubmit = (values, { setStatus, resetForm }) => {
-        axios.post('api/auth/register', {
+        axios.post('/apigateway/api/auth/register', {
             email: values.email,
             username: values.username,
             password: values.password,
-            "registerAsAdmin":false
+            roles: [{
+                "RoleName":"ROLE_ADMIN"
+                  }]
         }).then((response) => {
             setStatus(response.data.message);
             resetForm(initialValues)
@@ -102,15 +104,18 @@ const Registerformik = () => {
             toast.error('Cannot register try after sometime',{ position: "top-center", theme: "colored" });
         })
     }
-
+ 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email("Invalid email address").required("Email is required"),
         username: Yup.string().required('Username is required.'),
         password: Yup.string().required('Password is required.')
             .min(8, 'Password must be at least 8 characters long.')
     });
+
+
+
     return (
-        <Container>
+        <Container style={{ margin:'82px 139px ' ,width:' 806px',height:' 697px'}}>
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
