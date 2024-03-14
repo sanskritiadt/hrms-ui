@@ -19,7 +19,7 @@ const CreatePositionformik = () => {
         // validationSchema: CreatePostitionSchema,
         onSubmit: (values, Action) => {
             console.log(values);
-            axios.post(`/apigateway/hrms/interview/savePosition`, {
+            axios.post(`/hrms/interview/savePosition`, {
                 techid: values.techid,
                 positionopendate: values.positionopendate,
                 status: values.status,

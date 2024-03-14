@@ -8,7 +8,7 @@ function GetAllPrEngagement() {
     const [project , setProject ] = useState([]);
     const token = localStorage.getItem("response-token")
     React.useEffect(() => {
-      axios.get(`/apigateway/hrms/engagement/allProjectEngagement`, {
+      axios.get(`/hrms/engagement/allProjectEngagement`, {
          headers: {
           'Authorization': `Bearer ${token}`
         }

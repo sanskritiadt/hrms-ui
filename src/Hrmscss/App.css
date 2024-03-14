@@ -1,16 +1,4 @@
- @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-
-body{
-  font-family: 'Roboto Slab', serif;
-
-}
  #svgimg{
     margin-left: auto;
     margin-right: auto;
@@ -21,28 +9,3 @@ body{
     color: blue;
   
 }
-
-
-.Heading1{
-
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 17px;
-  font-weight: bold;
-  color : black;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin: 0 auto;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  background-color: #d3dace;
-  box-shadow: 5px 5px 5px black;
-  /* display: inline-block; */
-  
-  margin: 13px auto;
-  padding: 17px;
-  width: 344px;
-  height: 54px;
-
-}
-
-

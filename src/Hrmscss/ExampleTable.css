@@ -13,8 +13,8 @@
   }
   
   .custom-table th {
-    background-color: #f6c3d6;
-    color: black;
+    background-color: #f0ad4e;
+    color: #fff;
   }
   
   .custom-table tbody tr:nth-child(even) {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {toast} from 'react-toastify';
-import { Link } from 'react-router-dom';
 const CreateEmpAssets = () => {
     const token = localStorage.getItem("response-token");
     const [data,setData] = useState({
@@ -21,7 +20,7 @@ const CreateEmpAssets = () => {
     })
     function submit(e){
         e.preventDefault();
-        axios.post(`/apigateway/hrms/masterAsset/insertAssets`,{
+        axios.post(`/hrms/masterAsset/insertAssets`,{
         assetUser:data.assetUser,
         assetName:data.assetName,
         assetId:data.assetId,
@@ -70,19 +69,10 @@ const CreateEmpAssets = () => {
     //     "status": "jksahu"
     // }
   return (
-    <div>   <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-    <ol className="breadcrumb" style={{  color: "white" }}>
-    
-        <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-        <li className="breadcrumb-item"><a href="">Employee Management</a></li>
-        <li className="breadcrumb-item active" aria-current="page">Employee Position</li>
-    </ol>
-</nav>
-    <div className='container pt-3'>     
+    <div className='container pt-3'>
     <div className='row'>
         <div className='col-md-8 mx-auto'>
-            <div className='card border-0 shadow' style={{  marginLeft:'100px',width:'700px',height:'1100PX'}}>
-          
+            <div className='card border-0 shadow'>
                 <div className='card-body'>
                     <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                         <div className="row mb-3">
@@ -217,7 +207,6 @@ const CreateEmpAssets = () => {
             </div>
         </div>
     </div>
-</div>
 </div>
   );
 };
