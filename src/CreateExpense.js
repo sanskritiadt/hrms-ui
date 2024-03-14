@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-import { Link } from 'react-router-dom';
+
 const CreateExpense = () => {
     const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
@@ -20,7 +20,7 @@ const CreateExpense = () => {
 
     function submit(e) {
         e.preventDefault();
-        axios.post(`/apigateway/expensemanagement/createExpenses`, {
+        axios.post(`/expensemanagement/createExpenses`, {
             amount: parseInt(data.amount),
             description: data.description,
             paymentMode: data.paymentMode,
@@ -75,18 +75,10 @@ const CreateExpense = () => {
     //     "comments" : "decortion"
     // }
     return (
-        <div> <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-        <ol className="breadcrumb" style={{  color: "white" }}>
-        
-            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Expense</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Create  Expense</li>
-        </ol>
-    </nav>
         <div className='container pt-3'>
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
-                    <div className='card border-0 shadow' style={{  marginLeft:'100px',width:'700px',height:'750PX'}}>
+                    <div className='card border-0 shadow'>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                                 <div className="row mb-3">
@@ -177,15 +169,6 @@ const CreateExpense = () => {
                                             id="comments" />
                                     </div>
                                 </div>
-                                <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Comments</label>
-                                    <div className="col-sm-10">
-                                        <input onChange={(e) => { handle(e) }} value={data.comments}
-                                            type="text" className="form-control"
-                                            placeholder='enter your comments'
-                                            id="comments" />
-                                    </div>
-                                </div>
                                 <div className="d-grid gap-2 col-6 mx-auto">
                                     <button className="btn btn-outline-danger" type="submit">Submit</button>
                                 </div>
@@ -195,7 +178,6 @@ const CreateExpense = () => {
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     )
 }

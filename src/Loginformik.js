@@ -11,7 +11,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required(' Email is Required'),
     password: Yup.string().required('Password is required.')
-            .min(8, 'Password must be at least 8 characters long.')
+        .min(8, 'Password must be at least 8 characters long.')
 });
 
 const Login = () => {
@@ -19,7 +19,7 @@ const Login = () => {
 
     const handleSubmit = (values) => {
         axios
-            .post(`/apigateway/api/auth/login`, {
+            .post(`/api/auth/login`, {
                 email: values.email,
                 password: values.password,
                 deviceInfo: {
@@ -28,10 +28,12 @@ const Login = () => {
                 },
             })
             .then((response) => {
-                localStorage.setItem('response-token',response.data.jwtAuthenticationResponse.accessToken);
-                localStorage.setItem('refresh-token',response.data.jwtAuthenticationResponse.refreshToken);
+                localStorage.setItem('response-token', response.data.jwtAuthenticationResponse.accessToken);
+                localStorage.setItem('refresh-token', response.data.jwtAuthenticationResponse.refreshToken);
                 localStorage.setItem('EmpID', response.data.employeeId);
+                localStorage.setItem('roleArray', response.data.roles.length);
                 console.log(response.data.jwtAuthenticationResponse.accessToken);
+                console.log('role', response.data.roles.length);
                 alert('login successfull');
                 navigate('/');
             })

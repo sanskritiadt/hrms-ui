@@ -18,7 +18,7 @@ import { useFormik } from 'formik';
 import { CandidateSchema } from './Validations/Candidate'
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-import { Link } from 'react-router-dom';
+
 export default function InterviewCandidate() {
     const token = localStorage.getItem("response-token");
 
@@ -34,12 +34,11 @@ export default function InterviewCandidate() {
             cvShortlisted: '',
             lastCTC: '',
             noticePeriod: '',
-            dob:''
         },
         validationSchema: CandidateSchema,
         onSubmit: (values, action) => {
             console.log(values)
-            axios.post(`/apigateway/hrms/interviewCandidate/saveInterviewCandidate`, {
+            axios.post(`/hrms/interviewCandidate/saveInterviewCandidate`, {
                 candidateName: values.candidateName,
                 emailId: values.emailId,
                 contactNo: values.contactNo,
@@ -49,8 +48,7 @@ export default function InterviewCandidate() {
                 technicalStack: values.technicalStack,
                 cvShortlisted: values.cvShortlisted,
                 lastCTC: values.lastCTC,
-                noticePeriod: parseInt(values.noticePeriod),
-                dob:values.dob
+                noticePeriod: parseInt(values.noticePeriod)
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -73,18 +71,10 @@ export default function InterviewCandidate() {
 
     return (
         <>
-           <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-        <ol className="breadcrumb" style={{  color: "white" }}>
-        
-            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Hiring</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Create Candidate Details</li>
-        </ol>
-    </nav>
-            <div className='container pt-3'>  
+            <div className='container pt-3'>
                 <div className='row'>
                     <div className='col-lg-8 col-md-8 mx-auto'>
-                        <div className='card border-0 shadow'style={{width:'700px',height:'1000px'}}>
+                        <div className='card border-0 shadow'>
                             <div className='card-body'>
                                 <form className='container py-3  mb-3' onSubmit={formik.handleSubmit} >
                                     <div className="row mb-3">
@@ -226,9 +216,10 @@ export default function InterviewCandidate() {
                                         <label htmlFor="lastCTC" className="col-sm-2 col-form-label"> Last CTC</label>
                                         <div className="col-sm-10">
                                             <input
-                                                type="text"
+                                                type="number"
                                                 id="lastCTC"
                                                 name='lastCTC'
+                                                step='0.1'
                                                 placeholder='Enter Last CTC'
                                                 className={`form-control ${formik.touched.lastCTC && formik.errors.lastCTC ? 'is-invalid' : ''}`}
                                                 onChange={formik.handleChange}
@@ -310,23 +301,6 @@ export default function InterviewCandidate() {
                                             </div>
                                         </div>
                                     </fieldset>
-                                    <div className="row mb-3">
-                                        <label htmlFor="dob" className="col-sm-2 col-form-label">dob</label>
-                                        <div className="col-sm-10">
-                                            <input
-                                                type="date"
-                                                id="dob"
-                                                name='dob'
-                                                className={`form-control ${formik.touched.dob && formik.errors.dob ? 'is-invalid' : ''}`}
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                value={formik.values.dob}
-                                            />
-                                            {formik.touched.dob && formik.errors.dob ? (
-                                                <div className="invalid-feedback">{formik.errors.dob}</div>
-                                            ) : null}
-                                        </div>
-                                    </div>
                                     <div className="d-grid gap-2 col-6 mx-auto">
                                         <button className="btn btn-outline-danger" type="submit">Submit</button>
                                     </div>
@@ -337,7 +311,6 @@ export default function InterviewCandidate() {
                     </div>
                 </div>
             </div>
-           </div>
 
         </>
     )

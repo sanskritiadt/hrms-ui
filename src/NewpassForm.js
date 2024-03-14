@@ -127,7 +127,7 @@ const PasswordForm = ({ token, email, type }) => {
     const token = urlParams.get("token");
     const email = urlParams.get("email");
     axios
-      .post(`/apigatewayapi/auth/password/reset`, {
+      .post(`api/auth/password/reset`, {
         email: email,
         password: values.password,
         confirmPassword: values.confirmPassword,

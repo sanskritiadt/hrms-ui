@@ -5,9 +5,7 @@ import './Hrmscss/ExampleTable.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import './Hrmscss/App.css';
 import handleAuthError from './CommonErrorHandling';
-
 
 //******** USe Prototype obj */
 
@@ -17,7 +15,7 @@ function ClientInfoTable() {
 
     useEffect(() => {
         // Fetch the client information from the server when the component mounts
-        axios.get(`/apigateway/expensemanagement/clientInfo/getAllClientInfo`, {
+        axios.get('/expensemanagement/clientInfo/getAllClientInfo', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -27,26 +25,17 @@ function ClientInfoTable() {
             toast.success("Client data found successfully!!", { position: "top-center", theme: 'colored' })
 
         })
-            .catch(error => {
-                console.log(error);
+            .catch((error) => {
                 handleAuthError(error);
-                // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
-            });
+                console.log(error);
+                // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+            })
     }, []);
 
     // Otherwise, render the client information in a table
     return (
-        <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-        <ol className="breadcrumb" style={{  color: "white" }}>
-        
-            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Partner</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Get Client Information</li>
-        </ol>
-    </nav>
-        <div  style={{  marginTop:'50px', marginLeft : '80px ', width:'820px',height:'750px'}}>
+        <div style={{ marginTop: '20px' }}>
             <Container>
-            <h1  className='Heading1' >Get Client Information </h1>
                 <Table striped bordered hover className="custom-table">
                     <thead >
                         <tr>
@@ -74,7 +63,6 @@ function ClientInfoTable() {
                     </tbody>
                 </Table>
             </Container>
-        </div>
         </div>
     )
 };

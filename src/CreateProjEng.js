@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import {toast} from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-import { Link } from 'react-router-dom';
+
 const CreateProjEng = () => {
     const token = localStorage.getItem("response-token");
     const [data,setData] = useState({
@@ -24,7 +24,7 @@ const CreateProjEng = () => {
     // }
     function submit(e){
         e.preventDefault();
-        axios.post(`/apigateway/hrms/engagement/saveProjectEngagement`,{
+        axios.post(`/hrms/engagement/saveProjectEngagement`,{
             projectName:data.projectName,
             projectDescription:data.projectDescription,
             engagedEmployee:data.engagedEmployee,
@@ -63,20 +63,10 @@ const CreateProjEng = () => {
            console.log(newData);
     }
     return (
-        <div>
-        <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-        <ol className="breadcrumb" style={{  color: "white" }}>
-        
-            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Partner</a></li>
-            <li className="breadcrumb-item active" aria-current="page"> Create Project Engagement</li>
-        </ol>
-    </nav>
         <div className='container pt-3'>
-             <h1  className='Heading1' >Create Project Details</h1>
         <div className='row'>
             <div className='col-md-8 mx-auto'>
-                <div className='card border-0 shadow' style={{  marginRight:'100px',width:'700px',height:'550px'}}>
+                <div className='card border-0 shadow'>
                     <div className='card-body'>
                         <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                             <div className="row mb-3">
@@ -146,7 +136,6 @@ const CreateProjEng = () => {
                 </div>
             </div>
         </div>
-    </div>
     </div>
     )
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-import { Link } from 'react-router-dom';
+
 
 export default function CreatePosition() {
     const token = localStorage.getItem("response-token")
@@ -23,7 +23,7 @@ export default function CreatePosition() {
 
     function submit(e) {
         e.preventDefault();
-        axios.post(`/apigateway/hrms/interview/savePosition`, {
+        axios.post(`/hrms/interview/savePosition`, {
             positionName: data.positionName,
             techStack: selectedValue,
             vacancy: data.vacancy,
@@ -81,18 +81,10 @@ export default function CreatePosition() {
     }
     return (
         <>
-          <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-         <ol className="breadcrumb" style={{  color: "white" }}>
-         
-             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-             <li className="breadcrumb-item"><a href="">Hiring</a></li>
-             <li className="breadcrumb-item active" aria-current="page">Create Position</li>
-         </ol>
-     </nav>
             <div className='container pt-3'>
                 <div className='row'>
                     <div className='col-md-8 mx-auto' >
-                        <div className='card border-0 shadow'style={{  marginLeft:'100px',width:'700px',height:'750PX'}}>
+                        <div className='card border-0 shadow'>
                             <div className='card-body'>
                                 <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                                     <div className="row mb-3">
@@ -130,7 +122,7 @@ export default function CreatePosition() {
                                         <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='vacancy'>Vacancy</label>
                                         <div className="col-sm-10">
                                             <input onChange={(e) => { handle(e) }} value={data.vacancy}
-                                                type="text"
+                                                type="number"
                                                 id="vacancy"
                                                 placeholder='enter your vacancy'
                                                 className="form-control" />
@@ -140,7 +132,7 @@ export default function CreatePosition() {
                                         <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='experienceInYear'>Experience in years</label>
                                         <div className="col-sm-10">
                                             <input onChange={(e) => { handle(e) }} value={data.experienceInYear}
-                                                type="text"
+                                                type="number"
                                                 id="experienceInYear"
                                                 placeholder='enter your experience in years'
                                                 className="form-control" />
@@ -213,7 +205,6 @@ export default function CreatePosition() {
                     </div>
                 </div>
             </div>
- </div>
         </>
     )
 }

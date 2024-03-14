@@ -1,12 +1,10 @@
 import axios from 'axios'
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import handleAuthError from './CommonErrorHandling';
 
 const GetAllEmpAttendance = () => {
-    
-    const token = localStorage.getItem("response-token")
-    const empid = localStorage.getItem("EmpID")
+    const token = localStorage.getItem("response-token");
     const [getAttendence, setAttendence] = useState({
         fromDate: "",
         toDate: ""
@@ -14,17 +12,18 @@ const GetAllEmpAttendance = () => {
     const [getData, setData] = useState([])
     const submit = (e) => {
         e.preventDefault();
-        axios.get(`/apigateway/payroll/timeSheet/allEmpAttendence?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`, {
+        axios.get(`/payroll/timeSheet/allEmpAttendence?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            toast.success("data found succesfully.", { position: "top-center", theme: "colored" });
+            toast.success("Data found succesfully.", { position: "top-center", theme: "colored" });
             console.log(response.data)
             setData(response.data);
-        }).catch(error => {
-            toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" });
-            console.log("error happend", error)
+        }).catch((error) => {
+            handleAuthError(error);
+            // toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" });
+            console.log(error);
         })
 
     }
@@ -34,21 +33,20 @@ const GetAllEmpAttendance = () => {
         setAttendence(newDate);
         console.log(newDate)
     }
-
-
+    //    "timeSheetId": 79,
+    //         "employeeId": 7,
+    //         "checkOut": "16:34:33",
+    //         "checkIn": "16:34:12",
+    //         "workingHour": "0:0:21",
+    //         "date": "15-04-2023",
+    //         "status": "Present",
+    //         "month": "4",
+    //         "year": "2023",
+    //         "leaveInterval": null,
+    //         "intervalStatus": null
     return (
-        <div>     <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-        <ol className="breadcrumb" style={{  color: "white" }}>
-        
-            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Employee Management</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Employee Attendance </li>
-        </ol>
-    </nav>
-        <div  style={{ margin:' 116px 38px',height:'562px'  }} >
-          
+        <div >
             <div className=" col-lg-10 container pt-2">
-            <h1  className='Heading1' >Employee  Attendance </h1>
                 <form onSubmit={(e) => { submit(e) }} >
                     <div className="mb-2 d-grid gap-1 d-md-flex justify-content-center">
                         <label className="pt-3" htmlFor="fromdate">fromDate:</label>
@@ -64,11 +62,26 @@ const GetAllEmpAttendance = () => {
                 </form>
             </div>
 
+            {/* <div className=" col-lg-10 container pt-2">
+                <form onSubmit={(e) => { submit(e) }} >
+                    <div className=" mb-2 d-grid gap-1 d-md-flex justify-content-center">
+                        <label className="pt-3" htmlFor="fromdate">fromDate:</label>
+                        <input onChange={(e) => { handle(e) }} value={date.fromDate}
+                            type="date" className="form-control"
+                            id="fromDate" />
+                        <label className="pt-3" htmlFor="todate">toDate:</label>
+                        <input onChange={(e) => { handle(e) }} value={date.toDate}
+                            type="date" className="form-control"
+                            id="toDate" />
+                        <button className=" btn btn-primary  pb-1">Get</button>
+                    </div> 
+                </form>
+            </div> */}
             <div className="table-responsive-sm">
                 <table border='2' className="table table-striped table-bordered">
                     <thead className="head">
                         <tr className="table-danger table-striped">
-                        <th>EMPLOYEE NAME</th>
+                            <th>EMPLOYEE NAME</th>
                             <th>EMPLOYEE ID</th>
                             <th>CHECK OUT</th>
                             <th>CHECK IN</th>
@@ -103,7 +116,6 @@ const GetAllEmpAttendance = () => {
                     </tbody>
                 </table>
             </div>
-        </div>
         </div>
     )
 }
