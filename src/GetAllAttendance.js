@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const GetAllAttendance = () => {
@@ -12,7 +13,7 @@ const GetAllAttendance = () => {
     const [getData, setData] = useState([])
     const submit = (e) => {
         e.preventDefault();
-        axios.get(`/payroll/timeSheet/empAttendence?empId=${empid}&fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`, {
+        axios.get(`/apigateway/payroll/timeSheet/empAttendence?empId=${empid}&fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -20,10 +21,10 @@ const GetAllAttendance = () => {
             .then(response => {
                 console.log(response.data);
                 setData(response.data);
-                toast.success("Data found succesfully.", { position: 'top-center', theme: "colored" })
+                toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
             }).catch(error => {
-                toast.error("Error occured data not found.", { position: 'top-center', theme: "colored" })
-                console.log(error);
+                toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
+                console.log("error happend", error)
             })
 
     }
@@ -34,8 +35,20 @@ const GetAllAttendance = () => {
         console.log(newDate)
     }
 
+
+
+ 
     return (
-        <div>
+        <div  style={{margin:'25px 25px 25px 50px',width:'820px',height: '750px'}}  >
+               <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+                <ol className="breadcrumb" style={{  color: "white" }}> 
+                
+
+                    <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
+                    <li className="breadcrumb-item"><a href="">Employee Management</a></li>
+                    <li className="breadcrumb-item active" aria-current="page"> Attendance</li>
+                </ol>
+            </nav>
             <form onSubmit={(e) => { submit(e) }} className="mb-3 row">
 
                 <div className=" mb-2 gap-2 d-md-flex justify-content-center pt-5 px-5">
@@ -55,7 +68,7 @@ const GetAllAttendance = () => {
                     <button className=" btn btn-primary">Get</button>
                 </div>
             </form>
-            <div className="table-responsive-sm">
+            <div className="table-responsive-sm" >
                 <table border='2' className="table table-striped table-bordered">
                     <thead className="head">
                         <tr className="table-danger table-striped">

@@ -19,11 +19,12 @@ const EditCandidate = () => {
         technicalStack: "",
         cvShortlisted: "",
         lastCTC: "",
-        noticePeriod: ""
+        noticePeriod: "",
+        dob:""
     });
 
     useEffect(() => {
-        axios.get(`/hrms/interviewCandidate/interviewCandidateById/${id}`, {
+        axios.get(`/apigateway/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -51,7 +52,7 @@ const EditCandidate = () => {
 
     function HandleSubmit(e) {
         e.preventDefault();
-        axios.put(`/hrms/interviewCandidate/updateInterviewCandidate/${id}`, {
+        axios.put(`/apigateway/hrms/interviewCandidate/updateInterviewCandidate/${id}`, {
             candidateName: data.candidateName,
             emailId: data.emailId,
             contactNo: data.contactNo,
@@ -61,7 +62,8 @@ const EditCandidate = () => {
             technicalStack: data.technicalStack,
             cvShortlisted: data.cvShortlisted,
             lastCTC: data.lastCTC,
-            noticePeriod: parseInt(data.noticePeriod)
+            noticePeriod: parseInt(data.noticePeriod),
+            dob: data.dob
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -77,9 +79,6 @@ const EditCandidate = () => {
             // toast.error("Something Bad happened try after sometime.", { position: 'top-center', theme: "colored" })
         })
     }
-
-
-    
     function HandleDelete() {
         axios.delete(`/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
@@ -203,6 +202,15 @@ const EditCandidate = () => {
                                             type="text" className="form-control"
                                             placeholder='enter your noticePeriod'
                                             id="noticePeriod" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="noticePeriod">DOB</label>
+                                    <div className="col-sm-10">
+                                        <input value={data.dob || ''}
+                                            onChange={e => setData({ ...data, dob: e.target.value })}
+                                            type="date" className="form-control"
+                                            id="dob"/>
                                     </div>
                                 </div>
                                 <div className="d-grid gap-2 col-6 mx-auto">

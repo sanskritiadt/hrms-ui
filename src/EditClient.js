@@ -3,8 +3,6 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Hrmscss/App.css';
-import handleAuthError from './CommonErrorHandling';
-
 
 
 function EditClient() {
@@ -21,22 +19,21 @@ function EditClient() {
         phone: ""
     });
     useEffect(() => {
-        axios.get(`/expensemanagement/clientInfo/getClientInfoById/${id}`, {
+        axios.get(`/apigateway/expensemanagement/clientInfo/getClientInfoById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
             console.log(response.data);
             setData(response.data);
-        }).catch((error) => {
-            handleAuthError(error);
+        }).catch(error => {
             console.log(error);
         })
     }, [id]);
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.put(`/expensemanagement/clientInfo/updateClientInfo/${id}`, {
+        axios.put(`/apigateway/expensemanagement/clientInfo/updateClientInfo/${id}`, {
             id: data.id,
             address: data.address,
             companyName: data.companyName,
@@ -49,13 +46,12 @@ function EditClient() {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            toast.success("Data has been updated successfully!!", { position: "top-center", theme: 'colored' });
+            toast.success("data has been updated successfully!!", { position: "top-center", theme: 'colored' });
             console.log(response.data);
             navigate('/Getclientinfo');
         }).catch(error => {
-            handleAuthError(error);
             console.log(error);
-            // toast.error("error occured try after sometime.", { position: "top-center", theme: 'colored' });
+            toast.error("error occured try after sometime.", { position: "top-center", theme: 'colored' });
         })
 
     }
@@ -63,7 +59,7 @@ function EditClient() {
         <div className='container pt-3'>
             <div className='row'>
                 <div className=' col-md-8 mx-auto'>
-                    <div className='card border-0 shadow'>
+                    <div className='card border-0 shadow'style={{width:'600px',height:'870px'}}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={handleSubmit}>
                                 <div className="row mb-3">
