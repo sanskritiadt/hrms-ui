@@ -27,7 +27,7 @@ const EmployeeExpense = () => {
     }
     formexpense.append("expense", JSON.stringify(expense));
     axios
-      .post(`/payroll/timeSheet/employeeExpense/${empId}`, formexpense, {
+      .post(`/apigateway/payroll/timeSheet/employeeExpense/${empId}`, formexpense, {
         headers: {
             'Authorization': `Bearer ${token}`
         }

@@ -10,7 +10,7 @@ const GetAllAssets = () => {
   
   useEffect(() => {
     axios
-      .get(`/hrms/masterAsset/getAllMasterAsset`, {
+      .get(`/apigateway/hrms/masterAsset/getAllMasterAsset`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,7 +43,17 @@ if(!asset) return null;
 //     "warrentyDate": "2023-06-09",
 //     "status": "jksahu"
 // }
-  return ( <div className="table-responsive-sm">
+  return ( 
+  <div className="table-responsive-sm">
+     <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+                <ol className="breadcrumb" style={{  color: "white" }}>
+                
+                    <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
+                    <li className="breadcrumb-item"><a href="">Employee Management</a></li>
+                    <li className="breadcrumb-item active" aria-current="page">Employee Assets</li>
+                </ol>
+            </nav>
+     <h1  className='Heading1' >Employee Assets</h1>
  <table border='2' className="table table-striped table-bordered">
      <thead className="head">
          <tr className="table-danger table-striped">
@@ -87,7 +97,8 @@ if(!asset) return null;
          ))}
      </tbody>
  </table>
-</div>)
+</div>
+)
 };
 
 export default GetAllAssets;

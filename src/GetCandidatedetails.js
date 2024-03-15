@@ -2,8 +2,9 @@ import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
 import './Hrmscss/App.css'
-import { toast } from 'react-toastify';
-import handleAuthError from './CommonErrorHandling'
+import {toast } from 'react-toastify';
+import './Hrmscss/App.css';
+import handleAuthError from './CommonErrorHandling';
 
 export default function CandidateDetails() {
 
@@ -11,15 +12,15 @@ export default function CandidateDetails() {
     const token = localStorage.getItem("response-token")
 
     React.useEffect(() => {
-        axios.get("/hrms/interviewCandidate/allInterviewCandidate", {
+        axios.get(`/apigateway/hrms/interviewCandidate/allInterviewCandidate`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then((response) => {
             setCandidate(response.data);
-            toast.success("Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
-        }).catch((error) => {
-            handleAuthError(error);
+            toast.success(" Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
+        }).catch(error => {
+            handleAuthError(error )
             console.log("error occoured", error)
             // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
         })
@@ -37,12 +38,20 @@ export default function CandidateDetails() {
     //     "cvShortlisted": true,
     //     "lastCTC": 3.0,
     //     "noticePeriod": 90
-    // }
-
+    // }    
     if (!Candidates) return null;
 
     return (
-        <div className="table-responsive-sm">
+        <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+        <ol className="breadcrumb" style={{  color: "white" }}>
+        
+            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
+            <li className="breadcrumb-item"><a href="">Hiring</a></li>
+            <li className="breadcrumb-item active" aria-current="page">Get candidate </li>
+        </ol>
+    </nav>
+        <div className="table-responsive-sm" style={{ margin:'100px 10px ',height: '562px'}}>
+             <h1  className='Heading1' > Candidate Details</h1>
             <table border='2' className="table table-striped table-bordered">
                 <thead className="head">
                     <tr className="table-danger table-striped">
@@ -57,6 +66,7 @@ export default function CandidateDetails() {
                         <th>CV Shortlisted</th>
                         <th>Last CTC</th>
                         <th>Notice Period</th>
+                        <th>Dob</th>
                     </tr>
                 </thead>
                 <tbody className="body">
@@ -76,11 +86,13 @@ export default function CandidateDetails() {
                             <td>{String(Candidate.cvShortlisted)}</td>
                             <td>{Candidate.lastCTC}</td>
                             <td>{Candidate.noticePeriod}</td>
+                            <td>{Candidate.dob}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
         </div>
+       </div>
 
     );
 }

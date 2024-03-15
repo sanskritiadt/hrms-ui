@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import {toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 
 export default function Saveclientinfo() {
@@ -22,7 +22,7 @@ export default function Saveclientinfo() {
 
   function submit(e) {
     e.preventDefault();
-    axios.post(`/expenseManagement/clientInfo/saveClientInfo`, {
+    axios.post(`/apigateway/expenseManagement/clientInfo/saveClientInfo`, {
       companyName: data.Companyname,
       address: data.Address,
       phone: data.number,
@@ -40,8 +40,9 @@ export default function Saveclientinfo() {
       toast.success("Client info created Successfully!!", { position: "top-center", theme: "colored" })
     }).catch((error) => {
       handleAuthError(error);
-      console.log(error);
+      console.log(error)
       // toast.error("cannot generate client info!!", { position: "top-center", theme: "colored" })
+
     })
   }
   function handle(e) {
@@ -55,7 +56,7 @@ export default function Saveclientinfo() {
       <div className='container pt-3'>
         <div className='row'>
           <div className='col-lg-8 col-md-10 mx-auto'>
-            <div className='card border-0 shadow'>
+            <div className='card border-0 shadow'style={{width:'810px',height:'750px'}}>
               <div className='card-body'>
                 <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }} >
                   <div className="row mb-3">
