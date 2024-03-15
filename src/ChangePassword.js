@@ -15,7 +15,7 @@ const ChangepasswordForm = () => {
         showPassword: false
     };
     const handleSubmit = (values, { setStatus, resetForm }) => {
-        axios.post('/api/user/password/update', {
+        axios.post(`/apigateway/api/user/password/update`, {
             oldPassword: values.oldPassword,
             newPassword: values.newPassword
         }, {

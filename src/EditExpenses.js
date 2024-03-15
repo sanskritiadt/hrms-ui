@@ -2,11 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import handleAuthError from './CommonErrorHandling';
 const EditExpenses = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const token = localStorage.getItem("response-token")
+    const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
         amount: "",
         description: "",
@@ -20,18 +19,14 @@ const EditExpenses = () => {
     });
 
     useEffect(() => {
-        axios.get(`/expensemanagement/getExpenseById/${id}`, {
+        axios.get(`/apigateway/expensemanagement/getExpenseById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then(res => {
             setData(res.data)
             console.log(res.data.gst)
-        }).catch((error) => {
-            handleAuthError(error);
-            console.log(error)
-        })
-
+        }).catch(error => console.log(error))
     }, [])
 
     // {
@@ -48,7 +43,7 @@ const EditExpenses = () => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.put(`/expensemanagement/updateExpense/${id}`, {
+        axios.put(`/apigateway/expensemanagement/updateExpense/${id}`, {
             amount: parseInt(data.amount),
             description: data.description,
             paymentMode: data.paymentMode,
@@ -63,13 +58,12 @@ const EditExpenses = () => {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            console.log(response.data);
-            toast.success("Data has been updated successfully!!", { position: "top-center", theme: 'colored' });
+            console.log(response.data)
+            toast.success("data has been updated successfully!!", { position: "top-center", theme: 'colored' })
             navigate('/Getallexpenses');
-        }).catch((error) => {
-            handleAuthError(error);
+        }).catch(error => {
             console.log(error)
-            // toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+            toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
         })
     }
     // function handleradio(e) {
@@ -82,7 +76,7 @@ const EditExpenses = () => {
         <div className='container pt-3'>
             <div className='row'>
                 <div className=' col-md-8 mx-auto'>
-                    <div className='card border-0 shadow'>
+                    <div className='card border-0 shadow'style={{width:'600px',height:'870px'}}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={handleSubmit}>
                                 <div className="row mb-3">

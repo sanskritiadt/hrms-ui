@@ -18,7 +18,7 @@ const EditprojEng = () => {
     });
 
 useEffect(() => {
-axios.get(`/hrms/engagement/ProjectEngagementDetailById/${id}`,{
+axios.get(`/apigateway/hrms/engagement/ProjectEngagementDetailById/${id}`,{
     headers:{
     'Authorization' : `Bearer ${token}`
 }}).then((response)=>{
@@ -32,7 +32,7 @@ axios.get(`/hrms/engagement/ProjectEngagementDetailById/${id}`,{
 
 function HandleSubmit(e){
     e.preventDefault();
-    axios.put(`/hrms/engagement/updateProjectEngagement/${id}`,{
+    axios.put(`/apigateway/hrms/engagement/updateProjectEngagement/${id}`,{
         projectId:data.projectId,
         projectName:data.projectName,
         projectDescription:data.projectDescription,
@@ -54,7 +54,7 @@ function HandleSubmit(e){
     })
 }
 function HandleDelete(){
-    axios.delete(`/hrms/engagement/DeleteProjectEngagement/${id}`,{
+    axios.delete(`/apigateway/hrms/engagement/DeleteProjectEngagement/${id}`,{
         headers: {
             'Authorization' :`Bearer ${token}`
         }
@@ -76,7 +76,7 @@ function HandleDelete(){
     //     "status":true   
     // }
   return (
-  <div className='container pt-3'>
+  <div className='container pt-3'style={{  marginLeft:'100px',width:'1100px',height:'650PX'}}>
             <div className='row'>
                 <div className='col-lg-8 col-md-8 mx-auto'>
                     <div className='card border-0 shadow'>
@@ -97,7 +97,7 @@ function HandleDelete(){
                                             onChange={e => setData({ ...data, projectName: e.target.value })}
                                             type="text" className="form-control"
                                             id="projectName" />
-                                    </div>
+                                    </div>   
                                 </div>
                                 <div className="row mb-3">
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='emailId'>Project Description</label>
