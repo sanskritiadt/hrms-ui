@@ -1,3 +1,17 @@
+// {
+//     "candidateName": "Siddharth",
+//     "emailId"  : "mailto:siddharth.adt@gmail.com",
+//     "contactNo": "9666256882",
+//     "address"  : "indore, MP",
+//     "highestQualification" : "CS",
+//     "workExperience" : "2.0 Year",
+//     "technicalStack" : "Java, HTML, CSS, BootStrap",
+//     "cvShortlisted" : true,
+//     "lastCTC" : 3.4,
+//     "noticePeriod" : 90
+// }
+
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';

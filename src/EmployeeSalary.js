@@ -291,7 +291,7 @@ const [paySlipData, setPaySlipData] = useState(null);
        accountNumber: selectedEmployee.accountNumber,
        role: selectedEmployee.role,
        salary: selectedEmployee.salary,
-     };
+     }; 
 
 axios
   .post(`/apigateway/payroll/viewPay?month=${selectedMonth}&year=${year}`, requestBody,{

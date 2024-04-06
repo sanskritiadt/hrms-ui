@@ -114,17 +114,13 @@ const Login = () => {
                         </button>
                       </div>
                     </div>
-
-
                     <ErrorMessage name="password" component="div" className="text-danger" />
                     <div className="text-center mt-3">
                       <button
                         type='submit'
                         className=" btn btn-outline-danger py-2 px-4 "
                         disabled={ logincheck || !values.email || !values.password}
-                        
                       >
-                        
                         Login
                       </button>
                       <div style={{ marginTop: '20px' }}>

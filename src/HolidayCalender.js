@@ -81,12 +81,9 @@ function EditHolidayCalender() {
       });
     });
   };
-  
-
   return (
     <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
     <ol className="breadcrumb" style={{  color: "white" }}>
-    
         <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
         <li className="breadcrumb-item"><a href="">Employee Services</a></li>
         <li className="breadcrumb-item active" aria-current="page">Holiday Calender </li>
