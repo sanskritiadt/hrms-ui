@@ -17,6 +17,7 @@ function AppNavbar() {
       setclick(false);
     }
   },[empId]);
+  
   function checkStatus() {
     axios.post(`/payroll/timeSheet/checkStatus/${empId}`, {},
       {

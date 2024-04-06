@@ -17,11 +17,42 @@ const Capex = () => {
         invoice:[]
     });
 
-   
+    // function submit(e) {
+    //     e.preventDefault();
+    //     axios.post(`/apigateway/expensemanagement/capExDetails/createCapExDetails`, {
+    //         date: data.date,
+    //         expenseDetails: data.expenseDetails,
+    //         gstBill: data.gstBill,
+    //         amount: parseInt(data.amount),
+    //         paidBy: data.paidBy,
+    //         comment: data.comment,
+    //         mode: data.mode
+    //     }, {
+    //         headers: {
+    //             'Authorization': `Bearer ${token}`
+    //         }
+    //     }).then(response => {
+    //         console.log(response.data);
+    //         toast.success("Data has been created successfully.", { position: 'top-center', theme: "colored" })
+    //     }).catch((error) => {
+    //         handleAuthError(error);
+    //         console.log(error);
+    //         // toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
+    //     });
+    // };
 
     function submit(e) {
         e.preventDefault();
         const formData = new FormData();
+        // Append data fields to FormData
+        // formData.append("date", data.date);
+        // formData.append("expenseDetails", data.expenseDetails);
+        // formData.append("gstBill", data.gstBill);
+        // formData.append("amount",parseFloat(data.amount));
+        // formData.append("paidBy", data.paidBy);
+        // formData.append("comment", data.comment);
+        // formData.append("mode", data.mode);
+
         const body = {
             "date": data.date,
             "expenseDetails": data.expenseDetails,
@@ -57,6 +88,15 @@ const Capex = () => {
         setData(newdata);
         console.log(newdata);
     }
+    //   {
+    //     "date":"2023-05-16",
+    //     "expenseDetails":"Desktop repair",
+    //     "gstBill":"29GYFUDG1314R9Z7",
+    //     "amount":808888,
+    //     "paidBy":"jyoti",
+    //     "comment":"decortion",
+    //     "mode":"PhonePay"
+    // }
     return (
         <div>     <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
         <ol className="breadcrumb" style={{  color: "white" }}>

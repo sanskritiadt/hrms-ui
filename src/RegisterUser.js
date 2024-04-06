@@ -77,6 +77,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Registerformik = () => {
+    const token = localStorage.getItem("response-token");
+   // const empId = localStorage.getItem("EmpID");
     const navigate = useNavigate();
     const initialValues = {
         email: '',
@@ -93,6 +95,10 @@ const Registerformik = () => {
             roles: [{
                 "RoleName":"ROLE_ADMIN"
                   }]
+        },{
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         }).then((response) => {
             setStatus(response.data.message);
             resetForm(initialValues)
@@ -111,9 +117,6 @@ const Registerformik = () => {
         password: Yup.string().required('Password is required.')
             .min(8, 'Password must be at least 8 characters long.')
     });
-
-
-
     return (
         <Container style={{ margin:'82px 139px ' ,width:' 806px',height:' 697px'}}>
             <Formik
@@ -146,7 +149,7 @@ const Registerformik = () => {
                         </div>
                         <div className="text-center mt-2">
                         <button   type="submit" disabled={isSubmitting} >
-                            {isSubmitting ? 'Submitting...' : 'Register User'}
+                            {isSubmitting ? 'Submitting...' : 'Register User '}
                         </button>
                         </div>                                                  
                     </Form>
