@@ -74,7 +74,7 @@ function AppNavbar() {
 
   return (
     <div className='main'>
-      <Navbar expand="lg" className="navbar navbar-light bg-light">
+      <Navbar expand="lg" className="navbar navbar-light bg-light fixed-top">
         <Container fluid>
           <Navbar.Brand href="/" className='p-0 m-0'>
           <div className=''>

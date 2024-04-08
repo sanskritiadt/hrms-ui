@@ -5,6 +5,7 @@
 }
 
 .main-container1 {
+  padding-top: 55px;
   display: flex;
   position:absolute;
 }

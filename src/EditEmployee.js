@@ -366,92 +366,27 @@ const EditEmployee = () => {
   //     console.log(pan);
 
   // }
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-  //   const empData = new FormData();
-  //   const body = {
-  //     employeeId: "",
-  //     firstName: "",
-  //     lastName: "",
-  //     salary: "",
-  //     maritalStatus: "",
-  //     mobileNo: "",
-  //     joinDate: "",
-  //     gender: "",
-  //     dob: "",
-  //     designation: "",
-  //     isActive: "",
-  //     bankName: "",
-  //     accountNumber: "",
-  //     ifscCode: "",
-  //     email: "",
-  //     isEmailVerified: "",
-  //     userName: "",
-  //   };
-  //   // Only append files if they are present
-  //   if (data.resume && data.resume.length > 0) {
-  //     for (let i = 0; i < data.resume.length; i++) {
-  //       empData.append("file", data.resume[i]);
-  //     }
-  //   }
-
-  //   if (data.aadharCard && data.aadharCard.length > 0) {
-  //     for (let i = 0; i < data.aadharCard.length; i++) {
-  //       empData.append("image", data.aadharCard[i]);
-  //     }
-  //   }
-
-  //   if (data.panCard && data.panCard.length > 0) {
-  //     for (let i = 0; i < data.panCard.length; i++) {
-  //       empData.append("image1", data.panCard[i]);
-  //     }
-  //   }
-  //   // Append the whole data object
-  //   empData.append("emp", JSON.stringify(data));
-  //   axios
-  //     .put(`/apigateway/hrms/employee/updateEmp`, empData, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       toast.success("Candidate data has been updated successfully.", {
-  //         position: "top-center",
-  //         theme: "colored",
-  //       });
-  //       navigate("/empfunc");
-  //     })
-  //     .catch((error) => {
-  //       // handleAuthError(error);
-  //       console.log(error.response.data);
-  //       toast.error("Error, try after sometime.", {
-  //         position: "top-center",
-  //         theme: "colored",
-  //       });
-  //     });
-  // }
   function handleSubmit(e) {
     e.preventDefault();
     const empData = new FormData();
     const body = {
-      'employeeId': "",
-      'firstName': "",
-      'lastName': "",
-      'salary': "",
-      'maritalStatus': "",
-      'mobileNo': "",
-      'joinDate': "",
-      'gender': "",
-      'dob': "",
-      'designation': "",
-      'isActive': "",
-      'bankName': "",
-      'accountNumber': "",
-      'ifscCode': "",
-      'email': "",
-      'isEmailVerified': "",
-      'userName': ""
+      employeeId: "",
+      firstName: "",
+      lastName: "",
+      salary: "",
+      maritalStatus: "",
+      mobileNo: "",
+      joinDate: "",
+      gender: "",
+      dob: "",
+      designation: "",
+      isActive: "",
+      bankName: "",
+      accountNumber: "",
+      ifscCode: "",
+      email: "",
+      isEmailVerified: "",
+      userName: "",
     };
     // Only append files if they are present
     if (data.resume && data.resume.length > 0) {
@@ -459,27 +394,27 @@ const EditEmployee = () => {
         empData.append("file", data.resume[i]);
       }
     }
-  
-    if (data.aadhar && data.aadhar.length > 0) {
-      for (let i = 0; i < data.aadhar.length; i++) {
-        empData.append("image", data.aadhar[i]);
+
+    if (data.aadharCard && data.aadharCard.length > 0) {
+      for (let i = 0; i < data.aadharCard.length; i++) {
+        empData.append("image", data.aadharCard[i]);
       }
     }
-  
-    if (data.pan && data.pan.length > 0) {
-      for (let i = 0; i < data.pan.length; i++) {
-        empData.append("image1", data.pan[i]);
+
+    if (data.panCard && data.panCard.length > 0) {
+      for (let i = 0; i < data.panCard.length; i++) {
+        empData.append("image1", data.panCard[i]);
       }
     }
     // Append the whole data object
     empData.append("emp", JSON.stringify(data));
-    console.log(empData);
     axios
       .put(`/apigateway/hrms/employee/updateEmp`, empData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }).then((response) => {
+      })
+      .then((response) => {
         console.log(response.data);
         toast.success("Candidate data has been updated successfully.", {
           position: "top-center",
@@ -488,17 +423,82 @@ const EditEmployee = () => {
         navigate("/empfunc");
       })
       .catch((error) => {
-        if (error.response && error.response.data) {
-          console.log(error.response.data);
-        } else {
-          console.log(error);
-        }
+        // handleAuthError(error);
+        console.log(error.response.data);
         toast.error("Error, try after sometime.", {
           position: "top-center",
           theme: "colored",
         });
       });
   }
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   const empData = new FormData();
+  //   const body = {
+  //     'employeeId': "",
+  //     'firstName': "",
+  //     'lastName': "",
+  //     'salary': "",
+  //     'maritalStatus': "",
+  //     'mobileNo': "",
+  //     'joinDate': "",
+  //     'gender': "",
+  //     'dob': "",
+  //     'designation': "",
+  //     'isActive': "",
+  //     'bankName': "",
+  //     'accountNumber': "",
+  //     'ifscCode': "",
+  //     'email': "",
+  //     'isEmailVerified': "",
+  //     'userName': ""
+  //   };
+  //   // Only append files if they are present
+  //   if (data.resume && data.resume.length > 0) {
+  //     for (let i = 0; i < data.resume.length; i++) {
+  //       empData.append("resume", data.resume[i]);
+  //     }
+  //   }
+  
+  //   if (data.aadhar && data.aadhar.length > 0) {
+  //     for (let i = 0; i < data.aadhar.length; i++) {
+  //       empData.append("aadhar", data.aadhar[i]);
+  //     }
+  //   }
+  
+  //   if (data.pan && data.pan.length > 0) {
+  //     for (let i = 0; i < data.pan.length; i++) {
+  //       empData.append("pan", data.pan[i]);
+  //     }
+  //   }
+  //   // Append the whole data object
+  //   empData.append("emp", JSON.stringify(data));
+  //   console.log(empData);
+  //   axios
+  //     .put(`/apigateway/hrms/employee/updateEmp`, empData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }).then((response) => {
+  //       console.log(response.data);
+  //       toast.success("Candidate data has been updated successfully.", {
+  //         position: "top-center",
+  //         theme: "colored",
+  //       });
+  //       navigate("/empfunc");
+  //     })
+  //     .catch((error) => {
+  //       if (error.response && error.response.data) {
+  //         console.log(error.response.data);
+  //       } else {
+  //         console.log(error);
+  //       }
+  //       toast.error("Error, try after sometime.", {
+  //         position: "top-center",
+  //         theme: "colored",
+  //       });
+  //     });
+  // }
   
   return (
     <div className="container pt-3">
