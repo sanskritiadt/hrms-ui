@@ -449,9 +449,11 @@ function SearchEmpAssets() {
             <Form.Label>Search By Asset Status</Form.Label>
             <Form.Control as="select" value={selectedAssetStatus} onChange={(e) => setSelectedAssetStatus(e.target.value)} style={{ width: '50%' }}>
               <option value="">Select Asset Status</option>
-              <option value="completed">Completed</option>
+              {/* <option value="completed">Completed</option>
               <option value="accepted">Accepted</option>
-              <option value="rejected">Rejected</option>
+              <option value="rejected">Rejected</option> */}
+               <option value="active">Active</option>
+              <option value="inactive">Inactive</option> 
             </Form.Control>
           </Form.Group>
 

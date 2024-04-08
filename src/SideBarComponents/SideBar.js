@@ -28,13 +28,13 @@ const routes = [
   },
   {
     path: "/TimeSheet",
-    name: "TimeSheet",
+    name: "Time Sheet",
     icon: <FaClock />,
   
   },
   {
     path: "/messages",
-    name: "EmployeeManagement",
+    name: "Employee Management",
     icon: <FaUserAlt />,
     subRoutes: [
       {
@@ -49,7 +49,7 @@ const routes = [
       },
       {
         path: "/GetAllEmpAttendance",
-        name: "Employee attendence",
+        name: "Employee Attendence",
         icon: <FaClock />,
       },
       {
@@ -121,22 +121,22 @@ const routes = [
   },
   {
     path: "/",
-    name: "EmployeeServices",
+    name: "Employee Services",
     icon: <FaUserPlus />,
     subRoutes: [
       {
         path: "/payslip",
-        name: "PaySlip ",
+        name: "Pay Slip ",
         icon: <FaFileInvoice />,
       },
       {
         path: "/EmployeeSalary",
-        name: "EmployeeSalary ",
+        name: "Employee Salary ",
         icon: <FaFileInvoice />,
       },
       {
         path: "/HolidayCalender",
-        name: "HolidayCalender ",
+        name: "Holiday Calender ",
         icon: <FaFileInvoice />,
       },
       {
