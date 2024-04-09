@@ -19,12 +19,11 @@ main {
   place-items: center;
 }
 
-/* Sidebar */
+
 .sidebar1 {
   background: #333;
   color: white;
   height: auto;
-   /* overflow-y: auto;  */
    flex: 0 0 auto;
 }
 
@@ -120,7 +119,7 @@ main {
 
 
 
-/* Add media query for responsiveness */
+
 @media screen and (max-width: 768px) {
   .main-container1 {
     flex-direction: column;

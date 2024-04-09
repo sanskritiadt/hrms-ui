@@ -45,14 +45,15 @@ if(!asset) return null;
 // }
   return ( 
   <div className="table-responsive-sm">
+     <div className=" mt-3">
      <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
                 <ol className="breadcrumb" style={{  color: "white" }}>
-                
                     <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
                     <li className="breadcrumb-item"><a href="">Employee Management</a></li>
                     <li className="breadcrumb-item active" aria-current="page">Employee Assets</li>
                 </ol>
             </nav>
+            </div>
      <h1  className='Heading1' >Employee Assets</h1>
  <table border='2' className="table table-striped table-bordered">
      <thead className="head">
