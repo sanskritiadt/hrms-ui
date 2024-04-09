@@ -14,7 +14,7 @@ function GetAllPrEngagement() {
         }
       }).then((response) => {
         setProject(response.data);
-        toast.success("Data found successfully.", { position: 'top-center', theme: "colored", closeOnClick: true })
+        //toast.success("Data found successfully.", { position: 'top-center', theme: "colored", closeOnClick: true })
       }).catch(error => {
         console.log(error)
         toast.error("Error occured try after sometime.", { position: "top-center", theme: 'colored' })

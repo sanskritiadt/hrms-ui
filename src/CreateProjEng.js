@@ -73,8 +73,12 @@ const CreateProjEng = () => {
         </ol>
     </nav>
         <div className='container pt-3'>
-             <h1  className='Heading1' >Create Project Details</h1>
+           
+           
         <div className='row'>
+        <div>
+      <h1  className='Heading1' style={{ textAlign: 'center' }}>Create Project Details</h1>
+    </div>
             <div className='col-md-8 mx-auto'>
                 <div className='card border-0 shadow' style={{  marginRight:'100px',width:'700px',height:'550px'}}>
                     <div className='card-body'>

@@ -21,7 +21,7 @@ const GetAllAttendance = () => {
             .then(response => {
                 console.log(response.data);
                 setData(response.data);
-                toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
+                //toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
             }).catch(error => {
                 toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
                 console.log("error happend", error)

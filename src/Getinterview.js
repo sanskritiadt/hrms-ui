@@ -16,7 +16,7 @@ export default function Getinterviewdetails() {
             }
         }).then((response) => {
             setPosition(response.data);
-            toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
+          //  toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
         }).catch((error) => {
             handleAuthError(error);
             console.log("error occured", error)

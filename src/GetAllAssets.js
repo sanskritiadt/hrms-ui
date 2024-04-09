@@ -18,7 +18,7 @@ const GetAllAssets = () => {
       .then((response) => {
         console.log(response.data);
         setAsset(response.data);
-        toast.success('Assets data found successfully!!',{position:'top-center',theme:'colored'})
+        //toast.success('Assets data found successfully!!',{position:'top-center',theme:'colored'})
       })
       .catch((error) => {
         console.log(error);
