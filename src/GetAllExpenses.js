@@ -42,7 +42,7 @@ const Getallexpenses = () => {
       console.log(response.data);
       expenseItems.length = 0;
       setExpenseItems(response.data);
-      toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
+     // toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
       Navigate('/Getallexpenses')
     }).catch((error) => {
       console.log(error);
@@ -80,7 +80,7 @@ const Getallexpenses = () => {
 
                 type="date" name="end-date" className="form-control"
                 id="endDate" />
-              <Button type='submit' variant="outline-primary">Search</Button>
+             <Button type='submit' variant="outline-primary" style={{ margin:'3px',height:'37px',}}>Search</Button>
             </div>
           </form>
         </div>
@@ -99,7 +99,7 @@ const Getallexpenses = () => {
               <th styles={{ width: '50%' }}>Category</th>
               <th styles={{ width: '50%' }}>GST</th>
               <th styles={{ width: '50%' }}>Comments</th>
-              <th><Button  variant="outline-primary" type='submit' onClick={routeCreateExpense}>
+              <th><Button  variant="outline-primary" style={{height:'53px',}} type='submit' onClick={routeCreateExpense}>
                 Create exp
               </Button></th>
             </tr>

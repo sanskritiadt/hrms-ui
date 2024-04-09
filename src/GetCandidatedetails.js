@@ -18,7 +18,7 @@ export default function CandidateDetails() {
             }
         }).then((response) => {
             setCandidate(response.data);
-            toast.success(" Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
+            //toast.success(" Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
         }).catch(error => {
             handleAuthError(error )
             console.log("error occoured", error)

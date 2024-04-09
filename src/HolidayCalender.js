@@ -25,7 +25,7 @@ function EditHolidayCalender() {
       console.log(response.data);
       console.log(token)
       setHoliday(response.data);
-      toast.success("Data found successfully!", { position: "top-center", theme: 'colored' });
+     // toast.success("Data found successfully!", { position: "top-center", theme: 'colored' });
     }).catch(error => {
       console.log(error);
       toast.error("Error occurred, please try again later.", { position: "top-center", theme: 'colored' });

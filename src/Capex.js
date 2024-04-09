@@ -44,15 +44,6 @@ const Capex = () => {
     function submit(e) {
         e.preventDefault();
         const formData = new FormData();
-        // Append data fields to FormData
-        // formData.append("date", data.date);
-        // formData.append("expenseDetails", data.expenseDetails);
-        // formData.append("gstBill", data.gstBill);
-        // formData.append("amount",parseFloat(data.amount));
-        // formData.append("paidBy", data.paidBy);
-        // formData.append("comment", data.comment);
-        // formData.append("mode", data.mode);
-
         const body = {
             "date": data.date,
             "expenseDetails": data.expenseDetails,

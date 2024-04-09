@@ -38,11 +38,8 @@ function HolidayCalender() {
       .then((response) => {
         console.log(response.data);
         console.log(token);
-        setHoliday(response.data);
-        toast.success("Data found successfully!", {
-          position: "top-center",
-          theme: "colored",
-        });
+        setHoliday(response.data); 
+       // toast.success("Data found successfully!", {position: "top-center", theme: "colored",});
       })
       .catch((error) => {
         console.log(error);

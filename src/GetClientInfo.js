@@ -24,7 +24,7 @@ function ClientInfoTable() {
         }).then(response => {
             setClientInfo(response.data)
             console.log(response.data);
-            toast.success("Client data found successfully!!", { position: "top-center", theme: 'colored' })
+           // toast.success("Client data found successfully!!", { position: "top-center", theme: 'colored' })
 
         })
             .catch(error => {

@@ -1,19 +1,18 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './SideBar.css';
-
-import {  BiSearch} from "react-icons/bi";
-import { FaHome, FaUser,  FaUserPlus, FaClock,  FaFileInvoice } from 'react-icons/fa';
+import { BiSearch } from "react-icons/bi";
+import { FaHome, FaUser, FaUserPlus, FaClock, FaFileInvoice } from 'react-icons/fa';
 import { FaList, FaClipboardList } from 'react-icons/fa';
-import {  FaInfoCircle } from 'react-icons/fa';
-import {AiOutlineLaptop} from 'react-icons/ai';
-import {FaLaptopMedical} from 'react-icons/fa'
-import {  FaDollarSign  } from 'react-icons/fa';
-import { FaUserAlt, FaBriefcase,  } from 'react-icons/fa';
-import { FaPlus,  FaReceipt,FaLock,FaBars } from 'react-icons/fa';
+import { FaInfoCircle } from 'react-icons/fa';
+import { AiOutlineLaptop } from 'react-icons/ai';
+import { FaLaptopMedical } from 'react-icons/fa'
+import { FaDollarSign } from 'react-icons/fa';
+import { FaUserAlt, FaBriefcase, } from 'react-icons/fa';
+import { FaPlus, FaReceipt, FaLock, FaBars } from 'react-icons/fa';
 import { FaHandshake } from 'react-icons/fa';
 import { FaUserFriends } from 'react-icons/fa';
- import {MdCreateNewFolder} from 'react-icons/md'
+import { MdCreateNewFolder } from 'react-icons/md'
 
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
@@ -24,17 +23,17 @@ const routes = [
     path: "/",
     name: "Home",
     icon: <FaHome />,
-  
+
   },
   {
     path: "/TimeSheet",
-    name: "Time Sheet",
+    name: "TimeSheet",
     icon: <FaClock />,
-  
+
   },
   {
     path: "/messages",
-    name: "Employee Management",
+    name: "EmployeeManagement",
     icon: <FaUserAlt />,
     subRoutes: [
       {
@@ -49,7 +48,7 @@ const routes = [
       },
       {
         path: "/GetAllEmpAttendance",
-        name: "Employee Attendence",
+        name: "Employee attendence",
         icon: <FaClock />,
       },
       {
@@ -77,7 +76,7 @@ const routes = [
       {
         path: "/Capex",
         name: "Create Capital Expense  ",
-        icon:  <FaList />,
+        icon: <FaList />,
       },
       {
         path: "/Getallexpenses",
@@ -115,28 +114,28 @@ const routes = [
         name: " Create Project Engagement",
         icon: <MdCreateNewFolder />,
       }
-    
-    
+
+
     ],
   },
   {
     path: "/",
-    name: "Employee Services",
+    name: "EmployeeServices",
     icon: <FaUserPlus />,
     subRoutes: [
       {
         path: "/payslip",
-        name: "Pay Slip ",
+        name: "PaySlip ",
         icon: <FaFileInvoice />,
       },
       {
         path: "/EmployeeSalary",
-        name: "Employee Salary ",
+        name: "EmployeeSalary ",
         icon: <FaFileInvoice />,
       },
       {
         path: "/HolidayCalender",
-        name: "Holiday Calender ",
+        name: "HolidayCalender ",
         icon: <FaFileInvoice />,
       },
       {
@@ -175,11 +174,11 @@ const routes = [
       {
         path: "/createCandidate",
         name: "Create Candidate Details",
-        icon:  <FaUserPlus />,
+        icon: <FaUserPlus />,
       },
     ],
   },
- 
+
 ];
 
 const SideBar = ({ children }) => {
@@ -217,12 +216,24 @@ const SideBar = ({ children }) => {
         duration: 0.5,
       },
     },
+
   };
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleMouseEnter = () => {
+    setIsOpen(true);
+  };
+  const handleMouseLeave = () => {
+    setIsOpen(false); // Always close the sidebar when mouse leaves
+  };
   return (
     <>
 
       <div className=" main-container1">
+
         <motion.div
           animate={{
             width: isOpen ? "250px" : "45px",
@@ -233,7 +244,10 @@ const SideBar = ({ children }) => {
               damping: 10,
             },
           }}
-          className={`sidebar1 `}
+          className={`sidebar1 ${isOpen ? 'open' : ''}`}
+          onMouseLeave={handleMouseLeave}
+          onMouseEnter={handleMouseEnter}
+
         >
           <div className="top_section1">
             <AnimatePresence>
@@ -245,7 +259,7 @@ const SideBar = ({ children }) => {
                   exit="hidden"
                   className="logo1"
                 >
-                  AlPHA.HRMS
+                  ALPHA.HRMS
                 </motion.h1>
               )}
             </AnimatePresence>
@@ -280,6 +294,7 @@ const SideBar = ({ children }) => {
                     route={route}
                     showAnimation={showAnimation}
                     isOpen={isOpen}
+
                   />
                 );
               }
@@ -290,17 +305,20 @@ const SideBar = ({ children }) => {
                   key={index}
                   className="link1"
                   activeClassName="active1"
+
                 >
                   <div className="icon1">{route.icon}</div>
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div
+
                         variants={showAnimation}
                         initial="hidden"
                         animate="show"
                         exit="hidden"
                         className="link_text1"
                       >
+
                         {route.name}
                       </motion.div>
                     )}
@@ -317,4 +335,5 @@ const SideBar = ({ children }) => {
 };
 
 export default SideBar;
+
 
