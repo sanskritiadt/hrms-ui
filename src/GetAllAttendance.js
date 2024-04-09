@@ -40,15 +40,15 @@ const GetAllAttendance = () => {
  
     return (
         <div  style={{margin:'25px 25px 25px 50px',width:'820px',height: '750px'}}  >
+            <div className=" mt-3">
                <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
                 <ol className="breadcrumb" style={{  color: "white" }}> 
-                
-
                     <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
                     <li className="breadcrumb-item"><a href="">Employee Management</a></li>
                     <li className="breadcrumb-item active" aria-current="page"> Attendance</li>
                 </ol>
             </nav>
+            </div>
             <form onSubmit={(e) => { submit(e) }} className="mb-3 row">
 
                 <div className=" mb-2 gap-2 d-md-flex justify-content-center pt-5 px-5">

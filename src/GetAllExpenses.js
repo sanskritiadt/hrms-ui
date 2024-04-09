@@ -53,7 +53,9 @@ const Getallexpenses = () => {
   if (!expenseItems) return null;
 
   return (
-    <div><nav    aria-label="breadcrumb"   style={{ "--bs-breadcrumb-divider": "'>>'" }} >
+    <div>
+      <div className=" mt-3">
+      <nav    aria-label="breadcrumb"   style={{ "--bs-breadcrumb-divider": "'>>'" }} >
         <ol className="breadcrumb" style={{  color: "white" }}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
@@ -61,6 +63,7 @@ const Getallexpenses = () => {
             <li className="breadcrumb-item active" aria-current="page">Get ALL Expense Details</li>
         </ol>
     </nav>
+    </div>
     <div style={{ margin:'25px 100px  ',  width:'820px',height:'750px'}}>
       <div className="row">
       <h1  className='Heading1' >Get All Expense </h1>

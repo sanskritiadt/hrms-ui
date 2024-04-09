@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 
 export default function Getinterviewdetails() {
-
     const [positions, setPosition] = React.useState([]);
     const token = localStorage.getItem("response-token")
     React.useEffect(() => {
