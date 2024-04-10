@@ -83,6 +83,11 @@ const routes = [
         name: "Create Expense ",
         icon: <FaReceipt />,
       },
+      {
+        path: "/Gstinvoice",
+        name: "Gstinvoice",
+        icon: <FaReceipt />,
+      },
     ],
   },
   {
