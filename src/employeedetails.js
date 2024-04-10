@@ -143,7 +143,7 @@ export default function Empfunc() {
         },
       })
       .then((response) => {
-        setEmployees(response.data.content);
+        setEmployees(response.data);
         toast.success("Data found successfully.", {
           position: "top-center",
           theme: "colored",
@@ -261,7 +261,7 @@ export default function Empfunc() {
                   </tr>
                 </thead>
                 <tbody className="body">
-                  {employees.map((employee) => (
+                  {currentEmployees.map((employee) => (
                     <tr key={employee.employeeId}>
                       <td><Link to={`/EditEmployee/${employee.employeeId}`} className="Candidate-id">{employee.employeeId}</Link></td>
                       <td>{String(employee.isActive)}</td>
