@@ -85,7 +85,7 @@ const routes = [
       },
       {
         path: "/Gstinvoice",
-        name: "Gstinvoice",
+        name: "GST  Invoice",
         icon: <FaReceipt />,
       },
     ],
