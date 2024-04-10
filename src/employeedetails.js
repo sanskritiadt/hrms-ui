@@ -143,7 +143,7 @@ export default function Empfunc() {
         },
       })
       .then((response) => {
-        setEmployees(response.data);
+        setEmployees(response.data.content);
         toast.success("Data found successfully.", {
           position: "top-center",
           theme: "colored",
@@ -373,8 +373,6 @@ export default function Empfunc() {
                 </tbody>
               </table>
             </div>
-
-
           </div>
         </div>
       </div>
