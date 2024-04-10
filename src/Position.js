@@ -53,7 +53,7 @@ export default function PositionDetails() {
                     </ol>
                 </nav>
             </div>
-            <div className="d-flex justify-content-center  " style={{ width: screenWidth}}>
+            <div className="d-flex justify-content-center  " style={{ width: screenWidth-50}}>
 
                 <div className="table-responsive-sm">
                     <div className="my-4">

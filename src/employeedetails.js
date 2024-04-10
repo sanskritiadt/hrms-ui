@@ -143,7 +143,7 @@ export default function Empfunc() {
         },
       })
       .then((response) => {
-        setEmployees(response.data);
+        setEmployees(response.data.content);
         toast.success("Data found successfully.", {
           position: "top-center",
           theme: "colored",
@@ -159,7 +159,31 @@ export default function Empfunc() {
         });
       });
   }, []);
-
+  // useEffect(() => {
+  //   axios
+  //     .get(`/sit/gateway/hrms/employee/getAllEmp`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setEmployees(response.data.content);
+  //       console.log(response.data.content);
+  //       toast.success("Data found successfully.", {
+  //         position: "top-center",
+  //         theme: "colored",
+  //         closeOnClick: true,
+  //       });
+        
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       toast.error("An error occurred. Please try again later.", {
+  //         position: "top-center",
+  //         theme: "colored",
+  //       });
+  //     });
+  // }, []);
   if (!employees) return null;
   // Pagination logic
   const indexOfLastEmployee = currentPage * employeesPerPage;
@@ -178,20 +202,20 @@ export default function Empfunc() {
   // function ApiUpdater(){
   //   setempdata(currentEmployees);
   // }
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  //const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenWidth(window.innerWidth);
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setScreenWidth(window.innerWidth);
+  //   };
 
-    window.addEventListener('resize', handleResize);
+  //   window.addEventListener('resize', handleResize);
 
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, []);
   return (
     <div>
       <div className=" mt-3">
@@ -204,7 +228,7 @@ export default function Empfunc() {
           </ol>
         </nav>
       </div>
-      <div className="d-flex justify-content-center  " style={{ width: screenWidth  }}>
+      <div className="d-flex justify-content-center  ">
 
         <div style={{ paddingLeft: '20px', paddingRight: '20px' }}>
           <h1 className="Heading1 my-4">Employee Details</h1>
@@ -214,30 +238,30 @@ export default function Empfunc() {
               <table border="2" className="table table-striped table-bordered">
                 <thead className="head">
                   <tr className="table-danger table-striped">
-                    <th>employeeId</th>
-                    <th>isActive</th>
-                    <th>designation</th>
+                    <th>EMPLOYEE ID</th>
+                    <th>IS ACTIVE</th>
+                    <th>DESIGNATION</th>
                     <th>DOB</th>
-                    <th>email</th>
-                    <th>FirstName</th>
-                    <th>LastName</th>
-                    <th>MaritalStatus</th>
-                    <th>gender</th>
-                    <th>isEmailVerified</th>
-                    <th>joinDate</th>
-                    <th>mobileNo</th>
-                    <th>username</th>
-                    <th>salary</th>
-                    <th>bankName</th>
-                    <th>accountNumber</th>
-                    <th>ifscCode</th>
-                    <th>Aadhar Card </th>
-                    <th>Pan Card</th>
+                    <th>EMAIL</th>
+                    <th>FIRST NAME</th>
+                    <th>LAST NAME</th>
+                    <th>MARITAL STATUS</th>
+                    <th>GENDER</th>
+                    <th>EMAIL VERIFIED</th>
+                    <th>JOIN DATE</th>
+                    <th>MOBILE NO</th>
+                    <th>USERNAME</th>
+                    <th>SALARY</th>
+                    <th>BANK NAME</th>
+                    <th>ACCOUNT NO</th>
+                    <th>IFSC CODE</th>
+                    <th>AADHAR CARD </th>
+                    <th>PAN CARD</th>
 
                   </tr>
                 </thead>
                 <tbody className="body">
-                  {currentEmployees.map((employee) => (
+                  {employees.map((employee) => (
                     <tr key={employee.employeeId}>
                       <td><Link to={`/EditEmployee/${employee.employeeId}`} className="Candidate-id">{employee.employeeId}</Link></td>
                       <td>{String(employee.isActive)}</td>

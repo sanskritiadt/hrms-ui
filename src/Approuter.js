@@ -41,6 +41,7 @@ import CreateEmpAssets from "./CreateEmpAssets";
 import CreateProjEng from "./CreateProjEng";
 import EditprojEng from "./EditprojEng";
 import SearchEmpAssets from "./SearchEmpAssets";
+import Gstinvoice from "./Gstinvoice";
 import Footer from "./Footer";
 
 const Approuter = () => {
@@ -100,6 +101,8 @@ const Approuter = () => {
           <Route path="/CreateEmpAssets" element={<CreateEmpAssets />} />
           <Route path="/EditAssets/:id" element={<EditAssets />} />
           <Route path="/SearchEmpAssets" element={<SearchEmpAssets />} />
+          <Route path="/Gstinvoice" element={<Gstinvoice />} />
+          
         </Routes>
       </SideBar>
      
