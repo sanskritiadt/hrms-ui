@@ -42,7 +42,7 @@ const GetAllAttendance = () => {
         <div  style={{margin:'25px 25px 25px 50px',width:'820px',height: '750px'}}  >
             <div className=" mt-3">
                <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-                <ol className="breadcrumb" style={{  color: "white" }}> 
+                <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}> 
                     <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
                     <li className="breadcrumb-item"><a href="">Employee Management</a></li>
                     <li className="breadcrumb-item active" aria-current="page"> Attendance</li>

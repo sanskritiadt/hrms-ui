@@ -3,17 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Hrmscss/App.css";
-import { Form, Button } from 'react-bootstrap';
-import { FaDownload } from 'react-icons/fa';
-
+import { Form, Button } from "react-bootstrap";
+import { FaDownload } from "react-icons/fa";
 
 export default function Empfunc() {
   const [employees, setEmployees] = useState([]);
 
-  const [empName, setempName] = useState('');
+  const [empName, setempName] = useState("");
   const [emp, setEmp] = useState([]);
 
-  const [emailid, setEmailid] = useState('')
+  const [emailid, setEmailid] = useState("");
 
   // const [empdata, setempdata] = useState([]);
 
@@ -21,13 +20,12 @@ export default function Empfunc() {
   const [employeesPerPage] = useState(5); // Number of employees per page
   const token = localStorage.getItem("response-token");
 
-
   const handleNameChange = (event) => {
     setempName(event.target.value);
-    console.log(empName)
-  }
+    console.log(empName);
+  };
 
-  // download Aadhar Card 
+  // download Aadhar Card
   const downloadAadharCard = () => {
     const employeeId = 14; // Hard-coded employee ID
     const url = `/apigateway/hrms/employee/downloadAadharCard/${employeeId}`;
@@ -96,43 +94,54 @@ export default function Empfunc() {
       });
   };
 
-
   const handleSubmit = () => {
-    axios.get(`/apigateway/hrms/employee/searchByName?query=${empName}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    axios
+      .get(`/apigateway/hrms/employee/searchByName?query=${empName}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
-        console.log(response)
+        console.log(response);
         console.log(response.data);
         setEmp(response.data);
-        toast.success('Employee Name  found successfully', { position: 'top-center', theme: 'colored' });
+        toast.success("Employee Name  found successfully", {
+          position: "top-center",
+          theme: "colored",
+        });
       })
       .catch((error) => {
         console.log(error);
-        toast.error('Error occurred, try again later.', { position: 'top-center', theme: 'colored' });
+        toast.error("Error occurred, try again later.", {
+          position: "top-center",
+          theme: "colored",
+        });
       });
-  }
-
+  };
 
   const handleSearchByTypeAndStatus = () => {
     // Second API call: Search by asset type
-    axios.get(`/apigateway/hrms/employee/searchByEmail?query=${emailid}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    axios
+      .get(`/apigateway/hrms/employee/searchByEmail?query=${emailid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
-
         console.log(response.data);
         // Update the asset state with the data from the second API call
         setEmp(response.data);
-        toast.success('Employee data found successfully', { position: 'top-center', theme: 'colored' });
+        toast.success("Employee data found successfully", {
+          position: "top-center",
+          theme: "colored",
+        });
       })
       .catch((error) => {
         console.log(error);
-        toast.error('Error occurred while searching by asset type.', { position: 'top-center', theme: 'colored' });
+        toast.error("Error occurred while searching by asset type.", {
+          position: "top-center",
+          theme: "colored",
+        });
       });
   };
   useEffect(() => {
@@ -149,7 +158,6 @@ export default function Empfunc() {
           theme: "colored",
           closeOnClick: true,
         });
-        
       })
       .catch((error) => {
         console.log(error);
@@ -174,7 +182,7 @@ export default function Empfunc() {
   //         theme: "colored",
   //         closeOnClick: true,
   //       });
-        
+
   //     })
   //     .catch((error) => {
   //       console.log(error);
@@ -192,7 +200,7 @@ export default function Empfunc() {
     indexOfFirstEmployee,
     indexOfLastEmployee
   );
-  
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // useEffect(() => {
@@ -211,29 +219,35 @@ export default function Empfunc() {
 
   //   window.addEventListener('resize', handleResize);
 
-
   //   return () => {
   //     window.removeEventListener('resize', handleResize);
   //   };
   // }, []);
   return (
     <div>
-      <div className=" mt-3">
-        <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-          <ol className="breadcrumb" style={{ color: "white" }}>
-
-            <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Employee Management</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Employee Details </li>
+      <div className=" mt-3 pl-4">
+        <nav
+          aria-label="breadcrumb"
+          style={{ "--bs-breadcrumb-divider": "'>>'" }}
+        >
+          <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
+            <li className="breadcrumb-item">
+              <Link to="/">Home</Link>{" "}
+            </li>
+            <li className="breadcrumb-item">
+              <a href="">Employee Management</a>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Employee Details{" "}
+            </li>
           </ol>
         </nav>
       </div>
       <div className="d-flex justify-content-center  ">
-
-        <div style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+        <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
           <h1 className="Heading1 my-4">Employee Details</h1>
 
-          <div className="" style={{ width: "145vh", overflowX: 'auto' }}>
+          <div className="" style={{ width: "145vh", overflowX: "auto" }}>
             <div className="table-responsive-sm">
               <table border="2" className="table table-striped table-bordered">
                 <thead className="head">
@@ -257,13 +271,19 @@ export default function Empfunc() {
                     <th>IFSC CODE</th>
                     <th>AADHAR CARD </th>
                     <th>PAN CARD</th>
-
                   </tr>
                 </thead>
                 <tbody className="body">
                   {currentEmployees.map((employee) => (
                     <tr key={employee.employeeId}>
-                      <td><Link to={`/EditEmployee/${employee.employeeId}`} className="Candidate-id">{employee.employeeId}</Link></td>
+                      <td>
+                        <Link
+                          to={`/EditEmployee/${employee.employeeId}`}
+                          className="Candidate-id"
+                        >
+                          {employee.employeeId}
+                        </Link>
+                      </td>
                       <td>{String(employee.isActive)}</td>
                       <td>{employee.designation}</td>
                       <td>{employee.dob}</td>
@@ -280,8 +300,20 @@ export default function Empfunc() {
                       <td>{employee.bankName}</td>
                       <td>{employee.accountNumber}</td>
                       <td>{employee.ifscCode}</td>
-                      <td> <FaDownload style={{ 'cursor': 'pointer' }} onClick={downloadAadharCard} />  </td>
-                      <td> <FaDownload style={{ 'cursor': 'pointer' }} onClick={downloadPanCard} /> </td>
+                      <td>
+                        {" "}
+                        <FaDownload
+                          style={{ cursor: "pointer" }}
+                          onClick={downloadAadharCard}
+                        />{" "}
+                      </td>
+                      <td>
+                        {" "}
+                        <FaDownload
+                          style={{ cursor: "pointer" }}
+                          onClick={downloadPanCard}
+                        />{" "}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -290,10 +322,14 @@ export default function Empfunc() {
           </div>
           <nav>
             <ul className="pagination justify-content-center mt-2">
-              {Array.from({ length: Math.ceil(employees.length / employeesPerPage) }).map((_, index) => (
+              {Array.from({
+                length: Math.ceil(employees.length / employeesPerPage),
+              }).map((_, index) => (
                 <li
                   key={index}
-                  className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
+                  className={`page-item ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
                 >
                   <button
                     onClick={() => paginate(index + 1)}
@@ -309,22 +345,48 @@ export default function Empfunc() {
             <Form.Group controlId="employeeName">
               <Form.Label className=" my-2">Search By Employee Name</Form.Label>
               <div className=" d-flex my-2">
-                <Form.Control type="text" placeholder="Enter Employee Name " value={empName} onChange={handleNameChange} style={{ width: '50vh', marginBottom: 0 }} />
-                <Button onClick={handleSubmit} className=" mt-0 mx-2" >Search</Button>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Employee Name "
+                  value={empName}
+                  onChange={handleNameChange}
+                  style={{ width: "50vh", marginBottom: 0 }}
+                />
+                <Button onClick={handleSubmit} className=" mt-0 mx-2">
+                  Search
+                </Button>
               </div>
             </Form.Group>
-
 
             <Form.Group controlId="assetType">
               <Form.Label className=" my-2">Search By Email ID </Form.Label>
               <div className="d-flex my-2">
-                <Form.Control type="text" placeholder="Enter Employee Email" value={emailid} onChange={(e) => setEmailid(e.target.value)} style={{ width: '50vh', marginBottom: 0 }} />
-                <Button onClick={handleSearchByTypeAndStatus} className=" mt-0 mx-2" >Search</Button>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Employee Email"
+                  value={emailid}
+                  onChange={(e) => setEmailid(e.target.value)}
+                  style={{ width: "50vh", marginBottom: 0 }}
+                />
+                <Button
+                  onClick={handleSearchByTypeAndStatus}
+                  className=" mt-0 mx-2"
+                >
+                  Search
+                </Button>
               </div>
             </Form.Group>
           </div>
-      
-          <div className="" style={{ width: '145vh', overflowX: 'auto', marginTop: "40px", marginBottom: "40px" }}>
+
+          <div
+            className=""
+            style={{
+              width: "145vh",
+              overflowX: "auto",
+              marginTop: "40px",
+              marginBottom: "40px",
+            }}
+          >
             <div className="table-responsive-sm">
               <table border="2" className="table table-striped table-bordered">
                 <thead className="head">
@@ -351,7 +413,14 @@ export default function Empfunc() {
                 <tbody className="body">
                   {emp.map((employee) => (
                     <tr key={employee.employeeId}>
-                      <td><Link to={`/EditEmployee/${employee.employeeId}`} className="Candidate-id">{employee.employeeId}</Link></td>
+                      <td>
+                        <Link
+                          to={`/EditEmployee/${employee.employeeId}`}
+                          className="Candidate-id"
+                        >
+                          {employee.employeeId}
+                        </Link>
+                      </td>
                       <td>{String(employee.isActive)}</td>
                       <td>{employee.designation}</td>
                       <td>{employee.dob}</td>
@@ -379,17 +448,3 @@ export default function Empfunc() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

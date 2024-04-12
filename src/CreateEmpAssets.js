@@ -83,23 +83,25 @@ const CreateEmpAssets = () => {
   // }
   return (
     <div>
-      {" "}
-      <nav
-        aria-label="breadcrumb"
-        style={{ "--bs-breadcrumb-divider": "'>>'" }}
-      >
-        <ol className="breadcrumb" style={{ color: "white" }}>
-          <li className="breadcrumb-item">
-            <Link to="/">Home</Link>{" "}
-          </li>
-          <li className="breadcrumb-item">
-            <a href="">Employee Management</a>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            Employee Position
-          </li>
-        </ol>
-      </nav>
+      <div className=" mt-3">
+        <nav
+          aria-label="breadcrumb"
+          style={{ "--bs-breadcrumb-divider": "'>>'" }}
+        >
+          <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
+            <li className="breadcrumb-item">
+              <Link to="/">Home</Link>{" "}
+            </li>
+            <li className="breadcrumb-item">
+              <a href="">Employee Management</a>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Employee Position
+            </li>
+          </ol>
+        </nav>
+      </div>
+
       <div className="container pt-3">
         <div className="row">
           <div className="col-md-8 mx-auto">

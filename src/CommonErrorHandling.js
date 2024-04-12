@@ -13,7 +13,7 @@ export default function handleAuthError(error) {
         toast.error("Error,Try After Sometime.", { position: "top-center", theme: "colored" })
     }
     else {
-        toast.error("Please Login.", { position: "top-center", theme: "colored" });
+        toast.error("Error while calling the API.", { position: "top-center", theme: "colored" });
     }
 
 }

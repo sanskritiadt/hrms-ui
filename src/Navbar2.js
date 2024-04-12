@@ -5,6 +5,7 @@ import logoImg from './Images/logo.png'
 import './Hrmscss/navabr2.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import MyProfile from './MyProfile';
 
 function AppNavbar() {
   const [click, setclick] = useState(true);
@@ -73,8 +74,8 @@ function AppNavbar() {
   };
 
   return (
-    <div className='main'>
-      <Navbar expand="lg" className="navbar navbar-light bg-light fixed-top">
+    <div className='main    '>
+      <Navbar expand="lg" className="navbar navbar-light bg-light ">
         <Container fluid>
           <Navbar.Brand href="/" className='p-0 m-0'>
           <div className=''>
@@ -86,16 +87,14 @@ function AppNavbar() {
             />
             </div>
           </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-           <Navbar.Collapse id="basic-navbar-nav"  className='d-flex justify-content-end'>
            
             <Nav className="ml-auto">
               { click ? 
               <Button onClick={handleLogin} variant="outline-success" className="mx-2 py-2 px-4">Login</Button> :
-              <Button onClick={handleLogout} variant="outline-danger" className="mx-2">Logout</Button>
+              // <Button onClick={handleLogout} variant="outline-danger" className="mx-2">Logout</Button>
+              <MyProfile/>
                 }
-            </Nav>
-          </Navbar.Collapse> 
+            </Nav> 
         </Container>
       </Navbar>
     </div>

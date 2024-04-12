@@ -45,7 +45,7 @@ export default function PositionDetails() {
         <div>
             <div className="mt-3">
                 <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-                    <ol className="breadcrumb" style={{ color: "white" }}>
+                    <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
 
                         <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
                         <li className="breadcrumb-item"><a href="">Employee Management</a></li>
