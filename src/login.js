@@ -36,7 +36,7 @@ const Login = () => {
         console.log(response.data.jwtAuthenticationResponse.accessToken);
         toast.success('Login-Successfull.', { position: "top-center", theme: "colored" });
         navigate('/');
-
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);

@@ -5,13 +5,13 @@
 }
 
 .main-container1 {
-  padding-top: 55px;
+  /* padding-top: 55px; */
   display: flex;
   position:absolute;
 }
 main {
   padding:50 px;
-}
+} 
 
 .title1 {
   font-size: 3rem;
@@ -25,6 +25,7 @@ main {
   color: white;
   height: auto;
    flex: 0 0 auto;
+   /* z-index: 1; */
 }
 
 .top_section1 {
