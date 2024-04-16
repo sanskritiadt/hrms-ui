@@ -35,4 +35,4 @@ jobs:
         context: .
         file: ./Dockerfile_pdn
         push: true
-        tags: ajaymishraadt/ui-pdn:0.0.1-SNAPSHOT
+        tags: ajaymishraadt/ui:0.0.1-RELEASE
