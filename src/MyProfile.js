@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Dropdown,
   DropdownToggle,
@@ -64,8 +65,9 @@ const UserProfileDropdown = () => {
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem style={{ fontSize: "16px", padding: "10px" }} className=" d-flex justify-content-between">
-            My Profile
+            <Link to="/MyProfileDetails">My Profile</Link> 
             <i className="fas fa-user-alt " />
+            
         </DropdownItem>
         <DropdownItem style={{ fontSize: "16px", padding: "10px" }} className=" d-flex justify-content-between"
           onClick={handleLogout}>
