@@ -7,6 +7,7 @@ import { Form, Button } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
 
 export default function Empfunc() {
+
   const [employees, setEmployees] = useState([]);
 
   const [empName, setempName] = useState("");
@@ -19,6 +20,7 @@ export default function Empfunc() {
   const [currentPage, setCurrentPage] = useState(1);
   const [employeesPerPage] = useState(5); // Number of employees per page
   const token = localStorage.getItem("response-token");
+  const EmpId = localStorage.getItem("EmpID");
 
   const handleNameChange = (event) => {
     setempName(event.target.value);
@@ -27,8 +29,7 @@ export default function Empfunc() {
 
   // download Aadhar Card
   const downloadAadharCard = () => {
-    const employeeId = 14; // Hard-coded employee ID
-    const url = `/apigateway/hrms/employee/downloadAadharCard/${employeeId}`;
+    const url = `/apigateway/hrms/employee/downloadAadharCard/${EmpId}`;
 
     axios
       .get(url, {

@@ -43,7 +43,9 @@ import EditprojEng from "./EditprojEng";
 import SearchEmpAssets from "./SearchEmpAssets";
 import Gstinvoice from "./Gstinvoice";
 import HomePage from "./HomePage";
+import MyProfileDetails from "./MyProfileDetails";
 import Footer from "./Footer";
+import EmpPersonalDetail from "./EmpPersonalDetail";
 
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -123,6 +125,8 @@ const Approuter = () => {
               <Route path="/EditAssets/:id" element={<EditAssets />} />
               <Route path="/SearchEmpAssets" element={<SearchEmpAssets />} />
               <Route path="/Gstinvoice" element={<Gstinvoice />} />
+              <Route path="/personal-details/:id" element={<EmpPersonalDetail />} />
+              <Route path="/MyProfileDetails" element={<MyProfileDetails />} />
             </Routes>
           </SideBar>
         </div>

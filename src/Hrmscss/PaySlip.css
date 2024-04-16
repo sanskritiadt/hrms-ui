@@ -176,7 +176,7 @@ button {
 }
 
 button:hover {
-    background-color: #0062cc;
+    /* background-color: #0062cc; */
 }
 
 /*Input field styling */
