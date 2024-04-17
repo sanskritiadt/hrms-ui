@@ -61,13 +61,16 @@ const ChangepasswordForm = () => {
                             <Field type={values.showPassword ? "text" : "password"} name="newPassword" className={`form-control ${touched.newPassword && errors.newPassword ? 'is-invalid' : ''}`} />
                             <ErrorMessage name="newPassword" component="div" className="invalid-feedback" />
                         </div>
-                        <div className="form-group">
-                            <Field type="checkbox" name="showPassword" className="form-check-input" />
+                        <div className="form-group d-flex">
                             <label htmlFor="showPassword" className="form-check-label">Show password</label>
+                            <Field type="checkbox" name="showPassword" className="form-check-input ms-4" />
                         </div>
-                        <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginTop: 20 }}>
+                        <div className="d-flex justify-content-center ">
+                        <button className='btn btn-outline-success py-2 px-4 mt-4' type="submit" disabled={isSubmitting} style={{ marginTop: 20 }} >
                             {isSubmitting ? 'Submitting...' : 'Change Password'}
-                        </Button>
+                        </button>
+                        </div>
+                        
                     </Form>
                 )}
             </Formik>

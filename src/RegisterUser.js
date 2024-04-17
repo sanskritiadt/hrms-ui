@@ -58,9 +58,7 @@ const Registerformik = () => {
       .min(8, "Password must be at least 8 characters long."),
   });
   return (
-    <Container
-      style={{ margin: "82px 139px ", width: " 806px", height: " 697px" }}
-    >
+    <Container>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -117,18 +115,18 @@ const Registerformik = () => {
                 className="invalid-feedback"
               />
             </div>
-            <div className="form-group">
-              <Field
-                type="checkbox"
-                name="showPassword"
-                className="form-check-input"
-              />
+            <div className="form-group  d-flex">
               <label htmlFor="showPassword" className="form-check-label">
                 Show password
               </label>
+              <Field
+                type="checkbox"
+                name="showPassword"
+                className="form-check-input ms-4"
+              />
             </div>
             <div className="text-center mt-2">
-              <button type="submit" disabled={isSubmitting}>
+              <button  className='btn btn-outline-success py-2 px-4 mt-4' type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Register User "}
               </button>
             </div>
