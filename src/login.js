@@ -118,7 +118,7 @@ const Login = () => {
                     <div className="text-center mt-3">
                       <button
                         type='submit'
-                        className=" btn btn-outline-danger py-2 px-4 "
+                        className=" btn btn-outline-success py-2 px-4 "
                         disabled={ logincheck || !values.email || !values.password}
                       >
                         Login
