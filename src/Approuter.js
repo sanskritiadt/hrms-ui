@@ -67,12 +67,13 @@ const Approuter = () => {
               <Route path="/empfunc" element={<Empfunc />} />
               <Route path="/positiondetails" element={<PositionDetails />} />
               <Route path="/Createposition" element={<CreatePosition />} />
+              
               <Route
                 path="/getinterviewdetails"
                 element={<Getinterviewdetails />}
               />
               <Route path="/TimeSheet" element={<TimeSheet />} />
-              <Route path="/RegisterUser" element={<RegisterUser />} />
+              {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
               <Route path="/payslip" element={<Payslipdetails />} />
               <Route
                 path="/GetAllEmpAttendance"
@@ -99,13 +100,13 @@ const Approuter = () => {
                 element={<SaveClientFormik />}
               />
               <Route path="/Capex" element={<Capex />} />
-              <Route path="/ForgotPassword" element={<ForgotPassword />} />
+              {/* <Route path="/ForgotPassword" element={<ForgotPassword />} /> */}
               <Route path="/NewpassForm" element={<NewpassForm />} />
               <Route path="/Getallexpenses" element={<Getallexpenses />} />
-              <Route
+              {/* <Route
                 path="/ChangepasswordForm"
                 element={<ChangepasswordForm />}
-              />
+              /> */}
               <Route path="/getcandidate" element={<CandidateDetails />} />
               <Route path="/createCandidate" element={<InterviewCandidate />} />
               <Route
@@ -139,6 +140,10 @@ const Approuter = () => {
       )}
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/RegisterUser" element={<RegisterUser />} />
+        <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/ChangepasswordForm" element={<ChangepasswordForm />}/>
+        
       </Routes>
       {/* <Footer/> */}
     </div>
