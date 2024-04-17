@@ -22,7 +22,7 @@ export default function EmpPayrollDetail() {
       .post(
         `/apigateway/hrms/employee/updatePayrollByUser`,
         {
-            empId: data.empId,
+            empId: data.id,
             designation: data.designation,
             joinDate: data.joinDate,
             salary: data.salary,

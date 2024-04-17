@@ -75,7 +75,11 @@
 // }
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
+import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { toast } from "react-toastify";
 
 export default function EmpDocuments() {
     const token = localStorage.getItem("response-token");
@@ -90,7 +94,7 @@ export default function EmpDocuments() {
         },
       })
       .then((response) => {
-        console.log(response.data);
+       // console.log(response.data);
         setDocuments(response.data);
       })
       .catch((error) => {
@@ -98,6 +102,33 @@ export default function EmpDocuments() {
       });
   }, [ token]);
 
+  // const handleDownload = (documentId) => {
+  //   const url = `/apigateway/hrms/employee/downloadDocument/${EmpId}/${documentId}`;
+  //   axios
+  //     .get(url, {
+  //       responseType: 'arraybuffer',
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //           const blob = new Blob([response.data], { type: "application/pdf" });
+  //           const url = window.URL.createObjectURL(blob);
+  //           const link = document.createElement("a");
+  //           link.href = url;
+  //           link.setAttribute("download", `Document.jpg`);
+  //           document.body.appendChild(link);
+  //           link.click();
+  //           document.body.removeChild(link);
+  //           toast.success("Document downloaded successfully.", {
+  //             position: "top-center",
+  //             theme: "colored",
+  //           });
+  //         })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
   const handleDownload = (documentId) => {
     const url = `/apigateway/hrms/employee/downloadDocument/${EmpId}/${documentId}`;
     axios
@@ -108,26 +139,31 @@ export default function EmpDocuments() {
         },
       })
       .then((response) => {
-            const blob = new Blob([response.data], { type: "application/pdf" });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", `Document${employeeId}.pdf`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            toast.success("Document downloaded successfully.", {
-              position: "top-center",
-              theme: "colored",
-            });
-          })
+        const blob = new Blob([response.data], { type: response.headers['content-type'] });
+        const filename = response.headers['content-disposition'].split('filename=')[1];
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("Document downloaded successfully.", {
+          position: "top-center",
+          theme: "colored",
+        });
+      })
       .catch((error) => {
-        console.log(error);
+        console.error('Download failed:', error);
+        toast.error("Failed to download document.", {
+          position: "top-center",
+          theme: "colored",
+        });
       });
   };
-
+  
   const handleUpload = (documentId) => {
-    // Implement upload functionality
+    
   };
   const styles = {
     tableContainer: {
@@ -143,30 +179,22 @@ export default function EmpDocuments() {
                     <TableCell>Document Type</TableCell>
                     <TableCell>Download</TableCell>
                     <TableCell>Upload</TableCell>
+                    <TableCell>Delete</TableCell>
                   </TableRow>
                 </TableHead>
                 {documents.map((document) => (
-                <TableBody>
-                    <TableRow key={document.id}>
+                <TableBody key={document.id}>
+                    <TableRow >
                       <TableCell>{document.documentType}</TableCell>
                       <TableCell>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => handleDownload(document.id)}
-                        >
-                          Download
-                        </Button>
+                        <FileDownloadRoundedIcon fontSize="large" onClick={() => handleDownload(document.id)}/>
                         </TableCell>
                         <TableCell>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => handleUpload(document.id)}
-                        >
-                          Upload
-                        </Button>
+                       <UploadFileRoundedIcon fontSize="large"  onClick={() => handleUpload(document.id)}/>
                       </TableCell>
+                      <TableCell>
+                        <DeleteRoundedIcon  fontSize="large"   onClick={() => handleDelete(document.id)}/>
+                       </TableCell>
                     </TableRow>
                 </TableBody>
                   ))}
