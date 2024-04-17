@@ -75,10 +75,10 @@
 // }
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
-import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import {Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+// import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
+// import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
+// import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { toast } from "react-toastify";
 
 export default function EmpDocuments() {
@@ -187,13 +187,13 @@ export default function EmpDocuments() {
                     <TableRow >
                       <TableCell>{document.documentType}</TableCell>
                       <TableCell>
-                        <FileDownloadRoundedIcon fontSize="large" onClick={() => handleDownload(document.id)}/>
+                       <Button variant="contained">Download</Button>
                         </TableCell>
                         <TableCell>
-                       <UploadFileRoundedIcon fontSize="large"  onClick={() => handleUpload(document.id)}/>
+                        <Button variant="contained">Upload</Button>
                       </TableCell>
                       <TableCell>
-                        <DeleteRoundedIcon  fontSize="large"   onClick={() => handleDelete(document.id)}/>
+                      <Button variant="contained">Delete</Button>
                        </TableCell>
                     </TableRow>
                 </TableBody>
