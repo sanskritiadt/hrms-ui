@@ -233,7 +233,7 @@ export default function EmpDocuments() {
     formData.append("document", documentFile);
     axios
       .post(
-        `/apigateway/hrms/employee/uploadDocument/19/${documentId}`,
+        `/apigateway/hrms/employee/uploadDocument/${EmpId}/${documentId}`,
         formData,
         {
           headers: {
