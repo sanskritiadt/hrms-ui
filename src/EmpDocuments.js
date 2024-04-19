@@ -1,4 +1,78 @@
+// import React, { useState, useEffect } from "react";
+// import axios from "axios";
+// import { Card, CardContent, Typography, Button } from "@mui/material";
 
+// export default function EmpDocuments() {
+//   const token = localStorage.getItem("response-token");
+//   const [documents, setDocuments] = useState([]);
+
+//   useEffect(() => {
+//     axios
+//       .get(`/apigateway/hrms/employee/getDocumentTypes`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       })
+//       .then((response) => {
+//         console.log(response.data);
+//         setDocuments(response.data);
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   }, [token]);
+
+//   const handleDownload = (documentId) => {
+//     // Implement download functionality
+//   };
+
+//   const handleUpload = (documentId) => {
+//     // Implement upload functionality
+//   };
+
+//   return (
+//     <div>
+//       {documents.map((document) => (
+//         <Card
+//           key={document.id}
+//           sx={{
+//             maxWidth: 800,
+//             margin: "auto",
+//             marginTop: 3,
+//             textAlign: "center",
+//           }}
+//         >
+//           <CardContent>
+//             <Typography color="textSecondary"  >
+//               Type: {document.documentType}
+//             </Typography>
+//             <div
+//               sx={{
+//                 marginTop: 1,
+//                 justifyContent: "space-around",
+//               }}
+//             >
+//               <Button
+//                 variant="contained"
+//                 color="primary"
+//                 onClick={() => handleDownload(document.id)}
+//               >
+//                 Download
+//               </Button>
+//               <Button
+//                 variant="contained"
+//                 color="secondary"
+//                 onClick={() => handleUpload(document.id)}
+//               >
+//                 Upload
+//               </Button>
+//             </div>
+//           </CardContent>
+//         </Card>
+//       ))}
+//     </div>
+//   );
+// }
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -11,11 +85,19 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+// import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
+// import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
+// import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { toast } from "react-toastify";
 import { Input } from "@mui/material";
 export default function EmpDocuments() {
   const token = localStorage.getItem("response-token");
   const EmpId = localStorage.getItem("EmpID");
   const [documents, setDocuments] = useState([]);
+  const panData = new FormData();
+  const aadhData = new FormData();
+  const resumeData = new FormData();
+
   useEffect(() => {
     axios
       .get(`/apigateway/hrms/employee/getDocumentTypes`, {
@@ -34,16 +116,19 @@ export default function EmpDocuments() {
 
   const handleDelete = (documentId) => {
     axios
-      .delete(`/apigateway/hrms/employee/deleteDocument/${EmpId}/${documentId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      .delete(
+        `/apigateway/hrms/employee/deleteDocument/${EmpId}/${documentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
+      )
       .then((response) => {
-        toast.confirm('Are you sure you want to delete this item?', {
+        console.log(response.data);
+        toast.success(response.data, {
           position: "top-center",
-          autoClose: false,
-          onClose: handleDelete
+          theme: "colored",
         });
       })
       .catch((error) => {
@@ -70,7 +155,7 @@ export default function EmpDocuments() {
           const contentType = response.headers["content-type"];
           let mimeType;
           let fileExtension;
-  
+
           if (contentType.includes("application/pdf")) {
             mimeType = "application/pdf";
             fileExtension = "pdf";
@@ -190,9 +275,17 @@ export default function EmpDocuments() {
               <TableCell>
                 <Button
                   variant="contained"
-                  onClick={() => handleDelete(document.id)}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you wish to delete this item?"
+                      )
+                    ) {
+                      handleDelete(document.id);
+                    }
+                  }}
                 >
-                  Delete{" "}
+                  Delete
                 </Button>
               </TableCell>
             </TableRow>
