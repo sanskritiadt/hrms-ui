@@ -84,21 +84,41 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Modal,
+  Box,
+  Select,
+  MenuItem,
+  Typography,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
-// import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
-// import UploadFileRoundedIcon from '@mui/icons-material/UploadFileRounded';
-// import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { toast } from "react-toastify";
 import { Input } from "@mui/material";
 export default function EmpDocuments() {
   const token = localStorage.getItem("response-token");
   const EmpId = localStorage.getItem("EmpID");
   const [documents, setDocuments] = useState([]);
-  const panData = new FormData();
-  const aadhData = new FormData();
-  const resumeData = new FormData();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [documentTypes, setDocumentTypes] = useState([]);
+  const [selectedDocumentType, setSelectedDocumentType] = useState("");
 
   useEffect(() => {
+    axios
+      .get(`/apigateway/hrms/employee/getAllDocumentDetailsById/${EmpId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        const documentTypesArray = response.data.map(
+          (item) => item.documentType
+        );
+        setDocuments(documentTypesArray);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     axios
       .get(`/apigateway/hrms/employee/getDocumentTypes`, {
         headers: {
@@ -106,8 +126,8 @@ export default function EmpDocuments() {
         },
       })
       .then((response) => {
-        // console.log(response.data);
-        setDocuments(response.data);
+        console.log(response.data);
+        setDocumentTypes(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -139,6 +159,7 @@ export default function EmpDocuments() {
         });
       });
   };
+
   const handleDownload = (documentId) => {
     axios
       .get(
@@ -199,8 +220,10 @@ export default function EmpDocuments() {
       });
   };
 
-  function handleUpload(documentId) {
+  function handleSubmit(event) {
+    event.preventDefault();
     const formData = new FormData();
+    const documentId = selectedDocumentType; // Using the selected document type
     const body = {
       empId: EmpId,
       docTypeId: documentId,
@@ -210,7 +233,7 @@ export default function EmpDocuments() {
     formData.append("document", documentFile);
     axios
       .post(
-        `apigateway/hrms/employee/uploadDocument/19/${documentId}`,
+        `/apigateway/hrms/employee/uploadDocument/19/${documentId}`,
         formData,
         {
           headers: {
@@ -242,56 +265,114 @@ export default function EmpDocuments() {
     },
   };
   return (
-    <TableContainer component={Paper} style={styles.tableContainer}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Document Type</TableCell>
-            <TableCell>Download</TableCell>
-            <TableCell>Upload</TableCell>
-            <TableCell>Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        {documents.map((document) => (
-          <TableBody key={document.id}>
+    <div>
+      <Button sx={{
+        display: 'flex',
+        // justifyContent: 'flex-end', 
+        alignItems: 'flex-start', 
+        position: 'absolute', 
+        top: '50px', 
+        right: '110px', 
+        margin: '20px',
+    }} variant="contained" onClick={() => setIsModalOpen(true)}>
+        Upload
+      </Button>
+      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            maxWidth: 400,
+          }}
+        >
+          <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
+            Upload Document
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <Typography variant="subtitle1" sx={{ mr: 2 }}>
+                Document Type:
+              </Typography>
+              <FormControl fullWidth>
+                <Select
+                  value={selectedDocumentType}
+                  onChange={(event) =>
+                    setSelectedDocumentType(event.target.value)
+                  }
+                >
+                  <MenuItem value="">
+                    <em>Select document type</em>
+                  </MenuItem>
+                  {documentTypes.map((docType) => (
+                    <MenuItem key={docType.id} value={docType.id}>
+                      {docType.documentType}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <FormControl fullWidth>
+              <Input type="file" id="myfile" name="myfile" />
+            </FormControl>
+            <Box mt={2} display="flex" justifyContent="space-between">
+              <Button variant="contained" type="submit">
+                Upload
+              </Button>
+              <Button variant="contained" onClick={() => setIsModalOpen(false)}>
+                Close
+              </Button>
+            </Box>
+          </form>
+        </Box>
+      </Modal>
+
+      <TableContainer component={Paper} style={styles.tableContainer}>
+        <Table>
+          <TableHead>
             <TableRow>
-              <TableCell>{document.documentType}</TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  onClick={() => handleDownload(document.id)}
-                >
-                  Download
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Input
-                  type="file"
-                  id="myfile"
-                  name="myfile"
-                  onChange={(event) => handleUpload(document.id, event)}
-                />
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "Are you sure you wish to delete this item?"
-                      )
-                    ) {
-                      handleDelete(document.id);
-                    }
-                  }}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+              <TableCell>Document Type</TableCell>
+              <TableCell>Download</TableCell>
+              <TableCell>Delete</TableCell>
             </TableRow>
-          </TableBody>
-        ))}
-      </Table>
-    </TableContainer>
+          </TableHead>
+          {documents.map((document) => (
+            <TableBody key={document.id}>
+              <TableRow>
+                <TableCell>{document.documentType}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleDownload(document.id)}
+                  >
+                    Download
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Are you sure you wish to delete this item?"
+                        )
+                      ) {
+                        handleDelete(document.id);
+                      }
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ))}
+        </Table>
+      </TableContainer>
+    </div>
   );
 }
