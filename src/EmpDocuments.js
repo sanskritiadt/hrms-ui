@@ -104,7 +104,7 @@ export default function EmpDocuments() {
 
   useEffect(() => {
     axios
-      .get(`/apigateway/hrms/employee/getAllDocumentDetailsById/${EmpId}`, {
+      .get(`/apigateway/hrms/employee/getAllDocumentDetailsByEmpId/${EmpId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
