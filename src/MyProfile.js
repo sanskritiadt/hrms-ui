@@ -41,8 +41,9 @@ const UserProfileDropdown = () => {
             position: "top-center",
             theme: "colored",
           });
-          navigate("/");
+         
          window.location.reload();
+         navigate("/");
         } else {
           throw new Error("Logout failed");
         }

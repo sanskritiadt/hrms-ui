@@ -10,7 +10,7 @@ module.exports = {
     allowedHosts: 'all',
     proxy: {
       '/apigateway': {
-        target: 'https://sit.hrms.alphadot.co.in/gateway/', // Replace this with the address of your backend server
+        target: 'https://sit.hrms.alphadot.co.in//gateway/', // Replace this with the address of your backend server
         secure: true, // Set to true if your backend server has SSL enabled
         changeOrigin: true,
         pathRewrite: {
