@@ -9,10 +9,8 @@ import { FaDownload } from "react-icons/fa";
 export default function Empfunc() {
 
   const [employees, setEmployees] = useState([]);
-
   const [empName, setempName] = useState("");
   const [emp, setEmp] = useState([]);
-
   const [emailid, setEmailid] = useState("");
 
   // const [empdata, setempdata] = useState([]);
@@ -21,6 +19,21 @@ export default function Empfunc() {
   const [employeesPerPage] = useState(5); // Number of employees per page
   const token = localStorage.getItem("response-token");
   const EmpId = localStorage.getItem("EmpID");
+
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setScreenWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
   const handleNameChange = (event) => {
     setempName(event.target.value);
@@ -239,12 +252,12 @@ export default function Empfunc() {
               <a href="">Employee Management</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Employee Details{" "}
+              Employee Details
             </li>
           </ol>
         </nav>
       </div>
-      <div className="d-flex justify-content-center  ">
+      <div className="d-flex justify-content-center " style={{ width: screenWidth-50}}>
         <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
           <h1 className="Heading1 my-4">Employee Details</h1>
 

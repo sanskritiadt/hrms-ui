@@ -88,6 +88,11 @@ const routes = [
         name: "GST  Invoice",
         icon: <FaReceipt />,
       },
+      {
+        path: "/GetGstDetails",
+        name: "Gst Details",
+        icon: <FaList />,
+      },
     ],
   },
   {

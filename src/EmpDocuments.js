@@ -352,6 +352,14 @@ export default function EmpDocuments() {
                     Download
                   </Button>
                 </TableCell>
+                {/* <TableCell>
+                <Input
+                  type="file"
+                  id="myfile"
+                  name="myfile"
+                  onChange={(event) => handleUpload(document.id, event)}
+                />
+              </TableCell> */}
                 <TableCell>
                   <Button
                     variant="contained"
@@ -367,6 +375,20 @@ export default function EmpDocuments() {
                   >
                     Delete
                   </Button>
+                  {/* <div
+                  className="delete-button"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you wish to delete this item?"
+                      )
+                    ) {
+                      handleDelete(document.id);
+                    }
+                  }}
+                >
+                  Delete
+                </div> */}
                 </TableCell>
               </TableRow>
             </TableBody>

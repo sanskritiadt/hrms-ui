@@ -79,15 +79,6 @@ const Capex = () => {
         setData(newdata);
         console.log(newdata);
     }
-    //   {
-    //     "date":"2023-05-16",
-    //     "expenseDetails":"Desktop repair",
-    //     "gstBill":"29GYFUDG1314R9Z7",
-    //     "amount":808888,
-    //     "paidBy":"jyoti",
-    //     "comment":"decortion",
-    //     "mode":"PhonePay"
-    // }
     return (
         <div>     <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>

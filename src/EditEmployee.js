@@ -238,7 +238,7 @@ const EditEmployee = () => {
                   </label>
                   <div className="col-sm-10">
                     <input
-                      value={data.dob || ""}
+                      value={data.dob || ""}  
                       onChange={(e) =>
                         setData({ ...data, dob: e.target.value })
                       }
@@ -246,7 +246,7 @@ const EditEmployee = () => {
                       className="form-control"
                       id="dob"
                     />
-                  </div>
+                  </div>  
                 </div>
                 <div className="row mb-3">
                   <label

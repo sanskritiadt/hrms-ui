@@ -41,11 +41,12 @@ import CreateEmpAssets from "./CreateEmpAssets";
 import CreateProjEng from "./CreateProjEng";
 import EditprojEng from "./EditprojEng";
 import SearchEmpAssets from "./SearchEmpAssets";
-import Gstinvoice from "./Gstinvoice";
+import SaveGstinvoice from "./SaveGstinvoice";
 import HomePage from "./HomePage";
 import MyProfileDetails from "./MyProfileDetails";
 import Footer from "./Footer";
 import EmpPersonalDetail from "./EmpPersonalDetail";
+import GetGstDetails from './GetGstDetails'
 
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -125,9 +126,10 @@ const Approuter = () => {
               <Route path="/CreateEmpAssets" element={<CreateEmpAssets />} />
               <Route path="/EditAssets/:id" element={<EditAssets />} />
               <Route path="/SearchEmpAssets" element={<SearchEmpAssets />} />
-              <Route path="/Gstinvoice" element={<Gstinvoice />} />
+              <Route path="/Gstinvoice" element={<SaveGstinvoice />} />
               <Route path="/personal-details/:id" element={<EmpPersonalDetail />} />
               <Route path="/MyProfileDetails" element={<MyProfileDetails />} />
+              <Route path="/GetGstDetails" element={<GetGstDetails />} />
             </Routes>
           </SideBar>
         </div>
