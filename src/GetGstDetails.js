@@ -49,13 +49,13 @@ const GetGstDetails = () => {
           <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
             <li className="breadcrumb-item"><a href="">Employee Management</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Employee Assets</li>
+            <li className="breadcrumb-item active" aria-current="page">GST Details</li>
           </ol>
         </nav>
       </div>
       <div style={{width:screenWidth-50, display:'flex', justifyContent:'center'}}>
         <div>
-        <h1 className='Heading1 my-4' >Employee Assets</h1>
+        <h1 className='Heading1 my-4' > GST Details</h1>
         <div style={{width:"160vh", overflowX:'auto'}}>
           <table border='2' className="table table-striped table-bordered">
             <thead className="head">
