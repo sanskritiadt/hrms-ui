@@ -7,7 +7,6 @@ import { useState } from 'react';
 import './Hrmscss/App.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import { toast } from 'react-toastify';
-import CustomLoader from './CustomLoader'; 
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -70,7 +69,6 @@ const Login = () => {
   };
   return (
     <div className='container ' style={{ margin:0 , justifyItems:'center', alignItems:'center', width: '577px', height: '550px', borderRadius: '50px'}}>
-       {logincheck && <CustomLoader />}
       <div className='row'>
         <div className="col-12 col-sm-8 col-md-6 m-auto">
           <div className='card border-0 shadow' style={{ margin: '-50px 266px ', width: '577px', height: '413px', borderRadius: '50px' , top:'10rem' }}>
@@ -145,16 +143,3 @@ const Login = () => {
 }
 
 export default Login;
-
-
-
-
-
-
-
-
-
-
-
-
-
