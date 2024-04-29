@@ -46,7 +46,8 @@ import HomePage from "./HomePage";
 import MyProfileDetails from "./MyProfileDetails";
 import Footer from "./Footer";
 import EmpPersonalDetail from "./EmpPersonalDetail";
-import GetGstDetails from './GetGstDetails'
+import GetGstDetails from './GetGstDetails';
+import EditGstDetails from './EditGstDetails';
 
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -88,6 +89,7 @@ const Approuter = () => {
               <Route path="/editexpenses/:id" element={<EditExpenses />} />
               <Route path="/EditCandidate/:id" element={<EditCandidate />} />
               <Route path="/EditEmployee/:id" element={<EditEmployee />} />
+              <Route path="/EditGstDetails/:id" element={<EditGstDetails />} />
               <Route
                 path="/EditInterviewDetails/:id/:id2"
                 element={<EditInterviewDetails />}
