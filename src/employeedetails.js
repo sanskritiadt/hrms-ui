@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "./Hrmscss/App.css";
 import { Form, Button } from "react-bootstrap";
 import { FaDownload } from "react-icons/fa";
+import LoadingPage from "./LoadingPage";
 
 export default function Empfunc() {
 
@@ -12,11 +13,10 @@ export default function Empfunc() {
   const [empName, setempName] = useState("");
   const [emp, setEmp] = useState([]);
   const [emailid, setEmailid] = useState("");
-
   // const [empdata, setempdata] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [employeesPerPage] = useState(5); // Number of employees per page
+  const [employeesPerPage] = useState(5);
+  const [loading, setLoading] = useState(true); 
   const token = localStorage.getItem("response-token");
   const EmpId = localStorage.getItem("EmpID");
 
@@ -109,6 +109,7 @@ export default function Empfunc() {
   };
 
   const handleSubmit = () => {
+    setLoading(true); 
     axios
       .get(`/apigateway/hrms/employee/searchByName?query=${empName}`, {
         headers: {
@@ -117,8 +118,9 @@ export default function Empfunc() {
       })
       .then((response) => {
         console.log(response);
-        console.log(response.data);
-        setEmp(response.data);
+      //  console.log(response.data);
+        setEmp(response.data.content);
+        setLoading(false); 
         toast.success("Employee Name  found successfully", {
           position: "top-center",
           theme: "colored",
@@ -126,6 +128,7 @@ export default function Empfunc() {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false); 
         toast.error("Error occurred, try again later.", {
           position: "top-center",
           theme: "colored",
@@ -134,7 +137,7 @@ export default function Empfunc() {
   };
 
   const handleSearchByTypeAndStatus = () => {
-    // Second API call: Search by asset type
+    setLoading(true); 
     axios
       .get(`/apigateway/hrms/employee/searchByEmail?query=${emailid}`, {
         headers: {
@@ -144,7 +147,8 @@ export default function Empfunc() {
       .then((response) => {
         console.log(response.data);
         // Update the asset state with the data from the second API call
-        setEmp(response.data);
+        setEmp(response.data.content);
+        setLoading(false); 
         toast.success("Employee data found successfully", {
           position: "top-center",
           theme: "colored",
@@ -156,8 +160,11 @@ export default function Empfunc() {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       });
   };
+ 
+
   useEffect(() => {
     axios
       .get(`/apigateway/hrms/employee/getAllEmp`, {
@@ -167,6 +174,7 @@ export default function Empfunc() {
       })
       .then((response) => {
         setEmployees(response.data.content);
+        setLoading(false); 
         toast.success("Data found successfully.", {
           position: "top-center",
           theme: "colored",
@@ -179,6 +187,7 @@ export default function Empfunc() {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       });
   }, []);
   // useEffect(() => {
@@ -217,29 +226,11 @@ export default function Empfunc() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // useEffect(() => {
-  //   setempdata(currentEmployees);
-  // }, [currentEmployees]); // *********************************
-
-  // function ApiUpdater(){
-  //   setempdata(currentEmployees);
-  // }
-  //const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setScreenWidth(window.innerWidth);
-  //   };
-
-  //   window.addEventListener('resize', handleResize);
-
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
   return (
     <div>
+       {loading ? <LoadingPage/> : ''}
       <div className=" mt-3 pl-4">
+      {/* {loading ? <LoadingPage/> : ''} */}
         <nav
           aria-label="breadcrumb"
           style={{ "--bs-breadcrumb-divider": "'>>'" }}
@@ -315,18 +306,16 @@ export default function Empfunc() {
                       <td>{employee.accountNumber}</td>
                       <td>{employee.ifscCode}</td>
                       <td>
-                        {" "}
                         <FaDownload
                           style={{ cursor: "pointer" }}
                           onClick={downloadAadharCard}
-                        />{" "}
+                        />
                       </td>
                       <td>
-                        {" "}
                         <FaDownload
                           style={{ cursor: "pointer" }}
                           onClick={downloadPanCard}
-                        />{" "}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -401,6 +390,7 @@ export default function Empfunc() {
               marginBottom: "40px",
             }}
           >
+             
             <div className="table-responsive-sm">
               <table border="2" className="table table-striped table-bordered">
                 <thead className="head">

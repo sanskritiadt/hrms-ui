@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
-import './Hrmscss/App.css'
+import './Hrmscss/App.css';
+import LoadingPage from "./LoadingPage";
 
 function GetAllPrEngagement() {
     const [project , setProject ] = useState([]);
+    const [loading, setLoading] = useState(true);
     const token = localStorage.getItem("response-token")
     React.useEffect(() => {
       axios.get(`/apigateway/hrms/engagement/allProjectEngagement`, {
@@ -14,28 +16,21 @@ function GetAllPrEngagement() {
         }
       }).then((response) => {
         setProject(response.data);
+        setLoading(false); 
         //toast.success("Data found successfully.", { position: 'top-center', theme: "colored", closeOnClick: true })
       }).catch(error => {
         console.log(error)
-        toast.error("Error occured try after sometime.", { position: "top-center", theme: 'colored' })
+        toast.error("Error occured try after sometime.", { position: "top-center", theme: 'colored' });
+        setLoading(false); 
       })
     }, []);
     if (!project) return null;
   
-    //
-    // "projectId": 100,
-	// "projectName":"rki",
-	// "projectDescription":"Online villa booking site",
-	// "engagedEmployee":"vikash",
-	// "startDate":"01/05/2023",
-	// "endDate":"20/06/2023",
-	// "status":"active"
-  
     return (
       <div  className="mt-3">
+           {loading ? <LoadingPage/> : ''}
       <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
-        
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
             <li className="breadcrumb-item"><a href="">Partner</a></li>
             <li className="breadcrumb-item active" aria-current="page">Project Engagement</li>
@@ -60,8 +55,6 @@ function GetAllPrEngagement() {
           </thead>
           <tbody className="body">
             {project.map((project ) => (
-              // display a <div> element with the employees.emailId and employees.designation
-              // parent element needs to have a unique key
               <tr key={project.projectId}>
                 <td><Link to={`/EditprojEng/${project.projectId}`} className="Candidate-id">{project.projectId}</Link></td>
                 <td>{project.projectName}</td>

@@ -7,29 +7,34 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import './Hrmscss/App.css';
 import handleAuthError from './CommonErrorHandling';
+import LoadingPage from "./LoadingPage";
 
 
-//******** USe Prototype obj */
+
+
 
 function ClientInfoTable() {
     const token = localStorage.getItem("response-token")
     const [clientInfo, setClientInfo] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch the client information from the server when the component mounts
+       
         axios.get(`/apigateway/expensemanagement/clientInfo/getAllClientInfo`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-            setClientInfo(response.data)
-            console.log(response.data);
+            setClientInfo(response.data);
+            setLoading(false); 
+            //console.log(response.data);
            // toast.success("Client data found successfully!!", { position: "top-center", theme: 'colored' })
 
         })
             .catch(error => {
                 console.log(error);
                 handleAuthError(error);
+                setLoading(false); 
                 // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
             });
     }, []);
@@ -37,6 +42,7 @@ function ClientInfoTable() {
     // Otherwise, render the client information in a table
     return (
         <div  className="mt-3"><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+               {loading ? <LoadingPage/> : ''}
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
