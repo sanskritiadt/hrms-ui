@@ -108,7 +108,7 @@ const EditGstDetails = () => {
              <div className='container pt-3'>
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
-                    <div className='card border-0 shadow'style={{width:'700px',height:'1660px'}}>
+                    <div className='card border-0 shadow'style={{width:'700px',height:'1000px'}}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                             <div className="row mb-3">
@@ -124,7 +124,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='dataUser'>Invoice Number</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => { setData({ ...data, invoiceNumber: e.target.value }) }} value={data.invoiceNumber || ''}
-                                            type="text"
+                                            type="text" disabled
                                             id="invoiceNumber"
                                             placeholder='Enter data user name'
                                             className="form-control" />
@@ -134,7 +134,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='dataName'>Financial Year</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,fy:e.target.value})}} value={data.fy || ''}
-                                            type="text"
+                                            type="text" disabled
                                             id="fy"
                                             className="form-control" />
                                     </div>
@@ -143,7 +143,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='dataNo'>Invoice Date</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => { setData({...data,invoiceDate:e.target.value})}} value={data.invoiceDate || ''}
-                                            type="text"
+                                            type="text" disabled
                                             id="invoiceDate"
                                             placeholder='Enter data number'
                                             className="form-control" />
@@ -153,7 +153,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='dataType'>GST Period</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,gstPeriod:e.target.value})}} value={data.gstPeriod || ''}
-                                            type="text" className="form-control"
+                                            disabled type="text" className="form-control"
                                             id="gstPeriod" />
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='processor'>Billing Period</label>
                                     <div className="col-sm-10">
                                         <input  onChange={(e) => {setData({...data,billingPeriod:e.target.value})}} value={data.billingPeriod || ''}
-                                            type="text" className="form-control"
+                                           disabled  type="text" className="form-control"
                                             id="billingPeriod" />
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='ram'>Customer Id</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,customerId:e.target.value})}} value={data.customerId || ''}
-                                            type="text" className="form-control"
+                                           disabled type="text" className="form-control"
                                             id="customerId" />
                                     </div>
                                 </div>
@@ -177,7 +177,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='diskType'>Paid To</label>
                                     <div className="col-sm-10">
                                         <input  onChange={(e) => {setData({...data,paidTo:e.target.value})}}value={data.paidTo || ''}
-                                            type="text" className="form-control"
+                                           disabled type="text" className="form-control"
                                             id="paidTo" />
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='operatingSystem'>Taxable Amount</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,taxableAmount:e.target.value})}} value={data.taxableAmount || ''}
-                                            type="text" className="form-control"
+                                           disabled type="text" className="form-control"
                                             id="taxableAmount" />
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='purchesDate'>TDS</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,tds:e.target.value})}} value={data.tds || ''}
-                                            type="text" className="form-control"
+                                          disabled  type="text" className="form-control"
                                             id="tds" />
                                     </div>
                                 </div>
@@ -202,7 +202,7 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='warrenty'>GST</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,gst:e.target.value})}} value={data.gst || ''}
-                                            type="text" className="form-control"
+                                        disabled    type="text" className="form-control"
                                             id="gst" />
                                     </div>
                                 </div>
@@ -210,11 +210,11 @@ const EditGstDetails = () => {
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='warrentyDate'>Invoice Amount</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,invoiceAmount:e.target.value})}}value={data.invoiceAmount || ''}
-                                            type="number" className="form-control"
+                                          disabled  type="number" className="form-control"
                                             id="invoiceAmount" />
                                     </div>
                                 </div>
-                                <div className="row mb-3">
+                                {/* <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='warrentyDate'>Receivable</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => {setData({...data,receivable:e.target.value})}}value={data.receivable || ''}
@@ -269,12 +269,12 @@ const EditGstDetails = () => {
                                             type="number" className="form-control"
                                             id="tdsBalance" />
                                     </div>
-                                </div>
-                                <div className="d-grid gap-2 col-6 mx-auto">
+                                </div> */}
+                                {/* <div className="d-grid gap-2 col-6 mx-auto">
                                     <button className="btn btn-outline-primary" type="submit">Update</button>
-                                </div>
+                                </div> */}
                             </form>
-                            <div className="d-grid gap-2 col-6 mx-auto">
+                            {/* <div className="d-grid gap-2 col-6 mx-auto">
                                 <button className="btn btn-outline-danger" onClick={() => {
                       if (
                         window.confirm(
@@ -284,7 +284,7 @@ const EditGstDetails = () => {
                         HandleDelete(document.id);
                       }
                     }}type="submit">Delete</button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -293,10 +293,10 @@ const EditGstDetails = () => {
         <div className='container pt-3'>
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
-                    <div className='card border-0 shadow'style={{width:'700px',height:'1660px'}}>
+                    <div className='card border-0 shadow'style={{width:'700px',height:'560px'}}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
-                            <div className="row mb-3">
+                            {/* <div className="row mb-3">
                                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='dataId'>Id</label>
                                     <div className="col-sm-10">
                                         <input disabled value={data.id || ''}
@@ -414,7 +414,7 @@ const EditGstDetails = () => {
                                             type="number" className="form-control"
                                             id="amountReceived" />
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='warrentyDate'>Receivable</label>
                                     <div className="col-sm-10">

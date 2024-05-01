@@ -9,15 +9,19 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingPage from './LoadingPage'
+
 
 const UserProfileDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("response-token");
   const navigate = useNavigate();
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   const handleLogout = () => {
+    setLoading(true);
     axios
       .post(
         `/apigateway/api/user/logout`,
@@ -36,16 +40,17 @@ const UserProfileDropdown = () => {
       )
       .then((res) => {
         if (res.status === 200) {
-          localStorage.clear();
-          toast.success("Logout-Successful.", {
-            position: "top-center",
-            theme: "colored",
+          setTimeout(() => {
+            toast.success("Logout-Successful.", {
+              position: "top-center",
+              theme: "colored"
           });
-         
-         window.location.reload();
-         navigate("/");
-        } else {
-          throw new Error("Logout failed");
+            navigate("/");
+            window.location.reload();
+            localStorage.clear();
+            setLoading(false);
+          }, 4000);  
+
         }
       })
       .catch((error) => {
@@ -56,11 +61,13 @@ const UserProfileDropdown = () => {
         });
         console.error("Logout error:", error);
         window.location.reload();
+        setLoading(false);
       });
   };
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+         {loading ? <LoadingPage/> : ''}
       <DropdownToggle className="btn btn-floating dropdown-toggle hidden-arrow bg-dark rounded-circle mx-2">
         <i className="fas fa-user-alt" />
       </DropdownToggle>

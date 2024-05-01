@@ -12,10 +12,11 @@ const GetAllEmpAttendance = () => {
         fromDate: "",
         toDate: ""
     })
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [getData, setData] = useState([])
     const submit = (e) => {
         e.preventDefault();
+        setLoading(true); 
         axios.get(`/apigateway/payroll/timeSheet/allEmpAttendence?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`, {
             headers: {
                 'Authorization': `Bearer ${token}`

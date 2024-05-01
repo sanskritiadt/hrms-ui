@@ -55,7 +55,7 @@ const Approuter = () => {
   useEffect(() => {
     const empId = localStorage.getItem("EmpID");
     setIsLoggedIn(empId !== null);
-  }, []); // Runs only once on component mount
+  }, []); 
 
   return (
     <div>
