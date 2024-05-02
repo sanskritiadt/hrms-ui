@@ -4,6 +4,8 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './Hrmscss/homepage.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock, faUsers, faMoneyBillAlt, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import Footer from './Footer';
+
 
 
 
@@ -89,13 +91,9 @@ function HomePage2() {
 
         </Col>
         </Row>
-        {/* <Row className="footer-section bg-dark text-white py-3 mt-auto">
-          <Col className="text-center">
-            <p className="mb-0">© 2023 HUMAN RESOURCE MANAGEMENT SYSTEM</p>
-          </Col>
-        </Row> */}
+
       </Container>
-    
+    <Footer/>
     </>
   );
 

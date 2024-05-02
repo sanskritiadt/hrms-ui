@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import LoadingPage from './LoadingPage'
 
 const GetAllEmpAttendance = () => {
 
@@ -11,20 +12,24 @@ const GetAllEmpAttendance = () => {
         fromDate: "",
         toDate: ""
     })
+    const [loading, setLoading] = useState(false);
     const [getData, setData] = useState([])
     const submit = (e) => {
         e.preventDefault();
+        setLoading(true); 
         axios.get(`/apigateway/payroll/timeSheet/allEmpAttendence?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
            // toast.success("data found succesfully.", { position: "top-center", theme: "colored" });
-            console.log(response.data)
+           // console.log(response.data)
             setData(response.data);
+            setLoading(false); 
         }).catch(error => {
             toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" });
-            console.log("error happend", error)
+            console.log("error happend", error);
+            setLoading(false); 
         })
 
     }
@@ -53,6 +58,7 @@ const GetAllEmpAttendance = () => {
         <div>
             <div className='mt-3'>
                 <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+                     
                     <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
                         <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
                         <li className="breadcrumb-item"><a href="">Employee Management</a></li>
@@ -60,13 +66,12 @@ const GetAllEmpAttendance = () => {
                     </ol>
                 </nav>
             </div>
-
-
             <div className="d-flex justify-content-center  " style={{ width: screenWidth - 50 }}>
             <div>
                 <div className="pt-2">
                     <h1 className='Heading1 my-4' >Employee  Attendance </h1>
                     <form onSubmit={(e) => { submit(e) }} >
+                    {loading ? <LoadingPage/> : ''}
                         <div className="mb-2 d-grid gap-1 d-md-flex justify-content-center my-4">
                             <label className="pt-2 fs-5 mb-0" htmlFor="fromdate">fromDate:</label>
                             <input onChange={(e) => { handle(e) }} value={getAttendence.fromDate}

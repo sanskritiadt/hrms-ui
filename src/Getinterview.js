@@ -1,24 +1,29 @@
 import axios from "axios";
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import './Hrmscss/App.css'
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
+import LoadingPage from "./LoadingPage";
 
 export default function Getinterviewdetails() {
-    const [positions, setPosition] = React.useState([]);
+    const [positions, setPosition] = useState([]);
+    const [loading, setLoading] = useState(true);
+    
     const token = localStorage.getItem("response-token")
-    React.useEffect(() => {
+    useEffect(() => {
         axios.get("/apigateway/hrms/interview/getAllInterviewDetails", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then((response) => {
             setPosition(response.data);
+            setLoading(false); 
           //  toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
         }).catch((error) => {
             handleAuthError(error);
-            console.log("error occured", error)
+            console.log("error occured", error);
+            setLoading(false); 
             // toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
         })
     }, []);
@@ -79,6 +84,7 @@ export default function Getinterviewdetails() {
     // }
     return (
         <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+               {loading ? <LoadingPage/> : ''}
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>

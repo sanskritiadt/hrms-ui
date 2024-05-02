@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import { Link } from 'react-router-dom';
+import Footer from './Footer';
 const Capex = () => {
     const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
@@ -143,7 +144,7 @@ const Capex = () => {
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="comment">Comment</label>
                                     <div className="col-sm-10">
-                                        <input onChange={(e) => { handle(e) }} value={data.comment}
+                                       <input onChange={(e) => { handle(e) }} value={data.comment}
                                             type="text" className="form-control"
                                             placeholder='enter your comment'
                                             id="comment" />

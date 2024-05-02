@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Hrmscss/App.css";
+import LoadingPage from "./LoadingPage";
 
 const GetGstDetails = () => {
   const token = localStorage.getItem("response-token");
   const [Gst, setGst] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -18,6 +20,7 @@ const GetGstDetails = () => {
       .then((response) => {
        // console.log(response.data);
         setGst(response.data.content);
+        setLoading(false); 
         //toast.success('Assets data found successfully!!',{position:'top-center',theme:'colored'})
       })
       .catch((error) => {
@@ -26,6 +29,7 @@ const GetGstDetails = () => {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       });
   }, []);
   if (!Gst) return null;
@@ -46,6 +50,7 @@ const GetGstDetails = () => {
 
   return (
     <div className="table-responsive-sm">
+         {loading ? <LoadingPage/> : ''}
       <div className=" mt-3">
         <nav
           aria-label="breadcrumb"
@@ -75,7 +80,7 @@ const GetGstDetails = () => {
         }}
       >
         <div>
-          <h1 className="Heading1 my-4"> GST Details</h1>
+          <h1 className="Heading1 my-4">GST Details</h1>
           <div style={{ width: "160vh", overflowX: "auto" }}>
             <table border="2" className="table table-striped table-bordered">
               <thead className="head">

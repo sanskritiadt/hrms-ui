@@ -5,11 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { toast } from 'react-toastify';
 import './Hrmscss/App.css'
+import LoadingPage from "./LoadingPage";
 const Getallexpenses = () => {
   const token = localStorage.getItem("response-token")
   const [expenseItems, setExpenseItems] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [loading, setLoading] = useState(true);
+
   let Navigate = useNavigate();
 
   useEffect(() => {
@@ -20,9 +23,11 @@ const Getallexpenses = () => {
     }).then((response) => {
       console.log(response.data)
       setExpenseItems(response.data);
+      setLoading(false); 
       toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
     }).catch(error => {
       console.log(error);
+      setLoading(false); 
       toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
     })
   }, []);
@@ -33,18 +38,21 @@ const Getallexpenses = () => {
   }
 
   const getExpenseByDate = (e) => {
+    setLoading(true); 
     e.preventDefault();
     axios.get(`/apigateway/expensemanagement/getExpenseByDateRange?startDate=${startDate}&endDate=${endDate}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     }).then((response) => {
+      setLoading(false); 
       console.log(response.data);
       expenseItems.length = 0;
       setExpenseItems(response.data);
      // toast.success("data found successfully!!", { position: "top-center", theme: 'colored' })
       Navigate('/Getallexpenses')
     }).catch((error) => {
+      setLoading(false); 
       console.log(error);
       toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
     })
@@ -54,6 +62,7 @@ const Getallexpenses = () => {
 
   return (
     <div>
+      {loading ? <LoadingPage/> : ''}
       <div className=" mt-3">
       <nav    aria-label="breadcrumb"   style={{ "--bs-breadcrumb-divider": "'>>'" }} >
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>

@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import LoadingPage from './LoadingPage'
 
 const GetAllAttendance = () => {
     const token = localStorage.getItem("response-token")
@@ -9,7 +10,8 @@ const GetAllAttendance = () => {
     const [getAttendence, setAttendence] = useState({
         fromDate: "",
         toDate: ""
-    })
+    });
+    const [loading, setLoading] = useState(true);
     const [getData, setData] = useState([])
     const submit = (e) => {
         e.preventDefault();
@@ -19,12 +21,14 @@ const GetAllAttendance = () => {
             }
         })
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 setData(response.data);
+                setLoading(false); 
                 //toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
             }).catch(error => {
                 toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
-                console.log("error happend", error)
+                console.log("error happend", error);
+                setLoading(false); 
             })
 
     }
@@ -40,6 +44,7 @@ const GetAllAttendance = () => {
  
     return (
         <div  style={{margin:'25px 25px 25px 50px',width:'820px',height: '750px'}}  >
+               {loading ? <LoadingPage/> : ''}
             <div className=" mt-3">
                <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
                 <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}> 
