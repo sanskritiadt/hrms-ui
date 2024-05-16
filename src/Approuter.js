@@ -48,7 +48,7 @@ import Footer from "./Footer";
 import EmpPersonalDetail from "./EmpPersonalDetail";
 import GetGstDetails from './GetGstDetails';
 import EditGstDetails from './EditGstDetails';
-
+import PriorTimeAdj from './PriorTimeAdj';
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -132,6 +132,7 @@ const Approuter = () => {
               <Route path="/personal-details/:id" element={<EmpPersonalDetail />} />
               <Route path="/MyProfileDetails" element={<MyProfileDetails />} />
               <Route path="/GetGstDetails" element={<GetGstDetails />} />
+              <Route path="/PriorTimeAdj" element={<PriorTimeAdj />} />
             </Routes>
           </SideBar>
         </div>
@@ -143,7 +144,7 @@ const Approuter = () => {
         </Routes>
       )}
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login/>} />
         <Route path="/RegisterUser" element={<RegisterUser />} />
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
         <Route path="/ChangepasswordForm" element={<ChangepasswordForm />}/>
