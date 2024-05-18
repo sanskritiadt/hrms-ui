@@ -49,6 +49,7 @@ import EmpPersonalDetail from "./EmpPersonalDetail";
 import GetGstDetails from './GetGstDetails';
 import EditGstDetails from './EditGstDetails';
 import PriorTimeAdj from './PriorTimeAdj';
+import CreatePayslip from './CreatePayslip'
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -133,6 +134,7 @@ const Approuter = () => {
               <Route path="/MyProfileDetails" element={<MyProfileDetails />} />
               <Route path="/GetGstDetails" element={<GetGstDetails />} />
               <Route path="/PriorTimeAdj" element={<PriorTimeAdj />} />
+             
             </Routes>
           </SideBar>
         </div>
@@ -148,6 +150,7 @@ const Approuter = () => {
         <Route path="/RegisterUser" element={<RegisterUser />} />
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
         <Route path="/ChangepasswordForm" element={<ChangepasswordForm />}/>
+        <Route path="/CreatePayslip" element={<CreatePayslip />} />
         
       </Routes>
       {!isLoggedIn && <Footer />}

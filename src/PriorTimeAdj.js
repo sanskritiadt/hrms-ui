@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import LoadingPage from "./LoadingPage"; 
+import LoadingPage from "./LoadingPage";
 
 const PriorTimeRow = ({ data, onUpdate }) => {
   const [checkIn, setCheckIn] = useState(data.checkIn);
   const [checkOut, setCheckOut] = useState(data.checkOut);
   const [workingHours, setWorkingHours] = useState(data.workingHour);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     calculateWorkingHours();
@@ -30,22 +29,7 @@ const PriorTimeRow = ({ data, onUpdate }) => {
   };
 
   const handleUpdate = async () => {
-    setLoading(true);
-    try {
-      await onUpdate(data.id, checkIn, checkOut);
-      toast.success("Time updated successfully.", {
-        position: "top-center",
-        theme: "colored",
-      });
-    } catch (error) {
-      console.error(error);
-      toast.error("Error occurred while updating time.", {
-        position: "top-center",
-        theme: "colored",
-      });
-    } finally {
-      setLoading(false);
-    }
+    await onUpdate(data.date, checkIn, checkOut);
   };
 
   return (
@@ -68,11 +52,8 @@ const PriorTimeRow = ({ data, onUpdate }) => {
       </td>
       <td>{workingHours}</td>
       <td>{data.date}</td>
-      {/* <td>{data.status}</td> */}
       <td>
-        <button onClick={handleUpdate} >
-          Update prior time
-        </button>
+        <button onClick={handleUpdate}>Update prior time</button>
       </td>
     </tr>
   );
@@ -84,11 +65,10 @@ export default function PriorTimeAdj() {
   const empId = localStorage.getItem("EmpID");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-      // console.log(position);
       setLatitude(position.coords.latitude);
       setLongitude(position.coords.longitude);
     });
@@ -96,7 +76,7 @@ export default function PriorTimeAdj() {
 
   const fetchPriorData = useCallback(async () => {
     try {
-      setLoading(true); 
+      setLoading(true);
       const response = await axios.get(
         `/apigateway/payroll/timeSheet/priorTimeAdjustment/${empId}`,
         {
@@ -105,8 +85,9 @@ export default function PriorTimeAdj() {
           },
         }
       );
+    //  console.log("Fetched data:", response.data); // Debugging log
       setPriorData(response.data);
-      setLoading(false); 
+      setLoading(false);
     } catch (error) {
       console.error(error);
       toast.error("Error occurred, try again later.", {
@@ -121,10 +102,15 @@ export default function PriorTimeAdj() {
     fetchPriorData();
   }, [fetchPriorData]);
 
-  const handleUpdateTime = async (id, updatedCheckIn, updatedCheckOut) => {
+  const handleUpdateTime = async (date, updatedCheckIn, updatedCheckOut) => {
     try {
-      setLoading(true); 
-      const rowData = priorData.find((item) => item.id === id);
+      setLoading(true);
+      const rowData = priorData.find((item) => item.date === date);
+      if (!rowData) {
+        throw new Error("Row data not found");
+      }
+    //  console.log("Updating rowData:", rowData); // Debugging log
+
       const updatedRow = {
         employeeId: empId,
         checkIn: updatedCheckIn,
@@ -133,6 +119,8 @@ export default function PriorTimeAdj() {
         email: rowData.email,
         status: rowData.status,
       };
+
+      //console.log("Updated row payload:", updatedRow); // Debugging log
 
       const response = await axios.post(
         `/apigateway/payroll/timeSheet/updatePriorTime?Latitude=${latitude}&Longitude=${longitude}`,
@@ -144,14 +132,17 @@ export default function PriorTimeAdj() {
         }
       );
 
+      console.log("Response data:", response.data); // Debugging log
+
       const updatedData = priorData.map((row) => {
-        if (row.id === id) {
-          return response.data;
+        if (row.date === date) {
+          return { ...row, ...response.data };
         } else {
           return row;
         }
       });
 
+     // console.log("Updated data:", updatedData); // Debugging log
       setPriorData(updatedData);
       fetchPriorData();
     } catch (error) {
@@ -161,7 +152,7 @@ export default function PriorTimeAdj() {
         theme: "colored",
       });
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -170,7 +161,9 @@ export default function PriorTimeAdj() {
       className="table-responsive-sm"
       style={{ paddingLeft: "140px", paddingRight: "60px" }}
     >
-      {loading ? <LoadingPage /> : ( 
+      {loading ? (
+        <LoadingPage />
+      ) : (
         <table border="2" className="table table-striped table-bordered">
           <thead className="head">
             <tr className="table-danger table-striped">
@@ -178,15 +171,14 @@ export default function PriorTimeAdj() {
               <th>CHECKOUT</th>
               <th>WORKING HOUR</th>
               <th>DATE</th>
-              {/* <th>STATUS</th> */}
               <th>UPDATE</th>
             </tr>
           </thead>
           <tbody className="body">
-            {priorData.map((date) => (
+            {priorData.map((data) => (
               <PriorTimeRow
-                key={date.id}
-                data={date}
+                key={data.date}
+                data={data}
                 onUpdate={handleUpdateTime}
               />
             ))}
@@ -196,4 +188,6 @@ export default function PriorTimeAdj() {
     </div>
   );
 }
+
+
 
