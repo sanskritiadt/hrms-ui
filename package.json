@@ -76,5 +76,5 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
-  "proxy": "http://alphadot.co.in/gateway"
+  "proxy": "http://192.168.1.28:9094"
 }
