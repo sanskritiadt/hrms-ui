@@ -22,8 +22,6 @@ const GetAllEmpAttendance = () => {
                 'Authorization': `Bearer ${token}`
             }
         }).then(response => {
-           // toast.success("data found succesfully.", { position: "top-center", theme: "colored" });
-           // console.log(response.data)
             setData(response.data);
             setLoading(false); 
         }).catch(error => {
@@ -81,9 +79,12 @@ const GetAllEmpAttendance = () => {
                             <input onChange={(e) => { handle(e) }} value={getAttendence.toDate}
                                 type="date" className="form-control mb-0"
                                 id="toDate" />
-                            <button className=" btn btn-primary   mt-0 ">Get</button>
+                            <button className="btn btn-outline-primary  mt-0 ">Get</button>
                         </div>
                     </form>
+                    
+                            <button className=" btn btn-primary   mt-0 ">Get</button>
+                        
                 </div>
 
                 <div className="table-responsive-sm my-4">

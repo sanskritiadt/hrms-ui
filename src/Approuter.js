@@ -49,7 +49,8 @@ import EmpPersonalDetail from "./EmpPersonalDetail";
 import GetGstDetails from './GetGstDetails';
 import EditGstDetails from './EditGstDetails';
 import PriorTimeAdj from './PriorTimeAdj';
-import CreatePayslip from './CreatePayslip'
+import CreatePayslip from './CreatePayslip';
+import UpdatePayrollSalary from "./UpdatePayrollSalary";
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -107,10 +108,7 @@ const Approuter = () => {
               {/* <Route path="/ForgotPassword" element={<ForgotPassword />} /> */}
               <Route path="/NewpassForm" element={<NewpassForm />} />
               <Route path="/Getallexpenses" element={<Getallexpenses />} />
-              {/* <Route
-                path="/ChangepasswordForm"
-                element={<ChangepasswordForm />}
-              /> */}
+              <Route path="/ChangepasswordForm" element={<ChangepasswordForm />}/>
               <Route path="/getcandidate" element={<CandidateDetails />} />
               <Route path="/createCandidate" element={<InterviewCandidate />} />
               <Route
@@ -134,7 +132,8 @@ const Approuter = () => {
               <Route path="/MyProfileDetails" element={<MyProfileDetails />} />
               <Route path="/GetGstDetails" element={<GetGstDetails />} />
               <Route path="/PriorTimeAdj" element={<PriorTimeAdj />} />
-             
+              <Route path="/CreatePayslip" element={<CreatePayslip />} />
+              <Route path="/UpdatePayrollSalary/:id" element={<UpdatePayrollSalary />} />
             </Routes>
           </SideBar>
         </div>
@@ -149,9 +148,7 @@ const Approuter = () => {
         <Route path="/login" element={<Login/>} />
         <Route path="/RegisterUser" element={<RegisterUser />} />
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
-        <Route path="/ChangepasswordForm" element={<ChangepasswordForm />}/>
-        <Route path="/CreatePayslip" element={<CreatePayslip />} />
-        
+       
       </Routes>
       {!isLoggedIn && <Footer />}
     </div>

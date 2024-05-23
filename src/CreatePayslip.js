@@ -119,7 +119,7 @@
 //                       className="col-sm-2 col-form-label"
 //                       name="projectName"
 //                     >
-                     
+
 //                     </label>
 //                     <div className="col-sm-10">
 //                       <input
@@ -299,7 +299,7 @@
 //     const parsedData = Object.fromEntries(
 //         Object.entries(data).map(([key, value]) => [key, parseFloat(value)])
 //       );
-    
+
 //     axios
 //       .post(
 //         `/apigateway/hrms/engagement/saveProjectEngagement`,
@@ -408,7 +408,7 @@ const CreatePayslip = () => {
   const token = localStorage.getItem("response-token");
   const empId = localStorage.getItem("EmpID");
   const [data, setData] = useState({
-    empId: 57,
+    empId: "",
     basic: "",
     houseRentAllowance: "",
     employeeESICAmount: "",
@@ -442,10 +442,16 @@ const CreatePayslip = () => {
 
   const submit = (e) => {
     e.preventDefault();
+    if (validate()) {
       axios
         .post(
-          `/payroll/salaryDetails/saveSalaryDetails`,
+          `apigateway/payroll/salarydetails/saveEmployeeSalaryDetails`,
           data,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
         .then((response) => {
           console.log(response.data);
@@ -458,19 +464,25 @@ const CreatePayslip = () => {
           console.log(error);
           handleAuthError(error);
         });
-    
+    }
   };
 
   function handle(e) {
     const newdata = { ...data };
-    newdata[e.target.id] = e.target.value;           
+    newdata[e.target.id] = e.target.value;
     setData(newdata);
     console.log(newdata);
   }
   return (
     <div className="mt-3">
-      <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
-        <ol className="breadcrumb" style={{ color: "white", marginLeft: "20px" }}>
+      <nav
+        aria-label="breadcrumb"
+        style={{ "--bs-breadcrumb-divider": "'>>'" }}
+      >
+        <ol
+          className="breadcrumb"
+          style={{ color: "white", marginLeft: "20px" }}
+        >
           <li className="breadcrumb-item">
             <Link to="/">Home</Link>{" "}
           </li>
@@ -488,11 +500,34 @@ const CreatePayslip = () => {
           Salary Details
         </h1>
         <div className="col-md-8 mx-auto">
-          <div className="card border-0 shadow" style={{ marginRight: "100px", width: "700px", height: "800px" }}>
+          <div
+            className="card border-0 shadow"
+            style={{ marginRight: "100px", width: "700px", height: "950px" }}
+          >
             <div className="card-body">
-              <form className="container py-3  mb-3" >
+              <form className="container py-3  mb-3">
                 <div className="row mb-3">
-                  <label htmlFor="basic" className="col-sm-2 col-form-label">Basic</label>
+                  <label htmlFor="basic" className="col-sm-2 col-form-label">
+                    Emp ID
+                  </label>
+                  <div className="col-sm-10">
+                    <input
+                      onChange={handle}
+                      value={data.empId}
+                      type="text"
+                      id="empId"
+                      placeholder="Enter Emp id"
+                      className="form-control"
+                    />
+                    {errors.basic && (
+                      <div className="text-danger">{errors.empId}</div>
+                    )}
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <label htmlFor="basic" className="col-sm-2 col-form-label">
+                    Basic
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -502,11 +537,18 @@ const CreatePayslip = () => {
                       placeholder="Enter Basic"
                       className="form-control"
                     />
-                    {errors.basic && <div className="text-danger">{errors.basic}</div>}
+                    {errors.basic && (
+                      <div className="text-danger">{errors.basic}</div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="houseRentAllowance" className="col-sm-2 col-form-label">House Rent Allowance</label>
+                  <label
+                    htmlFor="houseRentAllowance"
+                    className="col-sm-2 col-form-label"
+                  >
+                    HRA
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -516,11 +558,20 @@ const CreatePayslip = () => {
                       placeholder="Enter House Rent Allowance"
                       className="form-control"
                     />
-                    {errors.houseRentAllowance && <div className="text-danger">{errors.houseRentAllowance}</div>}
+                    {errors.houseRentAllowance && (
+                      <div className="text-danger">
+                        {errors.houseRentAllowance}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="employeeESICAmount" className="col-sm-2 col-form-label">Employee ESIC Amount</label>
+                  <label
+                    htmlFor="employeeESICAmount"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Employee ESIC{" "}
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -530,11 +581,20 @@ const CreatePayslip = () => {
                       placeholder="Enter Employee ESIC Amount"
                       className="form-control"
                     />
-                    {errors.employeeESICAmount && <div className="text-danger">{errors.employeeESICAmount}</div>}
+                    {errors.employeeESICAmount && (
+                      <div className="text-danger">
+                        {errors.employeeESICAmount}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="employerESICAmount" className="col-sm-2 col-form-label">Employer ESIC Amount</label>
+                  <label
+                    htmlFor="employerESICAmount"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Employer ESIC{" "}
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -544,11 +604,20 @@ const CreatePayslip = () => {
                       placeholder="Enter Employer ESIC Amount"
                       className="form-control"
                     />
-                    {errors.employerESICAmount && <div className="text-danger">{errors.employerESICAmount}</div>}
+                    {errors.employerESICAmount && (
+                      <div className="text-danger">
+                        {errors.employerESICAmount}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="employeePFAmount" className="col-sm-2 col-form-label">Employee PF Amount</label>
+                  <label
+                    htmlFor="employeePFAmount"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Employee PF{" "}
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -558,11 +627,20 @@ const CreatePayslip = () => {
                       placeholder="Enter Employee PF Amount"
                       className="form-control"
                     />
-                    {errors.employeePFAmount && <div className="text-danger">{errors.employeePFAmount}</div>}
+                    {errors.employeePFAmount && (
+                      <div className="text-danger">
+                        {errors.employeePFAmount}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="employerPFAmount" className="col-sm-2 col-form-label">Employer PF Amount</label>
+                  <label
+                    htmlFor="employerPFAmount"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Employer PF{" "}
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -572,11 +650,20 @@ const CreatePayslip = () => {
                       placeholder="Enter Employer PF Amount"
                       className="form-control"
                     />
-                    {errors.employerPFAmount && <div className="text-danger">{errors.employerPFAmount}</div>}
+                    {errors.employerPFAmount && (
+                      <div className="text-danger">
+                        {errors.employerPFAmount}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="grossSalary" className="col-sm-2 col-form-label">Gross Salary</label>
+                  <label
+                    htmlFor="grossSalary"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Gross Salary
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -586,11 +673,18 @@ const CreatePayslip = () => {
                       placeholder="Enter Gross Salary"
                       className="form-control"
                     />
-                    {errors.grossSalary && <div className="text-danger">{errors.grossSalary}</div>}
+                    {errors.grossSalary && (
+                      <div className="text-danger">{errors.grossSalary}</div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="netSalary" className="col-sm-2 col-form-label">Net Salary</label>
+                  <label
+                    htmlFor="netSalary"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Net Salary
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -600,11 +694,18 @@ const CreatePayslip = () => {
                       placeholder="Enter Net Salary"
                       className="form-control"
                     />
-                    {errors.netSalary && <div className="text-danger">{errors.netSalary}</div>}
+                    {errors.netSalary && (
+                      <div className="text-danger">{errors.netSalary}</div>
+                    )}
                   </div>
                 </div>
                 <div className="row mb-3">
-                  <label htmlFor="medicalInsurance" className="col-sm-2 col-form-label">Medical Insurance</label>
+                  <label
+                    htmlFor="medicalInsurance"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Medical Insurance
+                  </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
@@ -614,11 +715,19 @@ const CreatePayslip = () => {
                       placeholder="Enter Medical Insurance"
                       className="form-control"
                     />
-                    {errors.medicalInsurance && <div className="text-danger">{errors.medicalInsurance}</div>}
+                    {errors.medicalInsurance && (
+                      <div className="text-danger">
+                        {errors.medicalInsurance}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="d-grid gap-2 col-6 mx-auto">
-                  <button  onClick={(e) => submit(e)}className="btn btn-outline-danger" type="submit">
+                  <button
+                    onClick={(e) => submit(e)}
+                    className="btn btn-outline-danger"
+                    type="submit"
+                  >
                     Submit
                   </button>
                 </div>

@@ -9,7 +9,8 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import './Hrmscss/App.css';
 
 
 const UserProfileDropdown = () => {
@@ -72,12 +73,15 @@ const UserProfileDropdown = () => {
         <i className="fas fa-user-alt" />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem style={{ fontSize: "16px", padding: "10px" }} className=" d-flex justify-content-between">
-            <Link to="/MyProfileDetails">My Profile</Link> 
+        <DropdownItem style={{ fontSize: "15px", padding: "10px" }} className=" d-flex justify-content-between">
+            <Link to="/MyProfileDetails" className="Candidate-id2">My Profile</Link> 
             <i className="fas fa-user-alt " />
-            
         </DropdownItem>
-        <DropdownItem style={{ fontSize: "16px", padding: "10px" }} className=" d-flex justify-content-between"
+        <DropdownItem style={{ fontSize: "15px", padding: "10px" }} className=" d-flex justify-content-between">
+        <Link to="/ChangepasswordForm" className="Candidate-id2">Change Password</Link> 
+         <i className="fas fa-key"></i> 
+        </DropdownItem>
+        <DropdownItem style={{ fontSize: "15px", padding: "10px" }} className=" d-flex justify-content-between"
           onClick={handleLogout}>
          Logout
           <i className="fas fa-door-open " />

@@ -21,6 +21,7 @@
     "framer": "^2.3.0",
     "framer-motion": "^7.6.12",
     "http-proxy-middleware": "^2.0.6",
+    "jwt-decode": "^4.0.0",
     "motion": "^10.16.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
@@ -76,5 +77,5 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
-  "proxy": "http://192.168.1.28:9094"
+  "proxy": "http://192.168.1.14:9093"
 }
