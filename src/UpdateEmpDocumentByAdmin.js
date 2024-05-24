@@ -63,15 +63,18 @@ const UpdateEmpDocumentByAdmin = () => {
       }, [token, id]);
       const handleDelete = async (documentId) => {
         try {
+          setLoading(true);
           const { data } = await axios.delete(
             `/apigateway/hrms/employee/deleteDocument/${id}/${documentId}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           toast.success(data, { position: "top-center", theme: "colored" });
+          setLoading(false);
           setDocuments((prevDocs) =>
             prevDocs.filter((doc) => doc.id !== documentId)
           );
         } catch (error) {
+          setLoading(false);
           console.error(error);
           toast.error("Error while deleting the file.", {
             position: "top-center",
@@ -82,6 +85,7 @@ const UpdateEmpDocumentByAdmin = () => {
     
       const handleDownload = async (documentId) => {
         try {
+          setLoading(true);
           const { data, headers } = await axios.get(
             `/apigateway/hrms/employee/downloadDocument/${id}/${documentId}`,
             {
@@ -108,6 +112,7 @@ const UpdateEmpDocumentByAdmin = () => {
               position: "top-center",
               theme: "colored",
             });
+            setLoading(false);
           } else {
             toast.error("File not found.", {
               position: "top-center",
@@ -115,6 +120,7 @@ const UpdateEmpDocumentByAdmin = () => {
             });
           }
         } catch (error) {
+          setLoading(false);
           console.error(error);
           toast.error("Error occurred, please try again later.", {
             position: "top-center",

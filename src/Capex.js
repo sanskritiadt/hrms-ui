@@ -18,30 +18,6 @@ const Capex = () => {
         invoice:[]
     });
 
-    // function submit(e) {
-    //     e.preventDefault();
-    //     axios.post(`/apigateway/expensemanagement/capExDetails/createCapExDetails`, {
-    //         date: data.date,
-    //         expenseDetails: data.expenseDetails,
-    //         gstBill: data.gstBill,
-    //         amount: parseInt(data.amount),
-    //         paidBy: data.paidBy,
-    //         comment: data.comment,
-    //         mode: data.mode
-    //     }, {
-    //         headers: {
-    //             'Authorization': `Bearer ${token}`
-    //         }
-    //     }).then(response => {
-    //         console.log(response.data);
-    //         toast.success("Data has been created successfully.", { position: 'top-center', theme: "colored" })
-    //     }).catch((error) => {
-    //         handleAuthError(error);
-    //         console.log(error);
-    //         // toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
-    //     });
-    // };
-
     function submit(e) {
         e.preventDefault();
         const formData = new FormData();
@@ -62,15 +38,14 @@ const Capex = () => {
         axios.post(`/apigateway/expensemanagement/capExDetails/createCapExDetails`, formData, {
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data' // Ensure proper content type for file uploads
+                'Content-Type': 'multipart/form-data' 
             }
         }).then(response => {
             console.log(response.data);
             toast.success("Data has been created successfully.", { position: 'top-center', theme: "colored" })
         }).catch((error) => {
             handleAuthError(error);
-            console.log(error);
-            // toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
+            console.log(error)
         });
     };
     
