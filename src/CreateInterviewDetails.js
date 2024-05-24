@@ -32,26 +32,7 @@ const CreateInterview = () => {
   const [technology, setTechnology] = useState([]);
   const [position, setPosition] = useState([]);
   const [candidate, setCandidate] = useState([]);
-
-  // "interviewId":3,
-  // "rounds":2,
-  // "candidate_id":123,
-  // "tech_id":1,
-  // "position_id":1,
-  // "marks":40,
-  // "communication":10,
-  // "enthusiasm":10,
-  // "notes":"good",
-  // "offerReleased":true,
-  // "workExInYears":3.5,
-  // "interviewerName":"Siddharth",
-  // "source":"LinkedIn",
-  // "offerAccepted":true,
-  // "type":"Inbound",
-  // "date":"2007-12-03",
-  // "clientName":"seuwehuyg",
-  // "status":"Accepted"
-
+  
   useEffect(() => {
     axios
       .get(`/apigateway/hrms/interview/alltech`, {

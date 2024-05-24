@@ -31,57 +31,7 @@ export default function Getinterviewdetails() {
 
     if (!positions) return null;
 
-    // {
-    //     "interviewId": 11,
-    //     "rounds": 3,
-    //     "candidate_id": {
-    //         "candidateId": 2,
-    //         "candidateName": "Rahul Tichkule",
-    //         "emailId": "rahul@gmail.com",
-    //         "contactNo": "9575258566",
-    //         "address": "Indore, MP",
-    //         "highestQualification": "BE",
-    //         "workExperience": "3.5 Year",
-    //         "technicalStack": "Java",
-    //         "cvShortlisted": true,
-    //         "lastCTC": 3.0,
-    //         "noticePeriod": 90,
-    //         "dob": null
-    //     },
-    //     "tech_id": {
-    //         "techId": 1,
-    //         "description": "Java"
-    //     },
-    //     "position_id": {
-    //         "positionId": 2,
-    //         "positionName": "Java Developer",
-    //         "techStack": [
-    //             "Java",
-    //             "SpringBoot"
-    //         ],
-    //         "positionOpenDate": "2023-05-01T16:29:30.412",
-    //         "positionCloseDate": "2023-05-31T16:29:30.412",
-    //         "status": "Available",
-    //         "experienceInYear": 2.5,
-    //         "remote": true,
-    //         "positionType": "Contractual",
-    //         "vacancy": 3
-    //     },
-    //     "marks": 80,
-    //     "communication": 90,
-    //     "enthusiasm": 80,
-    //     "notes": "Bad",
-    //     "offerReleased": false,
-    //     "workExInYears": 3.0,
-    //     "interviewerName": "Akash",
-    //     "candidateName": "Rahul Tichkule",
-    //     "source": "LinkedIn",
-    //     "offerAccepted": false,
-    //     "type": "Outbound",
-    //     "date": "2023-02-06",
-    //     "clientName": "Facebook",
-    //     "status": "Rejected"
-    // }
+
     return (
         <div><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
                {loading ? <LoadingPage/> : ''}

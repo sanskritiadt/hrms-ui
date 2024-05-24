@@ -864,10 +864,13 @@ import axios from "axios";
 import { Container, Box, Tabs, Tab } from "@mui/material";
 import UpdateEmpDocumentByAdmin from "./UpdateEmpDocumentByAdmin";
 import { useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
+import LoadingPage from "./LoadingPage";
 
 const UpdatePayrollSalary = () => {
   const [activeTab, setActiveTab] = useState("one");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     empId: "",
     salary: "",
@@ -926,6 +929,7 @@ const UpdatePayrollSalary = () => {
   };
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     axios
       .post(`${baseURL}/salarydetails/saveEmployeeSalaryDetails`, data, {
@@ -934,15 +938,27 @@ const UpdatePayrollSalary = () => {
         },
       })
       .then((response) => {
-        console.log("Data saved successfully", response.data);
+        setLoading(false);
+        //console.log("Data saved successfully", response.data);
+        toast.success(response.data, {
+          position: "top-center",
+          theme: "colored",
+        });
       })
       .catch((error) => {
-        console.log("Error saving data", error);
+        setLoading(false);
+       // console.log("Error saving data", error);
+       toast.error("An error occurred. Please try again later.", {
+        position: "top-center",
+        theme: "colored",
+      });
+
       });
   };
 
   return (
     <div style={{ width: screenWidth - 70 }}>
+        {loading && <LoadingPage />}
       <Container>
         <Box sx={{ borderBottom: 2, borderColor: "divider", width: "100%" }}>
           <Tabs
