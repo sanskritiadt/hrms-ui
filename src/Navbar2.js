@@ -18,20 +18,7 @@ function AppNavbar() {
       setclick(false);
     }
   },[empId]);
-  
-  function checkStatus() {
-    axios.post(`/payroll/timeSheet/checkStatus/${empId}`, {},
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }
-    ).then(res => {
-      console.log(res.data);
-    }).catch(err => {
-      console.log(err)
-    })
-  }
+
   const navigate = useNavigate();
   function handleLogin() {
     navigate('/login');
@@ -65,13 +52,7 @@ function AppNavbar() {
     })
     navigate('/login');
   }
-  const handleDropdownOpen = (id) => {
-    setDropdownOpen(id);
-  };
 
-  const handleDropdownClose = () => {
-    setDropdownOpen(null);
-  };
 
   return (
     <div className='main    '>
