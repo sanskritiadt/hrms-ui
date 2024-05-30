@@ -38,18 +38,6 @@ const EditCandidate = () => {
                 console.log(error.response.data)
             })
     }, [])
-
-    //     "candidateName": "Rahul Tichkule",
-    //     "emailId": "rahul@gmail.com",
-    //     "contactNo": "9575258566",
-    //     "address": "Indore, MP",
-    //     "highestQualification": "BE",
-    //     "workExperience": "3.5 Year",
-    //     "technicalStack": "Java",
-    //     "cvShortlisted": true,
-    //     "lastCTC": 3.0,
-    //     "noticePeriod": 90
-
     function HandleSubmit(e) {
         e.preventDefault();
         axios.put(`/apigateway/hrms/interviewCandidate/updateInterviewCandidate/${id}`, {
@@ -80,7 +68,7 @@ const EditCandidate = () => {
         })
     }
     function HandleDelete() {
-        axios.delete(`/hrms/interviewCandidate/interviewCandidateById/${id}`, {
+        axios.delete(`/apigateway/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

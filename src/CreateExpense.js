@@ -71,17 +71,6 @@ const CreateExpense = () => {
     setData(newdata);
     console.log(newdata);
   }
-  // {
-  //     "amount" : 9000,
-  //     "description" : "Char",
-  //     "paymentMode" : "PhonePay",
-  //     "paymentDate" : "2023-02-15",
-  //     "createdBy" : "Nisha",
-  //     "category" : "Office",
-  //     "gst" : true,
-  //     "paidBy" : "NS",
-  //     "comments" : "decortion"
-  // }
   return (
     <div  className=" mt-3">
       <div>
@@ -105,7 +94,7 @@ const CreateExpense = () => {
           <div className="col-md-8 mx-auto">
             <div
               className="card border-0 shadow"
-              style={{ marginLeft: "100px", width: "700px", height: "750PX" }}
+              style={{ marginLeft: "100px", width: "700px", height: "850PX" }}
             >
               <div className="card-body">
                 <form

@@ -692,11 +692,11 @@ export default function SaveGstinvoice() {
                         </div>
                       </div>
                     </fieldset>
-                    <div className="d-grid gap-2 col-6 mx-auto">
+                    {/* <div className="d-grid gap-2 col-6 mx-auto">
                       <button className="btn btn-outline-danger" type="submit">
                         Submit
                       </button>
-                    </div>
+                    </div> */}
                   </form>
                 </div>
               </div>
