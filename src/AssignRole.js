@@ -1,0 +1,204 @@
+import React, { useState, useEffect } from 'react';
+import { TextField, MenuItem, Button, CircularProgress, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Autocomplete } from '@mui/material';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+const AssignRole = () => {
+  const [searchCriterion, setSearchCriterion] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [allRoles, setAllRoles] = useState([]);
+  const [employeeRoles, setEmployeeRoles] = useState({});
+  const [updating, setUpdating] = useState({});
+  const token = localStorage.getItem("response-token");
+
+  useEffect(() => {
+    const fetchAllRoles = async () => {
+      try {
+        const response = await axios.get('/apigateway/api/role/getAllRoles', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setAllRoles(response.data);
+      } catch (error) {
+        console.error('Error fetching all roles:', error);
+      }
+    };
+
+    fetchAllRoles();
+  }, [token]);
+
+  const handleCriterionChange = (event) => {
+    setSearchCriterion(event.target.value);
+  };
+
+  const handleValueChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleSearch = async () => {
+    if (!searchCriterion || !searchValue) {
+      toast.error("Please select a search criterion and enter a search value.");
+      return;
+    }
+  
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `/apigateway/hrms/employee/searchEmployees`,
+        {
+          params: {
+            [searchCriterion]: searchValue,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const employees = response.data.content;
+      setSearchResult(employees);
+
+      const employeeRolesData = {};
+      for (const employee of employees) {
+        const roleResponse = await axios.get(
+          `/apigateway/api/role/getRoleAssingByEmployee`,
+          {
+            params: { employeeId: employee.employeeId },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        employeeRolesData[employee.employeeId] = roleResponse.data.body.map(role => role.role_name);
+      }
+      setEmployeeRoles(employeeRolesData);
+    } catch (error) {
+      console.error("Error searching employees:", error);
+      toast.error("An error occurred while searching. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRoleChange = (employeeId, newRoles) => {
+    setEmployeeRoles((prevRoles) => ({
+      ...prevRoles,
+      [employeeId]: newRoles,
+    }));
+  };
+
+  const handleUpdateRoles = async (employeeId) => {
+    try {
+      setUpdating((prevUpdating) => ({ ...prevUpdating, [employeeId]: true }));
+      const newRoles = employeeRoles[employeeId];
+      await axios.put(
+        `/apigateway/api/role/updateRoleOfEmployee`,
+        newRoles,
+        {
+          params: { employeeId },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Roles updated successfully.");
+    } catch (error) {
+      console.error('Error updating roles:', error);
+      toast.error("An error occurred while updating roles. Please try again later.");
+    } finally {
+      setUpdating((prevUpdating) => ({ ...prevUpdating, [employeeId]: false }));
+    }
+  };
+
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h6" gutterBottom>
+        Manage Role Permissions
+      </Typography>
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          select
+          label="Search By"
+          value={searchCriterion}
+          onChange={handleCriterionChange}
+          variant="outlined"
+          sx={{ width: '39vh', mr: 1 }}
+        >
+          <MenuItem value="">Select Search Criterion</MenuItem>
+          <MenuItem value="firstName">First Name</MenuItem>
+          <MenuItem value="lastName">Last Name</MenuItem>
+          <MenuItem value="email">Email</MenuItem>
+          <MenuItem value="mobileNo">Mobile Number</MenuItem>
+        </TextField>
+        <TextField
+          type="text"
+          label="Enter Search Value"
+          value={searchValue}
+          onChange={handleValueChange}
+          variant="outlined"
+          sx={{ width: '30vh', mr: 1 }}
+        />
+        <Button variant="contained" color="primary" onClick={handleSearch} disabled={loading} sx={{ width: '20vh', height: '8vh' }}>
+          {loading ? <CircularProgress size={24} /> : "Search"}
+        </Button>
+      </Box>
+      {searchResult.length > 0 && (
+        <TableContainer component={Paper} sx={{ mt: 4 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Employee ID</TableCell>
+                <TableCell>First Name</TableCell>
+                <TableCell>Last Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Mobile Number</TableCell>
+                <TableCell>Username</TableCell>
+                <TableCell>Roles</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {searchResult.map((employee) => (
+                <TableRow key={employee.employeeId}>
+                  <TableCell>{employee.employeeId}</TableCell>
+                  <TableCell>{employee.firstName}</TableCell>
+                  <TableCell>{employee.lastName}</TableCell>
+                  <TableCell>{employee.email}</TableCell>
+                  <TableCell>{employee.mobileNo}</TableCell>
+                  <TableCell>{employee.userName}</TableCell>
+                  <TableCell>
+                    <Autocomplete
+                      multiple
+                      options={allRoles.map(role => role.role)}
+                      value={employeeRoles[employee.employeeId] || []}
+                      onChange={(event, newValue) => handleRoleChange(employee.employeeId, newValue)}
+                      renderInput={(params) => <TextField {...params} variant="outlined" label="Roles" />}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleUpdateRoles(employee.employeeId)}
+                      disabled={updating[employee.employeeId]}
+                    >
+                      {updating[employee.employeeId] ? <CircularProgress size={24} /> : "Update"}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Box>
+  );
+};
+
+export default AssignRole;
+
+

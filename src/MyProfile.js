@@ -9,9 +9,8 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LoadingPage from './LoadingPage';
-import './Hrmscss/App.css';
-
+import LoadingPage from "./LoadingPage";
+import "./Hrmscss/App.css";
 
 const UserProfileDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -44,14 +43,13 @@ const UserProfileDropdown = () => {
           setTimeout(() => {
             toast.success("Logout-Successful.", {
               position: "top-center",
-              theme: "colored"
-          });
+              theme: "colored",
+            });
             navigate("/");
             window.location.reload();
             localStorage.clear();
             setLoading(false);
-          }, 4000);  
-
+          }, 4000);
         }
       })
       .catch((error) => {
@@ -68,23 +66,42 @@ const UserProfileDropdown = () => {
 
   return (
     <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-         {loading ? <LoadingPage/> : ''}
+      {loading ? <LoadingPage /> : ""}
       <DropdownToggle className="btn btn-floating dropdown-toggle hidden-arrow bg-dark rounded-circle mx-2">
         <i className="fas fa-user-alt" />
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem style={{ fontSize: "15px", padding: "10px" }} className=" d-flex justify-content-between">
-            <Link to="/MyProfileDetails" className="Candidate-id2">My Profile</Link> 
-            <i className="fas fa-user-alt " />
+        <DropdownItem
+          style={{ fontSize: "15px", padding: "10px" }}
+          className=" d-flex justify-content-between"
+        >
+          <Link to="/MyProfileDetails" className="Candidate-id2">
+            My Profile
+          </Link>
+          <i className="fas fa-user-alt " />
         </DropdownItem>
-        <DropdownItem style={{ fontSize: "15px", padding: "10px" }} className=" d-flex justify-content-between">
-        <Link to="/ChangepasswordForm" className="Candidate-id2">Change Password</Link> 
-         <i className="fas fa-key"></i> 
+        <DropdownItem
+          style={{ fontSize: "15px", padding: "10px" }}
+          className=" d-flex justify-content-between"
+        >
+          <Link to="/ChangepasswordForm" className="Candidate-id2">
+            Change Password
+          </Link>
+          <i className="fas fa-key"></i>
+        </DropdownItem>
+        <DropdownItem
+          style={{ fontSize: "15px", padding: "10px" }}
+          className=" d-flex justify-content-between"
+        >
+          <Link to="/ManageRoles" className="Candidate-id2">
+            Manage Permission
+          </Link>
+          <i class="fa fa-user-plus" aria-hidden="true"></i>
         </DropdownItem>
         <DropdownItem style={{ fontSize: "15px", padding: "10px" }} className=" d-flex justify-content-between"
           onClick={handleLogout}>
          Logout
-          <i className="fas fa-door-open " />
+         <i class="fas fa-sign-out-alt"></i>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
