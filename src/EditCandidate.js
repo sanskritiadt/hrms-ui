@@ -68,7 +68,7 @@ const EditCandidate = () => {
         })
     }
     function HandleDelete() {
-        axios.delete(`/apigateway/hrms/interviewCandidate/interviewCandidateById/${id}`, {
+        axios.delete(`/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

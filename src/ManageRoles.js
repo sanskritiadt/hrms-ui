@@ -289,6 +289,8 @@ import Divider from "@mui/material/Divider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AssignRole from "./AssignRole";
+import ManageAPI from './ManageAPI';
+import ManageAPIRoleMapping from "./ManageAPIRoleMapping";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -337,7 +339,7 @@ export default function ManageRoles() {
           Authorization: `Bearer ${token}`,
         },
       });
-      setRoles(response.data);
+      setRoles(response.data.content);
     } catch (error) {
       toast.error("Error fetching roles");
       console.error("Error fetching roles:", error);
@@ -428,14 +430,18 @@ export default function ManageRoles() {
     >
       <Box
         display="flex"
-        justifyContent="flex-start"
+        justifyContent="flex"
         alignItems="center"
         height="30vh"
+        marginRight='5vh'
       >
         <Button variant="outlined" onClick={handleClickOpen}>
-          Manage Roles
+          ManageRoles
         </Button>
-       
+        <Divider orientation="vertical" flexItem sx={{  margin : "5vh", bgcolor: 'grey.700'}} />
+        <ManageAPI/>
+        <Divider orientation="vertical" flexItem sx={{  margin : "5vh", bgcolor: 'grey.700'}} />
+        <ManageAPIRoleMapping/>
       </Box>
       <Divider sx={{  width: '100%', bgcolor: 'grey.700', marginBottom:'10px'}} />
       <AssignRole/>
@@ -462,7 +468,7 @@ export default function ManageRoles() {
         <DialogContent dividers>
           <Box display="flex" alignItems="center" mb={2}>
             <TextField
-              label="New Role"
+              label="New Role"  
               variant="outlined"
               value={newRole}
               onChange={(e) => setNewRole(e.target.value)}

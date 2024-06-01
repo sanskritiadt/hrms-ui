@@ -21,7 +21,7 @@ const AssignRole = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setAllRoles(response.data);
+        setAllRoles(response.data.content);
       } catch (error) {
         console.error('Error fetching all roles:', error);
       }
@@ -64,7 +64,7 @@ const AssignRole = () => {
       const employeeRolesData = {};
       for (const employee of employees) {
         const roleResponse = await axios.get(
-          `/apigateway/api/role/getRoleAssingByEmployee`,
+          `/apigateway/api/role/getRoleAssignToEmployee`,
           {
             params: { employeeId: employee.employeeId },
             headers: {
