@@ -15,7 +15,7 @@ function FileUpload() {
     const formData = new FormData();
     formData.append('file', file);
 
-    axios.post(`/apigateway/payroll/generatePaySlipForAll`, {
+    axios.post(`/payroll/generatePaySlipForAll`, {
       headers: {
         'Authorization':  `Bearer ${token}`,
         'Content-Type': 'multipart/form-data'
