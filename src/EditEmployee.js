@@ -4,11 +4,13 @@ import axios from "axios";
 import { useParams, useNavigate, json } from "react-router-dom";
 import { toast } from "react-toastify";
 import handleAuthError from "./CommonErrorHandling";
+import LoadingPage from './LoadingPage'
 
 const EditEmployee = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("response-token");
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     employeeId: "",
     firstName: "",
@@ -36,6 +38,7 @@ const EditEmployee = () => {
   const resumeData = new FormData();
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`/apigateway/hrms/employee/getById/${id}`, {
         headers: {
@@ -44,16 +47,18 @@ const EditEmployee = () => {
       })
       .then((response) => {
         console.log(response.data);
-
         setData(response.data);
+        setLoading(false); 
       })
       .catch((error) => {
-        handleAuthError(error);
+        toast.error( error.response.data.message || "Error fetching details" );
         console.log(error);
+        setLoading(false); 
       });
   }, []);
   
   function handleSubmit(e) {
+    setLoading(true);
     e.preventDefault();
     const formData = new FormData();
     // Append form data
@@ -112,19 +117,19 @@ const EditEmployee = () => {
           theme: "colored",
         });
         navigate("/empfunc");
+        setLoading(false); 
       })
       .catch((error) => {
         // handleAuthError(error);
         console.log(error.response.data);
-        toast.error("Error, try after sometime.", {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error( error.response.data.message || "Error updating details" );
+        setLoading(false); 
       });
   }
   
   return (
-    <div className="container pt-3">
+    <div className="container pt-3"> 
+    {loading ? <LoadingPage/> : ''}
       <div className="row">
         <div className="col-lg-8 col-md-10 mx-auto">
           <div

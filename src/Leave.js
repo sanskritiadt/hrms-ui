@@ -6,7 +6,9 @@ import { format } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import LoadingPage from './LoadingPage'
 const LeaveForm = () => {
+  const [loading, setLoading] = useState(false);
   const [leaveForm, setLeaveForm] = useState({
     leave: [],
     name: "",
@@ -19,6 +21,7 @@ const LeaveForm = () => {
   const token = localStorage.getItem("response-token");
 
   useEffect(() => {
+    setLoading(true); 
     axios
       .get(`/apigateway/payroll/leave/getById/${empID}`, {
         headers: {
@@ -36,13 +39,12 @@ const LeaveForm = () => {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Something went wrong. Please try again later.", {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error( error.response.data.message || "Error fetching details" );
+        setLoading(false); 
       });
   }, []);
 
@@ -71,6 +73,7 @@ const LeaveForm = () => {
       leaveReason: leaveReason,
     };
     try {
+      setLoading(true); 
       const response = await axios.post(
         `/apigateway/payroll/leave/leaveRequest`,
         payload,
@@ -84,12 +87,11 @@ const LeaveForm = () => {
         position: "top-center",
         theme: "colored",
       });
+      setLoading(false); 
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred. Please try again later.", {
-        position: "top-center",
-        theme: "colored",
-      });
+      toast.error( error.response.data.message || "Error creating details" );
+      setLoading(false);
     }
   };
 
@@ -101,7 +103,7 @@ const LeaveForm = () => {
       <nav
         aria-label="breadcrumb"
         style={{ "--bs-breadcrumb-divider": "'>>'" }}
-      >
+      >     {loading ? <LoadingPage/> : ''}
         <ol className="breadcrumb" style={{ color: "white" }}>
           <li className="breadcrumb-item">
             <Link to="/">Home</Link>{" "}

@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import './Hrmscss/App.css'
 import {toast } from 'react-toastify';
 import './Hrmscss/App.css';
-import handleAuthError from './CommonErrorHandling';
 import LoadingPage from "./LoadingPage";
 
 export default function CandidateDetails() {
@@ -21,28 +20,13 @@ export default function CandidateDetails() {
         }).then((response) => {
             setCandidate(response.data);
             setLoading(false); 
-            //toast.success(" Candidate data found successfully!!", { position: "top-center", theme: 'colored' })
         }).catch(error => {
-            handleAuthError(error )
             console.log("error occoured", error);
+            toast.error( error.response.data.message || "Error fetching details" );
             setLoading(false); 
-            // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
         })
     }, []);
 
-    // {
-    //     "candidateId": 1,
-    //     "candidateName": "Ankit",
-    //     "emailId": "ankit@gmail.com",
-    //     "contactNo": "9575255565",
-    //     "address": "Indore, MP",
-    //     "highestQualification": "BE",
-    //     "workExperience": "1.5 Year",
-    //     "technicalStack": "Java, React",
-    //     "cvShortlisted": true,
-    //     "lastCTC": 3.0,
-    //     "noticePeriod": 90
-    // }    
     if (!Candidates) return null;
 
     return (

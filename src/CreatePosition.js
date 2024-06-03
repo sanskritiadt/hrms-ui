@@ -4,9 +4,11 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import { Link } from 'react-router-dom';
+import LoadingPage from './LoadingPage'
 
 export default function CreatePosition() {
-    const token = localStorage.getItem("response-token")
+    const token = localStorage.getItem("response-token");
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         positionName: "",
         techStack: "",
@@ -23,6 +25,7 @@ export default function CreatePosition() {
 
     function submit(e) {
         e.preventDefault();
+        setLoading(true); 
         axios.post(`/apigateway/hrms/interview/savePosition`, {
             positionName: data.positionName,
             techStack: selectedValue,
@@ -40,9 +43,11 @@ export default function CreatePosition() {
         }).then((response) => {
             console.log(response.data);
             toast.success("Position created successfully!!", { position: 'top-center', theme: "colored" })
+            setLoading(false); 
         }).catch((error) => {
-            handleAuthError(error);
+            toast.error(error.response.data.message);
             console.log(error);
+            setLoading(false); 
             // toast.error("cannot create the position values!!", { position: 'top-center', theme: "colored" })
 
         })
@@ -82,6 +87,7 @@ export default function CreatePosition() {
     return (
         <>
           <div className=" mt-3"><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+          {loading ? <LoadingPage/> : ''}
          <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
          
              <li className="breadcrumb-item"><Link to="/">Home</Link> </li>

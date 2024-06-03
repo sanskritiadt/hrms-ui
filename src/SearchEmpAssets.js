@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container, Table, Form, Button } from 'react-bootstrap';
 import './Hrmscss/App.css';
+import LoadingPage from './LoadingPage'
 
 function SearchEmpAssets() {
   const token = localStorage.getItem("response-token");
   const [searchAsset, setSearchAsset] = useState('');
+  const [loading, setLoading] = useState(false);
   const [asset, setAsset] = useState([]);
 
   const handleNameChange = (event) => {
@@ -15,6 +17,7 @@ function SearchEmpAssets() {
   }
 
   const handleSubmit = () => {
+    setLoading(true); 
     axios.get(`/apigateway/hrms/masterAsset/searchByAssetUser?query=${searchAsset}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -24,18 +27,22 @@ function SearchEmpAssets() {
         console.log(response.data);
         setAsset(response.data);
         toast.success('Assets data found successfully', { position: 'top-center', theme: 'colored' });
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error('Error occurred, try again later.', { position: 'top-center', theme: 'colored' });
+        toast.error( error.response.data.message || "Error fetching details" );
+        setLoading(false);
       });
   }
 
   const [assetTypes, setAssetTypes] = useState([]); // State for asset types
   const [selectedAssetType, setSelectedAssetType] = useState(''); // State for selected asset type
   const [selectedAssetStatus, setSelectedAssetStatus] = useState(''); // State for selected asset status
+
+
   const handleSearchByTypeAndStatus = () => {
-    // Second API call: Search by asset type
+    setLoading(true); 
     axios.get(`/apigateway/hrms/masterAsset/searchByAssetType?query=${selectedAssetType}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -43,18 +50,20 @@ function SearchEmpAssets() {
     })
       .then((response) => {
         console.log(response.data);
-        // Update the asset state with the data from the second API call
         setAsset(response.data);
         toast.success('Assets data found successfully', { position: 'top-center', theme: 'colored' });
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error('Error occurred while searching by asset type.', { position: 'top-center', theme: 'colored' });
+        toast.error( error.response.data.message || "Error fetching asset type  details" );
+        setLoading(false);
       });
   };
 
   const handleSearchByStatus = () => {
     // Third API call: Search by asset status
+    setLoading(true); 
     axios.get(`/apigateway/hrms/masterAsset/searchByStatus?query=${selectedAssetStatus}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -65,10 +74,12 @@ function SearchEmpAssets() {
         // Update the asset state with the data from the third API call
         setAsset(response.data);
         toast.success('Assets data found successfully', { position: 'top-center', theme: 'colored' });
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error('Error occurred while searching by asset status.', { position: 'top-center', theme: 'colored' });
+        toast.error( error.response.data.message || "Error fetching asset" );
+        setLoading(false);
       });
   };
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -87,6 +98,7 @@ function SearchEmpAssets() {
   }, []);
   return (
     <div className="table-responsive-sm">
+        {loading ? <LoadingPage/> : ''}
       <div className=" mt-3">
         <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
           <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>

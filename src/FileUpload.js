@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import LoadingPage from './LoadingPage'
+import { toast } from 'react-toastify';
 
 function FileUpload() {
   const token = localStorage.getItem("response-token");
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
 
   function handleFileChange(event) {
@@ -14,29 +17,28 @@ function FileUpload() {
     event.preventDefault();
     const formData = new FormData();
     formData.append('file', file);
-
-    axios.post(`/payroll/generatePaySlipForAll`, {
+    setLoading(true); 
+    axios.post(`apigateway/payroll/generatePaySlipForAll`,{},{
       headers: {
         'Authorization':  `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data'
       }
     })
     .then(response => {
       console.log(response.data);
       alert(response.data)
-      // Handle response data
+      setLoading(false); 
     })
     .catch(error => {
       console.error(error);
-      // Handle error
+      toast.error( error.response.data.message || "Error creating details" );
+      setLoading(false); 
     });
   }
 
   return (
-    <div>
+    <div>  {loading ? <LoadingPage/> : ''}
       <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} />
-        <br />
+        {/* <input type="file" onChange={handleFileChange} /> */}
         <br />
         <button type="submit">generate Pay_Slip For all the Employee </button>
       </form>

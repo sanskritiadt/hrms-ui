@@ -4,9 +4,11 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import handleAuthError from "./CommonErrorHandling";
 import { Link } from "react-router-dom";
+import LoadingPage from './LoadingPage'
 
 const CreateInterview = () => {
   const token = localStorage.getItem("response-token");
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     interviewId: "",
     tech_id: "",
@@ -34,6 +36,7 @@ const CreateInterview = () => {
   const [candidate, setCandidate] = useState([]);
   
   useEffect(() => {
+
     axios
       .get(`/apigateway/hrms/interview/alltech`, {
         headers: {
@@ -46,6 +49,9 @@ const CreateInterview = () => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(
+          error.response.data.message
+        );
       });
     axios
       .get(`/apigateway/hrms/interviewCandidate/allInterviewCandidate`, {
@@ -59,7 +65,11 @@ const CreateInterview = () => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(
+          error.response.data.message
+        );
       });
+    
     axios
       .get(`/apigateway/hrms/interview/getAllPositionNew`, {
         headers: {
@@ -72,13 +82,16 @@ const CreateInterview = () => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.response.data.message);
       });
+
   }, []);
-  console.log(technology);
-  console.log(candidate);
-  console.log(position);
+//  console.log(technology);
+ // console.log(candidate);
+  //console.log(position);
   function submit(e) {
     e.preventDefault();
+    setLoading(true); 
     axios
       .post(
         `/apigateway/hrms/interview/saveInterviewNew`,
@@ -114,14 +127,15 @@ const CreateInterview = () => {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
-        handleAuthError(error);
-        // toast.error(error.response.data, { position: 'top-center', theme: "colored" })
+        toast.error( error.response.data.message);
+        setLoading(false); 
       });
   }
   var str2bool = (value) => {
@@ -133,24 +147,12 @@ const CreateInterview = () => {
   };
   function radiobutton1(e) {
     console.log(str2bool(e.target.value));
-    // Here we can send the data to further processing (Action/Store/Rest)
     data.offerReleased = str2bool(e.target.value);
   }
   function radiobutton2(e) {
     console.log(str2bool(e.target.value));
-    // Here we can send the data to further processing (Action/Store/Rest)
     data.offerAccepted = str2bool(e.target.value);
   }
-  // function radiobutton3(e) {
-  //     console.log(str2bool(e.target.value));
-  //     // Here we can send the data to further processing (Action/Store/Rest)
-  //     data.selected = str2bool(e.target.value);
-  // }
-  // function radiobutton4(e) {
-  //     console.log(str2bool(e.target.value));
-  //     // Here we can send the data to further processing (Action/Store/Rest)
-  //     data.screeningRound = str2bool(e.target.value);
-  // }
 
   function handle(e) {
     const newdata = { ...data };
@@ -161,6 +163,7 @@ const CreateInterview = () => {
   return (
     <div>
       <div className=" mt-3">
+         {loading ? <LoadingPage/> : ''}
         <nav
           aria-label="breadcrumb"
           style={{ "--bs-breadcrumb-divider": "'>>'" }}

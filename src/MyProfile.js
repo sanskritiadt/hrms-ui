@@ -54,11 +54,7 @@ const UserProfileDropdown = () => {
       })
       .catch((error) => {
         localStorage.clear();
-        toast.error("Server error,Cannot Logout.", {
-          position: "top-center",
-          theme: "colored",
-        });
-        console.error("Logout error:", error);
+        toast.error( error.response.data.message || "Error while logging out." );
         window.location.reload();
         setLoading(false);
       });

@@ -3,8 +3,10 @@ import axios from 'axios'
 import {toast} from  'react-toastify';
 import { useParams,useNavigate } from 'react-router-dom';
 import handleAuthError from './CommonErrorHandling';
+import LoadingPage from './LoadingPage'
 const EditprojEng = () => {
-    const token = localStorage.getItem("response-token")
+    const token = localStorage.getItem("response-token");
+    const [loading, setLoading] = useState(false);
     const { id } = useParams();
     const navigate = useNavigate()
     const [data,setData] = useState({
@@ -18,19 +20,24 @@ const EditprojEng = () => {
     });
 
 useEffect(() => {
+    setLoading(true);
 axios.get(`/apigateway/hrms/engagement/ProjectEngagementDetailById/${id}`,{
     headers:{
     'Authorization' : `Bearer ${token}`
 }}).then((response)=>{
     console.log(response.data);
     setData(response.data);
+    setLoading(false); 
 }).catch((error)=>{
     console.log(error);
+    toast.error( error.response.data.message || "Error fetching details" );
+    setLoading(false); 
 })
 }, [token,id])
 
 
 function HandleSubmit(e){
+    setLoading(true);
     e.preventDefault();
     axios.put(`/apigateway/hrms/engagement/updateProjectEngagement/${id}`,{
         projectId:data.projectId,
@@ -48,12 +55,15 @@ function HandleSubmit(e){
         console.log(response.data);
         navigate('/GetAllPrEngagement');
         toast.success(response.data,{ position: 'top-center', theme: "colored" })
+        setLoading(false); 
     }).catch((error)=>{
         console.log(error)
-        handleAuthError(error);
+        toast.error( error.response.data.message || "Error updating details" );
+        setLoading(false); 
     })
 }
 function HandleDelete(){
+    setLoading(true);
     axios.delete(`/apigateway/hrms/engagement/DeleteProjectEngagement/${id}`,{
         headers: {
             'Authorization' :`Bearer ${token}`
@@ -61,22 +71,16 @@ function HandleDelete(){
     }).then((response)=>{
         console.log(response.data);
         toast.success(response.data, { position: 'top-center', theme: "colored" })
+        setLoading(false); 
     }).catch((error)=>{
         console.log(error);
-        handleAuthError(error);
-    })
+        toast.error( error.response.data.message || "Error deleting details" );  
+        setLoading(false); 
+      })
 }
-
-    // {
-    //     "projectName":"HEB",
-    //     "projectDescription":"Online zilla booking site",
-    //     "engagedEmployee":"kailash",
-    //     "startDate":"01/05/2024",
-    //     "endDate":"20/05/2023",
-    //     "status":true   
-    // }
   return (
   <div className='container pt-3'style={{  marginLeft:'100px',width:'1100px',height:'650PX'}}>
+    {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className='col-lg-8 col-md-8 mx-auto'>
                     <div className='card border-0 shadow'>

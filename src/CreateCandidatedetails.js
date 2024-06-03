@@ -1,26 +1,13 @@
-// {
-//     "candidateName": "Siddharth",
-//     "emailId"  : "mailto:siddharth.adt@gmail.com",
-//     "contactNo": "9666256882",
-//     "address"  : "indore, MP",
-//     "highestQualification" : "CS",
-//     "workExperience" : "2.0 Year",
-//     "technicalStack" : "Java, HTML, CSS, BootStrap",
-//     "cvShortlisted" : true,
-//     "lastCTC" : 3.4,
-//     "noticePeriod" : 90
-// }
-
 import React, { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import { CandidateSchema } from "./Validations/Candidate";
 import { toast } from "react-toastify";
-import handleAuthError from "./CommonErrorHandling";
 import { Link } from "react-router-dom";
+import LoadingPage from './LoadingPage'
 export default function InterviewCandidate() {
   const token = localStorage.getItem("response-token");
-
+  const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
       candidateName: "",
@@ -37,6 +24,7 @@ export default function InterviewCandidate() {
     },
     validationSchema: CandidateSchema,
     onSubmit: (values, action) => {
+      setLoading(true); 
       console.log(values);
       axios
         .post(
@@ -62,28 +50,28 @@ export default function InterviewCandidate() {
         )
         .then((response) => {
           console.log(response.data);
-          toast.success("Candidate details successfully created !!", {
+          toast.success("Candidate details successfully created !!" ||response.data, {
             position: "top-center",
             theme: "colored",
           });
+          setLoading(false); 
         })
         .catch((error) => {
           console.log(error);
-          handleAuthError(error);
-          // toast.error("Cannot show the Candidate details values!!", { position: 'top-center', theme: "colored" })
+          toast.error(
+            error.response.data.message || "Error creating candidate."
+          );
+          setLoading(false); 
         });
       action.resetForm();
     },
   });
-  //   const handleScreeningRoundChange = (e) => {
-  //     const value = e.target.value === "true";
-  //     formik.setFieldValue('cvShortlisted', value);
-  //   }
 
   return (
     <>
       <div>
         <div className=" mt-3 ">
+        {loading ? <LoadingPage/> : ''}
           <nav
             aria-label="breadcrumb"
             style={{ "--bs-breadcrumb-divider": "'>>'" }}

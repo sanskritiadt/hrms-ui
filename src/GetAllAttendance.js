@@ -26,7 +26,7 @@ const GetAllAttendance = () => {
                 setLoading(false); 
                 //toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
             }).catch(error => {
-                toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
+                toast.error( error.response.data.message || "Error fetching details" );
                 console.log("error happend", error);
                 setLoading(false); 
             })

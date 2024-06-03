@@ -3,8 +3,10 @@ import axios from 'axios';
 import {toast} from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import { Link } from 'react-router-dom';
+import LoadingPage from './LoadingPage'
 const CreateProjEng = () => {
     const token = localStorage.getItem("response-token");
+    const [loading, setLoading] = useState(false);
     const [data,setData] = useState({
         projectName:'',
         projectDescription:'',
@@ -13,17 +15,9 @@ const CreateProjEng = () => {
         endDate:'',
         status:''
     });
-    // {
-    //     "projectName":"HEB",
-    //     "projectDescription":"Online zilla booking site",
-    //     "engagedEmployee":"kailash",
-    //     "startDate":"01/05/2024",
-    //     "endDate":"20/05/2023",
-    //     "status":true
-        
-    // }
     function submit(e){
         e.preventDefault();
+        setLoading(true); 
         axios.post(`/apigateway/hrms/engagement/saveProjectEngagement`,{
             projectName:data.projectName,
             projectDescription:data.projectDescription,
@@ -36,10 +30,14 @@ const CreateProjEng = () => {
             'Authorization':`Bearer ${token}`
         }}).then((response)=>{
             console.log(response.data);
-            toast.success(response.data, { position: 'top-center', theme: "colored" })
+            toast.success(response.data, { position: 'top-center', theme: "colored" });
+            setLoading(false); 
         }).catch((error)=>{
             console.log(error);
-            handleAuthError(error);
+            toast.error(
+                error.response.data.message || "Error saving project details."
+              );
+            setLoading(false); 
         })
 
     }
@@ -64,6 +62,7 @@ const CreateProjEng = () => {
     }
     return (
         <div className=" mt-3">
+             {loading ? <LoadingPage/> : ''}
         <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import './Hrmscss/App.css'
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
-import handleAuthError from './CommonErrorHandling';
 import LoadingPage from "./LoadingPage";
 
 export default function Getinterviewdetails() {
@@ -19,12 +18,10 @@ export default function Getinterviewdetails() {
         }).then((response) => {
             setPosition(response.data);
             setLoading(false); 
-          //  toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
         }).catch((error) => {
-            handleAuthError(error);
             console.log("error occured", error);
+            toast.error( error.response.data.message || "Error fetching details" );
             setLoading(false); 
-            // toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
         })
     }, []);
 

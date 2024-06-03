@@ -363,7 +363,6 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  Divider,
   IconButton,
   TextField,
   Table,
@@ -383,6 +382,8 @@ import {
   Save as SaveIcon,
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import LoadingPage from "./LoadingPage"; 
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -407,6 +408,8 @@ const ManageAPI = () => {
   const [editingApi, setEditingApi] = useState(null);
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     fetchApiData(page, rowsPerPage);
@@ -414,6 +417,7 @@ const ManageAPI = () => {
 
   const fetchApiData = async (page, rowsPerPage) => {
     try {
+      setLoading(true)
       const response = await axios.get(
         `/apigateway/api/role/getAllApiDetails?page=${page}&size=${rowsPerPage}`,
         {
@@ -426,16 +430,19 @@ const ManageAPI = () => {
       setApiData(content);
       setTotalPages(totalPages);
       setTotalElements(totalElements);
+      setLoading(false)
     } catch (error) {
       console.error("Error fetching API data", error);
       toast.error(
         error.response?.data?.message || "Failed to fetch API data"
       );
+      setLoading(false)
     }
   };
 
   const handleAddRole = async () => {
     try {
+      setLoading(true)
       const response = await axios.post(
         "/apigateway/api/role/saveApiDetails",
         newRole,
@@ -448,9 +455,11 @@ const ManageAPI = () => {
       setApiData([...apiData, response.data]);
       setNewRole({ apiName: "", methodType: "", serviceName: "" });
       toast.success(response.data);
+      setLoading(false)
     } catch (error) {
       console.error("Error adding role", error);
       toast.error(error.response.data.message || "Failed to add API details");
+      setLoading(false)
     }
   };
 
@@ -459,6 +468,7 @@ const ManageAPI = () => {
       return;
     }
     try {
+      setLoading(true)
       const response = await axios.delete(
         `/apigateway/api/role/deleteApiDetailData?apiName=${apiName}`,
         {
@@ -469,11 +479,13 @@ const ManageAPI = () => {
       );
       setApiData(apiData.filter((role) => role.apiName !== apiName));
       toast.success(response.data);
+      setLoading(false)
     } catch (error) {
       console.error("Error deleting role", error);
       toast.error(
         error.response.data.message || "Failed to delete API details"
       );
+      setLoading(false)
     }
   };
 
@@ -483,6 +495,7 @@ const ManageAPI = () => {
 
   const handleSaveApi = async () => {
     try {
+      setLoading(true)
       const response = await axios.put(
         "/apigateway/api/role/updateApiDetails",
         editingApi,
@@ -499,11 +512,13 @@ const ManageAPI = () => {
       );
       setEditingApi(null);
       toast.success(response.data);
+      setLoading(false)
     } catch (error) {
       console.error("Error updating API", error);
       toast.error(
         error.response.data.message || "Failed to update API details"
       );
+      setLoading(false)
     }
   };
 
@@ -531,8 +546,7 @@ const ManageAPI = () => {
       justifyContent="flex"
       alignItems="center"
       height="30vh"
-      width="30vh"
-      marginRight="5vh"
+      width="22vh"
     >
       <Button variant="outlined" onClick={handleClickOpen}>
         Manage API
@@ -542,9 +556,9 @@ const ManageAPI = () => {
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
-      >
+      >  {loading ? <LoadingPage/> : ''}
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          ManageAPI
+          Manage API
           <IconButton
             aria-label="close"
             onClick={handleClose}

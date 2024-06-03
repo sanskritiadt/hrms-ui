@@ -150,7 +150,7 @@ const Approuter = () => {
         <Route path="/login" element={<Login/>} />
         <Route path="/RegisterUser" element={<RegisterUser />} />
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
-        <Route path="/EmployeeSalary" element={<EmployeeSalary />} />
+        {/* <Route path="/EmployeeSalary" element={<EmployeeSalary />} /> */}
       </Routes>
       {!isLoggedIn && <Footer />}
     </div>

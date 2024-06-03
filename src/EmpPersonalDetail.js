@@ -2,8 +2,10 @@ import React ,{useState,useEffect}from 'react'
 import axios from 'axios'
 import {toast} from  'react-toastify';
 import handleAuthError from './CommonErrorHandling';
+import LoadingPage from './LoadingPage'
 export default function EmpPersonalDetail() {
-    const token = localStorage.getItem("response-token")
+    const token = localStorage.getItem("response-token");
+    const [loading, setLoading] = useState(false);
     const EmpId = localStorage.getItem("EmpID");
     const [data,setData] = useState({
         employeeId: '',
@@ -20,6 +22,7 @@ export default function EmpPersonalDetail() {
 
     function HandleSubmit(e) {
         e.preventDefault();
+        setLoading(true); 
         axios
           .put(
             `/apigateway/hrms/employee/updatePersonalDetailsById`,
@@ -46,13 +49,16 @@ export default function EmpPersonalDetail() {
               position: "top-center",
               theme: "colored",
             });
+            setLoading(false); 
           })
           .catch((error) => {
             console.log(error);
-            handleAuthError(error);
+            toast.error( error.response.data.message || "Error updating details" );
+            setLoading(false); 
           });
       }
       useEffect(() => {
+        setLoading(true); 
         axios
           .get(`/apigateway/hrms/employee/getById/${EmpId}`, {
             headers: {
@@ -62,9 +68,12 @@ export default function EmpPersonalDetail() {
           .then((response) => {
            // console.log(response.data);
             setData(response.data);
+            setLoading(false); 
           })
           .catch((error) => {
             console.log(error);
+            toast.error( error.response.data.message || "Error fetching details" );
+            setLoading(false); 
           });
       }, []);
         
@@ -72,6 +81,7 @@ export default function EmpPersonalDetail() {
     <div>
       <div className='container pt-3' style={{width:'1000px',height:'800px'}}>
             <div className='row'>
+            {loading ? <LoadingPage/> : ''}
                 <div className='col-lg-8 col-md-8 mx-auto'>
                     <div className='card border-0 shadow'>
                         <div className='card-body'>

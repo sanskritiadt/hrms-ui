@@ -4,23 +4,26 @@ import { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import { Link } from "react-router-dom";
-export default function PositionDetails() {
+import LoadingPage from './LoadingPage';
 
+export default function PositionDetails() {
+    const [loading, setLoading] = useState(true);
     const [positions, setPosition] = React.useState([]);
     const token = localStorage.getItem("response-token")
 
     React.useEffect(() => {
+
         axios.get("/apigateway/hrms/interview/getAllPositionNew", {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).then((response) => {
             setPosition(response.data);
-           // toast.success("data found successfully.", { position: "top-right", theme: "colored" })
+            setLoading(false);
         }).catch(error => {
-            handleAuthError(error);
+            toast.error( error.response.data.message || "Error fetching details" );
             console.log("error occurred", error)
-            // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: "colored" })
+            setLoading(false);
         })
     }, []);
 
@@ -44,6 +47,7 @@ export default function PositionDetails() {
     return (
         <div>
             <div className="mt-3">
+                {loading ? <LoadingPage/> : ''}
                 <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
                     <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
 

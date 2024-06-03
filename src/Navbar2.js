@@ -25,35 +25,6 @@ function AppNavbar() {
     
   }
 
-  const handleLogout = () => {
-    axios.post(`/apigateway/api/user/logout`, {
-      "deviceInfo": {
-        "deviceId": "D1",
-        "deviceType": "DEVICE_TYPE_ANDROID",
-        "notificationToken": null
-      }
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(res => {
-      localStorage.clear();
-      console.log(res.data);
-      toast.success('Logout-Successfull.', { position: "top-center", theme: "colored" });
-      // window.location.reload();
-      setclick(true);
-
-    }).catch(error => {
-      localStorage.clear();
-      toast.error('server error Cannot Logout.', { position: "top-center", theme: "colored" });
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    })
-    navigate('/login');
-  }
-
-
   return (
     <div className='main    '>
       <Navbar expand="lg" className="navbar navbar-light bg-light ">
@@ -72,7 +43,6 @@ function AppNavbar() {
             <Nav className="ml-auto">
               { click ? 
               <Button onClick={handleLogin} variant="outline-success" className="mx-2 py-2 px-4">Login</Button> :
-              // <Button onClick={handleLogout} variant="outline-danger" className="mx-2">Logout</Button>
               <MyProfile/>
                 }
             </Nav> 

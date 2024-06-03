@@ -20,7 +20,7 @@ function GetAllPrEngagement() {
         //toast.success("Data found successfully.", { position: 'top-center', theme: "colored", closeOnClick: true })
       }).catch(error => {
         console.log(error)
-        toast.error("Error occured try after sometime.", { position: "top-center", theme: 'colored' });
+        toast.error( error.response.data.message || "Error fetching details" );
         setLoading(false); 
       })
     }, []);

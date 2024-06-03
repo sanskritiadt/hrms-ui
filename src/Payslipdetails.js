@@ -3,11 +3,12 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import './Hrmscss/PaySlip.css';
 import { toast } from 'react-toastify';
-//import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import LoadingPage from './LoadingPage'
 function PaySlip() {
     const empID = localStorage.getItem("EmpID");
-    const token = localStorage.getItem("response-token")
+    const token = localStorage.getItem("response-token");
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState();
 
     const [year, setYear] = useState();
@@ -31,6 +32,7 @@ function PaySlip() {
     const handleSubmit = (event) => {
         alert("your month is" + data)
         event.preventDefault()
+        setLoading(true); 
         axios.get(`/apigateway/payroll/slip?empId=${empID}&month=${data}&year=${year}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -38,16 +40,20 @@ function PaySlip() {
         })
             .then(response => {
                 console.log(response.data)
-                toast.success("data found successfully.", { position: "top-center", theme: "colored" })
+                toast.success(response.data.message, { position: "top-center", theme: "colored" })
                 setMonth(response.data)
+                setLoading(false); 
             }).catch(error => {
                 console.log("error occured", error)
-                toast.error("error occured try after sometime.", { position: "top-center", theme: "colored" })
+                toast.error( error.response.data.message || "Error fetching details" );
+                setLoading(false); 
             })
     }
 
     return (
-        <div className='mt-3'><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+        <div className='mt-3'> 
+        {loading ? <LoadingPage/> : ''}
+            <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
