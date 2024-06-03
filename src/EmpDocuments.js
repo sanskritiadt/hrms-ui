@@ -367,6 +367,7 @@ export default function EmpDocuments() {
 
   useEffect(() => {
     const fetchDocuments = async () => {
+      setLoading(true);
       try {
         const { data } = await axios.get(
           `/apigateway/hrms/employee/getAllDocumentDetailsByEmpId/${EmpId}`,
@@ -375,8 +376,11 @@ export default function EmpDocuments() {
           }
         );
         setDocuments(data.map((item) => item.documentType));
+        setLoading(false); 
       } catch (error) {
         console.error(error);
+        toast.error( error.response.data.message || "Error fetching details" );
+        setLoading(false); 
       }
     };
 

@@ -87,13 +87,11 @@ export default function PriorTimeAdj() {
       );
     //  console.log("Fetched data:", response.data); // Debugging log
       setPriorData(response.data);
+    //  toast.success(response.data.data, { position: "top-center", theme: "colored" })
       setLoading(false);
     } catch (error) {
       console.error(error);
-      toast.error("Error occurred, try again later.", {
-        position: "top-center",
-        theme: "colored",
-      });
+      toast.error( error.response.data.message || "Error fetching details" );
       setLoading(false);
     }
   }, [token, empId]);
@@ -131,9 +129,9 @@ export default function PriorTimeAdj() {
           },
         }
       );
-
-      console.log("Response data:", response.data); // Debugging log
-
+      console.log("Response data:", response.data);
+      toast.success(response.data.data, { position: "top-center", theme: "colored" })
+      setLoading(false);
       const updatedData = priorData.map((row) => {
         if (row.date === date) {
           return { ...row, ...response.data };
@@ -141,16 +139,12 @@ export default function PriorTimeAdj() {
           return row;
         }
       });
-
      // console.log("Updated data:", updatedData); // Debugging log
       setPriorData(updatedData);
       fetchPriorData();
     } catch (error) {
       console.error(error);
-      toast.error("Error occurred while updating time.", {
-        position: "top-center",
-        theme: "colored",
-      });
+      toast.error( error.response.data.message || "Error updating details" );
     } finally {
       setLoading(false);
     }

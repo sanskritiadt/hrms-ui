@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TextField, MenuItem, Button, CircularProgress, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, Autocomplete } from '@mui/material';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import LoadingPage from "./LoadingPage"; 
+
 
 const AssignRole = () => {
   const [searchCriterion, setSearchCriterion] = useState("");
@@ -11,6 +13,9 @@ const AssignRole = () => {
   const [allRoles, setAllRoles] = useState([]);
   const [employeeRoles, setEmployeeRoles] = useState({});
   const [updating, setUpdating] = useState({});
+  const [loadingg, setLoadingg] = useState(true);
+
+  
   const token = localStorage.getItem("response-token");
 
   useEffect(() => {
@@ -22,8 +27,13 @@ const AssignRole = () => {
           },
         });
         setAllRoles(response.data.content);
+        setLoadingg(false)
       } catch (error) {
         console.error('Error fetching all roles:', error);
+        setLoadingg(false);
+        toast.error(
+          error.response.data.message || "Failed to fetching all roles"
+        );
       }
     };
 
@@ -40,7 +50,7 @@ const AssignRole = () => {
 
   const handleSearch = async () => {
     if (!searchCriterion || !searchValue) {
-      toast.error("Please select a search criterion and enter a search value.");
+      toast.error("Please select a search criteria and enter a search value.");
       return;
     }
   
@@ -77,7 +87,9 @@ const AssignRole = () => {
       setEmployeeRoles(employeeRolesData);
     } catch (error) {
       console.error("Error searching employees:", error);
-      toast.error("An error occurred while searching. Please try again later.");
+      toast.error(
+        error.response.data.message || "Error searching employees"
+      );
     } finally {
       setLoading(false);
     }
@@ -108,7 +120,9 @@ const AssignRole = () => {
       toast.success("Roles updated successfully.");
     } catch (error) {
       console.error('Error updating roles:', error);
-      toast.error("An error occurred while updating roles. Please try again later.");
+      toast.error(
+        error.response.data.message || "Error updating roles"
+      );
     } finally {
       setUpdating((prevUpdating) => ({ ...prevUpdating, [employeeId]: false }));
     }
@@ -116,6 +130,7 @@ const AssignRole = () => {
 
   return (
     <Box sx={{ p: 2 }}>
+        {loadingg ? <LoadingPage/> : ''}
       <Typography variant="h6" gutterBottom>
         Manage Role Permissions
       </Typography>

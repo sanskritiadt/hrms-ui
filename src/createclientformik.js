@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
@@ -6,8 +6,10 @@ import { clientInfoSchema } from "./Validations/createclientyup";
 import { toast } from "react-toastify";
 import handleAuthError from "./CommonErrorHandling";
 import { Link } from "react-router-dom";
+import LoadingPage from './LoadingPage'
 export default function SaveClientFormik() {
   const token = localStorage.getItem("response-token");
+  const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
       Companyname: "",
@@ -19,6 +21,7 @@ export default function SaveClientFormik() {
     },
     validationSchema: clientInfoSchema,
     onSubmit: (values, action) => {
+      setLoading(true); 
       console.log(values);
       axios
         .post(
@@ -43,11 +46,14 @@ export default function SaveClientFormik() {
             position: "top-center",
             theme: "colored",
           });
+          setLoading(false); 
         })
         .catch((error) => {
-          handleAuthError(error);
+          toast.error(
+            error.response.data.message || "Error creating client."
+          );
           console.log(error);
-          // toast.error("Cannot create client !!", { position: 'top-center', theme: "colored" });
+          setLoading(false); 
         });
       action.resetForm();
     },
@@ -55,7 +61,8 @@ export default function SaveClientFormik() {
 
   return (
     <>
-      <div className=" mt-3">
+      <div className=" mt-3"> 
+      {loading ? <LoadingPage/> : ''}
         <nav
           aria-label="breadcrumb"
           style={{ "--bs-breadcrumb-divider": "'>>'" }}

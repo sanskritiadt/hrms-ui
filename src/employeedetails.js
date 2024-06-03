@@ -11,7 +11,6 @@ export default function Empfunc() {
   const [currentPage, setCurrentPage] = useState(1);
   const [employeesPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
   const [searchCriterion, setSearchCriterion] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState(null);
@@ -46,9 +45,10 @@ export default function Empfunc() {
         }
       );
       setSearchResult(response.data.content);
+      setLoading(false); 
     } catch (error) {
       console.error("Error searching employees:", error);
-      toast.error("An error occurred while searching.Please try again later.");
+      toast.error( error.response.data.message || "Error searching details" );
     } finally {
       setLoading(false);
     }
@@ -72,10 +72,7 @@ export default function Empfunc() {
       })
       .catch((error) => {
         console.log(error);
-        toast.error("An error occurred. Please try again later.", {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error( error.response.data.message || "Error fetching details");
         setLoading(false);
       });
   }, []);

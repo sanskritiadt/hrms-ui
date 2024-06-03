@@ -5,7 +5,7 @@ import EmpPersonalDetail from "./EmpPersonalDetail";
 import EmpPayrollDetail from "./EmpPayrollDetails";
 import EmpDocuments from "./EmpDocuments";
 
-export default function YourComponent() {
+export default function MyProfileDetails() {
   const [activeTab, setActiveTab] = useState("one");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 

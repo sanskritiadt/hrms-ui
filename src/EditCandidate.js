@@ -3,12 +3,13 @@ import axios from 'axios'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-
+import LoadingPage from './LoadingPage'
 
 const EditCandidate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const token = localStorage.getItem("response-token");
+    const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         candidateName: "",
         emailId: "",
@@ -24,6 +25,7 @@ const EditCandidate = () => {
     });
 
     useEffect(() => {
+        setLoading(true); 
         axios.get(`/apigateway/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -31,11 +33,13 @@ const EditCandidate = () => {
         })
             .then((response) => {
                 setData(response.data)
-                console.log(response);
+               // console.log(response);
+                setLoading(false); 
             }).catch((error) => {
-                handleAuthError(error);
-                console.log(error);
-                console.log(error.response.data)
+                toast.error( error.response.data.message || "Error updating details" );
+                // console.log(error);
+                // console.log(error.response.data)
+                setLoading(false); 
             })
     }, [])
     function HandleSubmit(e) {
@@ -86,6 +90,7 @@ const EditCandidate = () => {
 
     return (
         <div className='container pt-3'>
+             {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className='col-lg-8 col-md-10 mx-auto'>
                     <div className='card border-0 shadow'>

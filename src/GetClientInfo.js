@@ -10,9 +10,6 @@ import handleAuthError from './CommonErrorHandling';
 import LoadingPage from "./LoadingPage";
 
 
-
-
-
 function ClientInfoTable() {
     const token = localStorage.getItem("response-token")
     const [clientInfo, setClientInfo] = useState([]);
@@ -27,15 +24,11 @@ function ClientInfoTable() {
         }).then(response => {
             setClientInfo(response.data);
             setLoading(false); 
-            //console.log(response.data);
-           // toast.success("Client data found successfully!!", { position: "top-center", theme: 'colored' })
-
         })
             .catch(error => {
                 console.log(error);
-                handleAuthError(error);
+                toast.error( error.response.data.message || "Error fetching details" );
                 setLoading(false); 
-                // toast.error("something went wrong please try after sometime.", { position: "top-center", theme: 'colored' })
             });
     }, []);
 

@@ -28,7 +28,7 @@ const Getallexpenses = () => {
     }).catch(error => {
       console.log(error);
       setLoading(false); 
-      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+      toast.error( error.response.data.message || "Error fetching details" );
     })
   }, []);
 
@@ -54,7 +54,7 @@ const Getallexpenses = () => {
     }).catch((error) => {
       setLoading(false); 
       console.log(error);
-      toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
+      toast.error( error.response.data.message || "Error fetching details" );
     })
   }
 

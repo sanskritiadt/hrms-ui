@@ -18,17 +18,13 @@ const GetGstDetails = () => {
         },
       })
       .then((response) => {
-       // console.log(response.data);
         setGst(response.data.content);
         setLoading(false); 
-        //toast.success('Assets data found successfully!!',{position:'top-center',theme:'colored'})
+       
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Error occured try after sometime.", {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error( error.response.data.message || "Error fetching details" );
         setLoading(false); 
       });
   }, []);

@@ -3,9 +3,10 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom';
-
+import LoadingPage from './LoadingPage'
 const EditProjectEngagement = () => {
-    const token = localStorage.getItem("response-token")
+    const token = localStorage.getItem("response-token");
+    const [loading, setLoading] = useState(false);
     const { projectId } = useParams();
     const navigate = useNavigate();
     const [data, setData] = useState({
@@ -18,7 +19,7 @@ const EditProjectEngagement = () => {
         status: ''
     });
     useEffect(() => {
-
+        setLoading(true);
         axios.get(`/apigateway/hrms/engagement/ProjectEngagementDetailById/${projectId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -26,8 +27,11 @@ const EditProjectEngagement = () => {
         }).then((response) => {
             console.log(response.data)
             setData(response.data)
+            setLoading(false); 
         }).catch((error) => {
-            console.log(error.response.data)
+            console.log(error.response.data);
+            toast.error( error.response.data.message || "Error fetching details" );
+            setLoading(false); 
         })
     }, []);
     var str2bool = (value) => {
@@ -40,13 +44,8 @@ const EditProjectEngagement = () => {
         console.log(e.target.value);
         data.status = str2bool(e.target.value);
     }
-    //       "projectName": "mki",
-    // 		"projectDescription": "Online villa booking site",
-    // 		"engagedEmployee": "vikash",
-    // 		"startDate": "01/05/2023",
-    // 		"endDate": "20/06/2023",
-    // 		"status": false
     function handleSubmit(e) {
+        setLoading(true);
         e.preventDefault();
         axios.put(`/hrms/engagement/updateProjectEngagement/${projectId}`, {
             projectId:data.projectId,
@@ -63,9 +62,11 @@ const EditProjectEngagement = () => {
         }).then(response => {
             console.log(response);
             toast.success(response.data, { position: "top-center", theme: 'colored' });
+            setLoading(false); 
         }).catch(error => {
             console.log(error);
-            toast.error(error.response.data, { position: "top-center", theme: 'colored' });
+            toast.error( error.response.data.message || "Error updating details" );
+            setLoading(false); 
         })
     }
     function handle(e) {
@@ -76,6 +77,7 @@ const EditProjectEngagement = () => {
     }
     return (
         <div className='container pt-3'>
+             {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
                     <div className='card border-0 shadow' style={{ marginRight: '100px', width: '700px', height: '650px' }}>

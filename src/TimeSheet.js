@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingPage from './LoadingPage'
 
 const TimeSheet = () => {
   const [checkindisable, setcheckinDisable] = useState(false);
@@ -12,6 +13,7 @@ const TimeSheet = () => {
   const [longitude, setLongitude] = useState("");
   const token = localStorage.getItem("response-token");
   const empId = localStorage.getItem("EmpID");
+  const [loading, setLoading] = useState(false);
 
   const [date, setDate] = useState({
     fromDate: "",
@@ -28,6 +30,7 @@ const TimeSheet = () => {
 
   const checkIn = (e) => {
     e.preventDefault();
+    setLoading(true); 
     axios
       .post(
         `/apigateway/payroll/timeSheet/checkIn/${empId}?Latitude=${latitude}&Longitude=${longitude}`,
@@ -45,15 +48,18 @@ const TimeSheet = () => {
           theme: "colored",
         });
         setcheckinDisable(true);
+        setLoading(false);
       })
       .catch((error) => {
-        toast.error("error", { position: "top-center", theme: "colored" });
+        toast.error( error.response.data.message || "Error while checkin" );
         // alert(latitude,longitude)
         console.log(error);
+        setLoading(false);
       });
   };
   const checkOut = (e) => {
     e.preventDefault();
+    setLoading(true); 
     axios
       .put(
         `/apigateway/payroll/timeSheet/checkOut/${empId}?Latitude=${latitude}&Longitude=${longitude}`,
@@ -71,15 +77,17 @@ const TimeSheet = () => {
           theme: "colored",
         });
         setcheckoutDisable(true);
+        setLoading(false);
       })
       .catch((error) => {
-        toast.error("error", { position: "top-center", theme: "colored" });
-        // alert(latitude,longitude)
+        toast.error( error.response.data.message || "Error while checkout" );
         console.log(error);
+        setLoading(false);
       });
   };
 
   const handleClick = () => {
+    setLoading(true); 
     const apiUrl = isPaused
       ? `/apigateway/payroll/timeSheet/resume/${empId}`
       : `/apigateway/payroll/timeSheet/pause/${empId}`;
@@ -98,18 +106,18 @@ const TimeSheet = () => {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data, {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error( error.response.data.message);
+        setLoading(false);
       });
   };
 
   function submit(e) {
     e.preventDefault();
+    setLoading(true); 
     axios
       .get(
         `/apigateway/payroll/timeSheet/empAttendence?fromDate=${date.fromDate}&toDate=${date.toDate}&empId=${empId}`,
@@ -126,13 +134,12 @@ const TimeSheet = () => {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.response.data);
-        toast.error("Error, try after sometime", {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error( error.response.data.message || "Error while fetching details." );
+        setLoading(false);
       });
   }
 
@@ -145,6 +152,7 @@ const TimeSheet = () => {
   return (
     <>
       <div className="container">
+      {loading ? <LoadingPage/> : ''}
         <div
           className="row justify-content-center align-items-center"
           style={{ height: "90vh" }}

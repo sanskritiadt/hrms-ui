@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import handleAuthError from "./CommonErrorHandling";
 import { toast } from "react-toastify";
+import LoadingPage from './LoadingPage'
 
 export default function SaveGstinvoice() {
   const token = localStorage.getItem("response-token");
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     invoiceNumber: "",
     fy: "",
@@ -28,6 +30,7 @@ export default function SaveGstinvoice() {
 
   function submit(e) {
     e.preventDefault();
+    setLoading(true); 
     axios
       .post(
         `/apigateway/expensemanagement/gst/saveGSTDetails`,
@@ -63,11 +66,12 @@ export default function SaveGstinvoice() {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false);
       })
       .catch((error) => {
-        handleAuthError(error);
+        toast.error( error.response.data.message || "Error saving details" );
         console.log(error);
-        // toast.error("cannot create the position values!!", { position: 'top-center', theme: "colored" })
+        setLoading(false);
       });
   }
   function handle(e) {
@@ -79,7 +83,8 @@ export default function SaveGstinvoice() {
 
   return (
     <div>
-      <div>
+      <div>  
+        {loading ? <LoadingPage/> : ''}
         <nav
           aria-label="breadcrumb"
           style={{ "--bs-breadcrumb-divider": "'>>'" }}
