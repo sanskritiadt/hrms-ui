@@ -221,8 +221,8 @@ const Login = () => {
           if (error.response.status === 417) {
             setlogincheck(false);
             toast.error("Bad credentials. Please try again.", { position: "top-center", theme: "colored" });
-          } else {
-            toast.error("Server error. Please try again.", { position: "top-center", theme: "colored" });
+          } else if(error.response.status === 500) {
+            toast.error("Internal Server Error, Please try again.", { position: "top-center", theme: "colored" });
           }
         }
       })

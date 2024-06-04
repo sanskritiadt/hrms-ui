@@ -43,7 +43,7 @@ const TimeSheet = () => {
       )
       .then((response) => {
         console.log(response.data);
-        toast.success("Checked In Successfully.", {
+        toast.success(response.data, {
           position: "top-center",
           theme: "colored",
         });
@@ -72,7 +72,7 @@ const TimeSheet = () => {
       )
       .then((response) => {
         console.log(response.data);
-        toast.success("Checked Out Successfully.", {
+        toast.success(response.data, {
           position: "top-center",
           theme: "colored",
         });

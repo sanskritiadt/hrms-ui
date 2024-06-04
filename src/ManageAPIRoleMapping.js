@@ -424,7 +424,7 @@ const ManageAPIRoleMapping = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `/apigateway/api/role/getListOfApiNameByRole?apiName=${searchCriterion}`,
+        `/apigateway/api/role/getListOfApiNameByRole?roleName=${searchCriterion}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
