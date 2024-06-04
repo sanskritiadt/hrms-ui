@@ -8,10 +8,10 @@ import LoadingPage from './LoadingPage';
 
 export default function PositionDetails() {
     const [loading, setLoading] = useState(true);
-    const [positions, setPosition] = React.useState([]);
+    const [positions, setPosition] = useState([]);
     const token = localStorage.getItem("response-token")
 
-    React.useEffect(() => {
+useEffect(() => {
 
         axios.get("/apigateway/hrms/interview/getAllPositionNew", {
             headers: {
@@ -83,7 +83,8 @@ export default function PositionDetails() {
                                 // display a <div> element with the employees.emailId and employees.designation
                                 // parent element needs to have a unique key
                                 <tr key={position.uiid}>
-                                    <td>{position.uiid}</td>
+                                    {/* <td>{position.uiid}</td> */}
+                                    <td><Link to={`/EditPosition/${position.uiid}`} className="Candidate-id">{position.uiid}</Link></td>
                                     <td>{position.techStack.join(",")}</td>
                                     <td>{position.vacancy}</td>
                                     <td>{position.positionopendate}</td>

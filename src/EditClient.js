@@ -82,7 +82,7 @@ function EditClient() {
         <div className=" col-md-8 mx-auto">
           <div
             className="card border-0 shadow"
-            style={{ width: "600px", height: "870px" }}
+            style={{ width: "600px", height: "650px" }}
           >
             <div className="card-body">
               <form className="container py-3  mb-3" onSubmit={handleSubmit}>
