@@ -96,7 +96,7 @@ const EditEmployee = () => {
       })
       .catch((error) => {
         console.log(error.response.data);
-        toast.error( error.response.data.message || "Error updating details" );
+        toast.error( error.response.data.message || error.response.data || "Error updating details");
         setLoading(false); 
       });
   }

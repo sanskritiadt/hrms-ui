@@ -54,9 +54,10 @@ const Registerformik = () => {
       .email("Invalid email address")
       .required("Email is required"),
     username: Yup.string().required("Username is required."),
-    password: Yup.string()
-      .required("Password is required.")
-      .min(8, "Password must be at least 8 characters long."),
+    password:  Yup.string().required('New password is required.')
+    .min(8, 'New password must be at least 8 characters long.')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+        'password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.')
   });
   return (
     <Container>

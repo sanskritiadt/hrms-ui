@@ -61,8 +61,6 @@ export default function Empfunc() {
         {
           params: {
             [searchCriterion]: searchValue,
-            page: currentPage - 1,
-            size: employeesPerPage,
           },
           headers: {
             Authorization: `Bearer ${token}`,
