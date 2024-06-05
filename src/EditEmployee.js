@@ -3,8 +3,23 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate, json } from "react-router-dom";
 import { toast } from "react-toastify";
-import handleAuthError from "./CommonErrorHandling";
+
 import LoadingPage from './LoadingPage'
+
+//   {
+//     "employeeId": 19,
+//     "updatedAt": "2024-04-04T14:58:27.225Z",
+//     "isActive": true,
+//     "dob": "08/05/1992",
+//     "email": "ajaymishra.adt@gmail.com",
+//     "firstName": "Ajay",
+//     "gender": "Male",
+//     "isEmailVerified": true,
+//     "lastName": "Mishra",
+//     "maritalStatus": "Married",
+//     "mobileNo": 8975663255,
+//     "userName": "ajaymishra"
+// }
 
 const EditEmployee = () => {
   const { id } = useParams();
@@ -15,27 +30,16 @@ const EditEmployee = () => {
     employeeId: "",
     firstName: "",
     lastName: "",
-    salary: "",
     maritalStatus: "",
     mobileNo: "",
-    joinDate: "",
     gender: "",
     dob: "",
     designation: "",
     isActive: "",
-    bankName: "",
-    accountNumber: "",
-    ifscCode: "",
     email: "",
     isEmailVerified: "",
     userName: "",
-    resume: [],
-    aadhar: [],
-    pan: [],
   });
-  const panData = new FormData();
-  const aadhData = new FormData();
-  const resumeData = new FormData();
 
   useEffect(() => {
     setLoading(true);
@@ -46,7 +50,7 @@ const EditEmployee = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         setData(response.data);
         setLoading(false); 
       })
@@ -56,63 +60,34 @@ const EditEmployee = () => {
         setLoading(false); 
       });
   }, []);
-  
   function handleSubmit(e) {
     setLoading(true);
     e.preventDefault();
-    const formData = new FormData();
-    // Append form data
+    
     const body = {
       employeeId: data.employeeId,
       firstName: data.firstName,
       lastName: data.lastName,
-      salary: data.salary,
       maritalStatus: data.maritalStatus,
       mobileNo: data.mobileNo,
-      joinDate: data.joinDate,
       gender: data.gender,
       dob: data.dob,
       designation: data.designation,
       isActive: data.isActive,
-      bankName: data.bankName,
-      accountNumber: data.accountNumber,
-      ifscCode: data.ifscCode,
       email: data.email,
       isEmailVerified: data.isEmailVerified,
       userName: data.userName,
     };
-    // Only append files if they are present
-    if (data.resume && data.resume.length > 0) {
-      for (let i = 0; i < data.resume.length; i++) {
-        resumeData.append("file", data.resume[i]);
-      }
-    }
-
-    if (data.aadharCard && data.aadharCard.length > 0) {
-      for (let i = 0; i < data.aadharCard.length; i++) {
-        aadhData.append("image", data.aadharCard[i]);
-      }
-    }
-
-    if (data.panCard && data.panCard.length > 0) {
-      for (let i = 0; i < data.panCard.length; i++) {
-        panData.append("image1", data.panCard[i]);
-      }
-    }
-    formData.append('resume', resumeData);
-    formData.append('emp', JSON.stringify(body));
-    formData.append('aadhar', aadhData);
-    formData.append('pan', panData);
+   
     axios
-      .put(`/apigateway/hrms/employee/updateEmp`, formData, {
+      .put(`/apigateway/hrms/employee/updateEmp`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
         },
       })
       .then((response) => {
         console.log(response.data);
-        toast.success("Candidate data has been updated successfully.", {
+        toast.success(response.data, {
           position: "top-center",
           theme: "colored",
         });
@@ -120,9 +95,8 @@ const EditEmployee = () => {
         setLoading(false); 
       })
       .catch((error) => {
-        // handleAuthError(error);
         console.log(error.response.data);
-        toast.error( error.response.data.message || "Error updating details" );
+        toast.error( error.response.data.message || error.response.data || "Error updating details");
         setLoading(false); 
       });
   }
@@ -134,7 +108,7 @@ const EditEmployee = () => {
         <div className="col-lg-8 col-md-10 mx-auto">
           <div
             className="card border-0 shadow"
-            style={{ width: "700px", height: "1500px" }}
+            style={{ width: "700px", height: "850px" }}
           >
             <div className="card-body">
               <form className="container py-3  mb-3" onSubmit={handleSubmit}>
@@ -278,28 +252,6 @@ const EditEmployee = () => {
                   <label
                     htmlFor="inputPassword3"
                     className="col-sm-2 col-form-label"
-                    name="salary"
-                  >
-                    Salary
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      value={data.salary || ""}
-                      onChange={(e) =>
-                        setData({ ...data, salary: e.target.value })
-                      }
-                      type="number"
-                      className="form-control"
-                      id="salary"
-                      min="1"
-                      step="1"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
                     name="maritalStatus"
                   >
                     Marital Status
@@ -313,28 +265,6 @@ const EditEmployee = () => {
                       type="text"
                       className="form-control"
                       id="maritalStatus"
-                    />
-                  </div>
-                </div>
-
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                    name="joinDate"
-                  >
-                    Join Date
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      value={data.joinDate || ""}
-                      onChange={(e) =>
-                        setData({ ...data, joinDate: e.target.value })
-                      }
-                      type="date"
-                      className="form-control"
-                      placeholder="created By"
-                      id="joinDate"
                     />
                   </div>
                 </div>
@@ -358,20 +288,6 @@ const EditEmployee = () => {
                     />
                   </div>
                 </div>
-                {/* <fieldset className="row mb-3">
-                                    <legend className="col-form-label col-sm-2 pt-0">IsActive</legend>
-                                    <div className="col-sm-10">
-                                        <div className="form-check form-check-inline">
-                                            <input checked={data.isActive} value={data.isActive} onChange={e => setData({ ...data, isActive: e.target.value })} className="form-check-input" type="radio" name="inlineRadioOptions" id="true" />
-                                            <label className="form-check-label" htmlFor="true">Yes</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input checked={data.isActive} value={data.isActive} onChange={e => setData({ ...data, isActive: e.target.value })} className="form-check-input" type="radio" name="inlineRadioOptions" id="false" />
-                                            <label className="form-check-label" htmlFor="false">No</label>
-                                        </div>
-                                    </div>
-                                </fieldset> */}
-                {/* The first input element is a radio button for "Yes" and is checked if data.isActive is true. The value prop is also set to data.isActive so that the value of the radio button matches the value in the state. The onChange handler updates the isActive value in the state when this radio button is selected.*/}
                 <fieldset className="row mb-3">
                   <legend className="col-form-label col-sm-2 pt-0">
                     Active
@@ -407,145 +323,6 @@ const EditEmployee = () => {
                     </div>
                   </div>
                 </fieldset>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                    name="designation"
-                  >
-                    Designation
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      value={data.designation || ""}
-                      onChange={(e) =>
-                        setData({ ...data, designation: e.target.value })
-                      }
-                      type="text"
-                      className="form-control"
-                      id="designation"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                    name="bankName"
-                  >
-                    Bank Name
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      value={data.bankName || ""}
-                      onChange={(e) =>
-                        setData({ ...data, bankName: e.target.value })
-                      }
-                      type="text"
-                      className="form-control"
-                      id="bankName"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                    name="accountNumber"
-                  >
-                    Account Number
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      value={data.accountNumber || ""}
-                      onChange={(e) =>
-                        setData({ ...data, accountNumber: e.target.value })
-                      }
-                      type="number"
-                      className="form-control"
-                      id="accountNumber"
-                      min="1"
-                      step="1"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                    name="ifscCode"
-                  >
-                    IFSC Code
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      value={data.ifscCode || ""}
-                      onChange={(e) =>
-                        setData({ ...data, ifscCode: e.target.value })
-                      }
-                      type="text"
-                      className="form-control"
-                      id="ifscCode"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                  >
-                    Upload Resume
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      onChange={(e) =>
-                        setData({ ...data, resume: e.target.files })
-                      }
-                      type="file"
-                      multiple
-                      className="form-control"
-                      id="resume"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                  >
-                    Upload Aadhar{" "}
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      onChange={(e) =>
-                        setData({ ...data, aadharCard: e.target.files })
-                      }
-                      type="file"
-                      multiple
-                      className="form-control"
-                      id="aadhar"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-3">
-                  <label
-                    htmlFor="inputPassword3"
-                    className="col-sm-2 col-form-label"
-                  >
-                    Upload PAN
-                  </label>
-                  <div className="col-sm-10">
-                    <input
-                      onChange={(e) =>
-                        setData({ ...data, panCard: e.target.files })
-                      }
-                      type="file"
-                      multiple
-                      className="form-control"
-                      id="pan"
-                    />
-                  </div>
-                </div>
                 <div className="d-grid gap-2 col-6 mx-auto">
                   <button className="btn btn-outline-success" type="submit">
                     Update Employeee

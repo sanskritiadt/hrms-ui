@@ -111,9 +111,10 @@ const Getallexpenses = () => {
               <th styles={{ width: '50%' }}>Category</th>
               <th styles={{ width: '50%' }}>GST</th>
               <th styles={{ width: '50%' }}>Comments</th>
-              <th><Button  variant="outline-primary" style={{height:'53px',}} type='submit' onClick={routeCreateExpense}>
+              <th styles={{ width: '50%' }}>Edit</th>
+              {/* <th><Button  variant="outline-primary" style={{height:'53px',}} type='submit' onClick={routeCreateExpense}>
                 Create exp
-              </Button></th>
+              </Button></th> */}
             </tr>
           </thead>
           <tbody className="body">
@@ -122,7 +123,7 @@ const Getallexpenses = () => {
               // display a <div> element with the employees.emailId and employees.designation
               // parent element needs to have a unique key
               <tr key={expenseItem.id}>
-                <td><Link to={`/editexpenses/${expenseItem.id}`} className="expense-id">{expenseItem.id}</Link></td>
+                <td>{expenseItem.id}</td>
                 <td>{expenseItem.paymentDate}</td>
                 <td>{expenseItem.paymentMode}</td>
                 <td>{expenseItem.paidBy}</td>
@@ -132,6 +133,12 @@ const Getallexpenses = () => {
                 <td>{expenseItem.category}</td>
                 <td>{String(expenseItem.gst)}</td>
                 <td>{expenseItem.comments}</td>
+                <td> <Link to={`/editexpenses/${expenseItem.id}`}>
+                      <Button variant="outline-primary" type="button">
+                        Edit
+                      </Button>
+                    </Link></td>
+               
               </tr>
             ))}
           </tbody>

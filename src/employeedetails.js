@@ -2,27 +2,50 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import LoadingPage from "./LoadingPage";
 import "./Hrmscss/App.css";
 
 export default function Empfunc() {
   const [employees, setEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [employeesPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
+  const [employeesPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
   const [searchCriterion, setSearchCriterion] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState(null);
 
-  
   const token = localStorage.getItem("response-token");
+
   const handleCriterionChange = (e) => {
     setSearchCriterion(e.target.value);
   };
 
   const handleValueChange = (e) => {
     setSearchValue(e.target.value);
+  };
+
+  const fetchEmployees = async (page) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/apigateway/hrms/employee/getAllEmp`, {
+        params: {
+          page: page - 1,
+          size: employeesPerPage,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setEmployees(response.data.content);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+      toast.error(error.response.data.message || "Error fetching details");
+      setLoading(false);
+    }
   };
 
   const handleSearch = async () => {
@@ -45,61 +68,32 @@ export default function Empfunc() {
         }
       );
       setSearchResult(response.data.content);
-      setLoading(false); 
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
     } catch (error) {
       console.error("Error searching employees:", error);
-      toast.error( error.response.data.message || "Error searching details" );
-    } finally {
+      toast.error(error.response.data.message || "Error searching details");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    axios
-      .get(`/apigateway/hrms/employee/getAllEmp`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setEmployees(response.data.content);
-        setLoading(false);
-        toast.success("Data found successfully.", {
-          position: "top-center",
-          theme: "colored",
-          closeOnClick: true,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error( error.response.data.message || "Error fetching details");
-        setLoading(false);
-      });
-  }, []);
+    fetchEmployees(currentPage);
+  }, [currentPage]);
 
   if (loading) return <LoadingPage />;
 
   const currentEmployees = searchResult || employees;
-  const indexOfLastEmployee = currentPage * employeesPerPage;
-  const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
-  const paginatedEmployees = currentEmployees.slice(
-    indexOfFirstEmployee,
-    indexOfLastEmployee
-  );
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
-    <div style={{ margin: "25px 100px  ", width: "820px", height: "750px" }}>
-      <div className=" mt-3 pl-4">
-        <nav
-          aria-label="breadcrumb"
-          style={{ "--bs-breadcrumb-divider": "'>>'" }}
-        >
-          <ol
-            className="breadcrumb"
-            style={{ color: "white", marginLeft: "20px" }}
-          >
+    <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
+      <div className="mt-3 pl-4">
+        <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+          <ol className="breadcrumb" style={{ color: "white", marginLeft: "20px" }}>
             <li className="breadcrumb-item">
               <Link to="/">Home</Link>
             </li>
@@ -112,7 +106,7 @@ export default function Empfunc() {
           </ol>
         </nav>
       </div>
-      <div className="d-flex justify-content-center " style={{ width: "90%" }}>
+      <div className="d-flex justify-content-center" style={{ width: "90%" }}>
         <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
           <h1 className="Heading1 my-4">Employee Details</h1>
           <div className="d-flex justify-content-between">
@@ -152,10 +146,7 @@ export default function Empfunc() {
               </div>
             </Form.Group>
           </div>
-          <div
-            className="table-responsive-sm"
-            style={{ width: "145vh", overflowX: "auto" }}
-          >
+          <div className="table-responsive-sm" style={{ width: "145vh", overflowX: "auto" }}>
             <table border="2" className="table table-striped table-bordered">
               <thead className="head">
                 <tr className="table-danger table-striped">
@@ -173,13 +164,10 @@ export default function Empfunc() {
                 </tr>
               </thead>
               <tbody className="body">
-                {paginatedEmployees.map((employee) => (
+                {currentEmployees.map((employee) => (
                   <tr key={employee.employeeId}>
                     <td>
-                      <Link
-                        to={`/EditEmployee/${employee.employeeId}`}
-                        className="Candidate-id"
-                      >
+                      <Link to={`/EditEmployee/${employee.employeeId}`} className="Candidate-id">
                         {employee.employeeId}
                       </Link>
                     </td>
@@ -193,11 +181,7 @@ export default function Empfunc() {
                     <td>{employee.mobileNo}</td>
                     <td>{employee.userName}</td>
                     <td>
-                      <Link
-                        to={`/UpdatePayrollSalary/${employee.employeeId}`}
-                        className="Candidate-id"
-                        variant="btn btn-outline-info"
-                      >
+                      <Link to={`/UpdatePayrollSalary/${employee.employeeId}`} className="Candidate-id" variant="btn btn-outline-info">
                         Payroll
                       </Link>
                     </td>
@@ -208,19 +192,9 @@ export default function Empfunc() {
           </div>
           <nav>
             <ul className="pagination justify-content-center mt-2">
-              {Array.from({
-                length: Math.ceil(currentEmployees.length / employeesPerPage),
-              }).map((_, index) => (
-                <li
-                  key={index}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                >
-                  <button
-                    onClick={() => paginate(index + 1)}
-                    className="page-link mx-1"
-                  >
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
+                  <button onClick={() => paginate(index + 1)} className="page-link mx-1">
                     {index + 1}
                   </button>
                 </li>

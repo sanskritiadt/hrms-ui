@@ -166,8 +166,6 @@ function SearchEmpAssets() {
               </thead>
               <tbody className="body">
                 {asset.map((assets) => (
-                  // display a <div> element with the asset.id and other asset details
-                  // parent element needs to have a unique key
                   <tr key={assets.id}>
                     <td><Link to={`/EditAssets/${assets.id}`} className="Candidate-id">{assets.id}</Link></td>
                     <td>{assets.assetUser}</td>
