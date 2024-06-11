@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 const Capex = () => {
-    const token = localStorage.getItem("response-token");
+   // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [data, setData] = useState({
         date: "",
         expenseDetails: "",

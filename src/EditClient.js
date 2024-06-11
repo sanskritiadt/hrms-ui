@@ -4,9 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Hrmscss/App.css";
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
 function EditClient() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();

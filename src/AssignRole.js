@@ -3,10 +3,10 @@ import { TextField, MenuItem, Button, CircularProgress, Typography, Table, Table
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LoadingPage from "./LoadingPage"; 
-
+import { useSelector } from 'react-redux';
 
 const AssignRole = () => {
-  const [searchCriterion, setSearchCriterion] = useState("");
+  const [searchCriterion, setSearchCriterion] = useState("firstName");
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,8 @@ const AssignRole = () => {
   const [loadingg, setLoadingg] = useState(true);
 
   
-  const token = localStorage.getItem("response-token");
+  //const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     const fetchAllRoles = async () => {
@@ -49,10 +50,10 @@ const AssignRole = () => {
   };
 
   const handleSearch = async () => {
-    if (!searchCriterion || !searchValue) {
-      toast.error("Please select a search criteria and enter a search value.");
-      return;
-    }
+    // if (!searchCriterion || !searchValue) {
+    //   toast.error("Please select a search criteria and enter a search value.");
+    //   return;
+    // }
   
     setLoading(true);
     try {
@@ -143,8 +144,7 @@ const AssignRole = () => {
           variant="outlined"
           sx={{ width: '39vh', mr: 1 }}
         >
-          <MenuItem value="">Select Search Criterion</MenuItem>
-          <MenuItem value="firstName">First Name</MenuItem>
+          <MenuItem  value="firstName">First Name</MenuItem>
           <MenuItem value="lastName">Last Name</MenuItem>
           <MenuItem value="email">Email</MenuItem>
           <MenuItem value="mobileNo">Mobile Number</MenuItem>

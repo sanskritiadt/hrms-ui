@@ -3,9 +3,10 @@ import axios from "axios";
 import handleAuthError from "./CommonErrorHandling";
 import { toast } from "react-toastify";
 import LoadingPage from './LoadingPage'
-
+import { useSelector } from 'react-redux';
 export default function SaveGstinvoice() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     invoiceNumber: "",

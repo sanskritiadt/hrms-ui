@@ -3,10 +3,14 @@ import axios from 'axios'
 import {toast} from  'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 export default function EmpPersonalDetail() {
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    // const EmpId = localStorage.getItem("EmpID");
+    const  token = useSelector((state) => state.auth.token);
+    const  EmpId = useSelector((state) => state.auth.empId);
+  
     const [loading, setLoading] = useState(false);
-    const EmpId = localStorage.getItem("EmpID");
     const [data,setData] = useState({
         employeeId: '',
         dob: '',
@@ -67,7 +71,12 @@ export default function EmpPersonalDetail() {
           })
           .then((response) => {
            // console.log(response.data);
-            setData(response.data);
+           const Data = response.data;
+           // setData(response.data);
+            setData({
+              ...Data,
+              dob: Data.dob ? new Date(Data.dob).toISOString().split('T')[0] : '',
+            });
             setLoading(false); 
           })
           .catch((error) => {
@@ -99,7 +108,7 @@ export default function EmpPersonalDetail() {
                                     <div className="col-sm-10">
                                         <input value={data.dob || ''}
                                             onChange={e => setData({ ...data, dob: e.target.value })}
-                                            type="text" className="form-control"
+                                            type="date" className="form-control"
                                             id="projectName" />
                                     </div>   
                                 </div>

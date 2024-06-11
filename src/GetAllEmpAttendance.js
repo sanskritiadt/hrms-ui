@@ -3,10 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import LoadingPage from './LoadingPage';
-
+import { useSelector } from 'react-redux';
 const GetAllEmpAttendance = () => {
-  const token = localStorage.getItem('response-token');
-  const empid = localStorage.getItem('EmpID');
+  // const token = localStorage.getItem('response-token');
+  // const empid = localStorage.getItem('EmpID');
+  const  token = useSelector((state) => state.auth.token);
+  const  empid = useSelector((state) => state.auth.empId);
+
   const [getAttendence, setAttendence] = useState({
     fromDate: '',
     toDate: ''
@@ -44,7 +47,7 @@ const GetAllEmpAttendance = () => {
   const exportToExcel = () => {
     setLoading(true);
     axios({
-      url: '/apigateway/payroll/timeSheet/exporttoexcel',
+      url: `/apigateway/payroll/timeSheet/exporttoexcel?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`,
       method: 'GET',
       responseType: 'blob', 
       headers: {

@@ -3,9 +3,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import LoadingPage from './LoadingPage';
-
+import { useSelector } from 'react-redux';
 const CreateEmpAssets = () => {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     assetUser: "",

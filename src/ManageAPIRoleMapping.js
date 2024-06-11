@@ -23,6 +23,7 @@ import { styled } from "@mui/material/styles";
 import { Close as CloseIcon} from "@mui/icons-material";
 import { toast } from "react-toastify";
 import LoadingPage from "./LoadingPage";  
+import { useSelector } from 'react-redux';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -38,7 +39,8 @@ const TotalApiCount = ({ count }) => (
 );
 
 const ManageAPIRoleMapping = () => {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [open, setOpen] = useState(false);
   const [searchCriterion, setSearchCriterion] = useState("");
   const [loading, setLoading] = useState(false);

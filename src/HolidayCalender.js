@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Form, Button } from 'react-bootstrap';
+import { Container, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import LoadingPage from './LoadingPage'
-
+import { useSelector } from 'react-redux';
 function EditHolidayCalender() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  
   const [loading, setLoading] = useState(false);
   const [holiday, setHoliday] = useState([]);
-  const [searchId, setSearchId] = useState('');
-  const [searchedHoliday, setSearchedHoliday] = useState(null);
 
 
   useEffect(() => {
@@ -104,3 +104,4 @@ function EditHolidayCalender() {
 }
 
 export default EditHolidayCalender;
+

@@ -5,9 +5,10 @@ import { toast } from "react-toastify";
 import { Container, Table, Form, Button } from 'react-bootstrap';
 import './Hrmscss/App.css';
 import LoadingPage from './LoadingPage'
-
+import { useSelector } from 'react-redux';
 function SearchEmpAssets() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [searchAsset, setSearchAsset] = useState('');
   const [loading, setLoading] = useState(false);
   const [asset, setAsset] = useState([]);
@@ -36,9 +37,9 @@ function SearchEmpAssets() {
       });
   }
 
-  const [assetTypes, setAssetTypes] = useState([]); // State for asset types
-  const [selectedAssetType, setSelectedAssetType] = useState(''); // State for selected asset type
-  const [selectedAssetStatus, setSelectedAssetStatus] = useState(''); // State for selected asset status
+  const [assetTypes, setAssetTypes] = useState([]); 
+  const [selectedAssetType, setSelectedAssetType] = useState(''); 
+  const [selectedAssetStatus, setSelectedAssetStatus] = useState(''); 
 
 
   const handleSearchByTypeAndStatus = () => {
@@ -62,7 +63,6 @@ function SearchEmpAssets() {
   };
 
   const handleSearchByStatus = () => {
-    // Third API call: Search by asset status
     setLoading(true); 
     axios.get(`/apigateway/hrms/masterAsset/searchByStatus?query=${selectedAssetStatus}`, {
       headers: {

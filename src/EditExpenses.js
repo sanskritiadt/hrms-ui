@@ -2,11 +2,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 const EditExpenses = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         amount: "",

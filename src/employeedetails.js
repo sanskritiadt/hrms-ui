@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Form, Button } from "react-bootstrap";
 import LoadingPage from "./LoadingPage";
 import "./Hrmscss/App.css";
+import { useSelector } from 'react-redux';
 
 export default function Empfunc() {
   const [employees, setEmployees] = useState([]);
@@ -12,11 +13,12 @@ export default function Empfunc() {
   const [totalPages, setTotalPages] = useState(0);
   const [employeesPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
-  const [searchCriterion, setSearchCriterion] = useState("");
+  const [searchCriterion, setSearchCriterion] = useState("firstName");
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState(null);
 
-  const token = localStorage.getItem("response-token");
+  //const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
 
   const handleCriterionChange = (e) => {
     setSearchCriterion(e.target.value);
@@ -49,10 +51,10 @@ export default function Empfunc() {
   };
 
   const handleSearch = async () => {
-    if (!searchCriterion || !searchValue) {
-      toast.error("Please select a search criterion and enter a search value.");
-      return;
-    }
+    // if (!searchCriterion || !searchValue) {
+    //   toast.error("Please select a search criterion and enter a search value.");
+    //   return;
+    // }
 
     setLoading(true);
     try {
@@ -123,8 +125,7 @@ export default function Empfunc() {
                     marginBottom: 0,
                   }}
                 >
-                  <option value="">Select Search Criterion</option>
-                  <option value="firstName">First Name</option>
+                  <option  value="firstName" selected >First Name</option>
                   <option value="lastName">Last Name</option>
                   <option value="email">Email</option>
                   <option value="mobileNo">Mobile Number</option>

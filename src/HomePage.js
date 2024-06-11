@@ -14,7 +14,7 @@ function HomePage() {
       <Container fluid className="d-flex flex-column min-vh-100 ">
         <Row className="header-section bg-dark text-white py-3 mt-0">
           <Col className="text-center">
-            <h2 className="display-4">Welcome to the Human Resource Management System</h2>
+            <h6 className="display-4">Welcome to the Human Resource Management System</h6>
             <p className="lead">Manage your employees and resources with ease</p>
           </Col>
         </Row>

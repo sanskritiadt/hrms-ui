@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 const EditGstDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     invoiceNumber: "",

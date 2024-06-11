@@ -3,11 +3,15 @@ import axios from "axios";
 import {toast} from  'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 
 export default function EmpPayrollDetail() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  // const EmpId = localStorage.getItem("EmpID");
+  const  token = useSelector((state) => state.auth.token);
+  const  EmpId = useSelector((state) => state.auth.empId);
+
   const [loading, setLoading] = useState(false);
-  const EmpId = localStorage.getItem("EmpID");
   const [data, setData] = useState({
     empId: '',
     designation: '',

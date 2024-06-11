@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Tabs, Tab, Container, Box } from "@mui/material";
 import EmpPersonalDetail from "./EmpPersonalDetail";
 import EmpPayrollDetail from "./EmpPayrollDetails";

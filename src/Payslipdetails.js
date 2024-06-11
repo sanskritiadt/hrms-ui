@@ -4,10 +4,15 @@ import axios from 'axios';
 import './Hrmscss/PaySlip.css';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
+
 function PaySlip() {
-    const empID = localStorage.getItem("EmpID");
-    const token = localStorage.getItem("response-token");
+    // const empID = localStorage.getItem("EmpID");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
+    const  empID = useSelector((state) => state.auth.empId);
+  
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState();
 

@@ -6,12 +6,12 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import './Hrmscss/App.css';
-import handleAuthError from './CommonErrorHandling';
+import { Button } from "react-bootstrap";
 import LoadingPage from "./LoadingPage";
-
-
+import { useSelector } from 'react-redux';
 function ClientInfoTable() {
-    const token = localStorage.getItem("response-token")
+    // const token = localStorage.getItem("response-token")
+    const  token = useSelector((state) => state.auth.token);
     const [clientInfo, setClientInfo] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -49,25 +49,31 @@ function ClientInfoTable() {
                 <Table striped bordered hover className="custom-table">
                     <thead >
                         <tr>
-                            <th>Id</th>
+                            {/* <th>Id</th> */}
                             <th>Company Name</th>
                             <th>Address</th>
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Contact Person</th>
                             <th>GSTIN</th>
+                            <th>Edit</th>
                         </tr>
                     </thead>
                     <tbody>
                         {clientInfo.map(client => (
                             <tr key={client.id}>
-                                <td><Link className="Candidate-id" to={`/EditClient/${client.id}`}>{client.id}</Link></td>
+                                {/* <td><Link className="Candidate-id" to={`/EditClient/${client.id}`}>{client.id}</Link></td> */}
                                 <td>{client.companyName}</td>
                                 <td>{client.address}</td>
                                 <td>{client.phone}</td>
                                 <td>{client.email}</td>
                                 <td>{client.contactPerson}</td>
                                 <td>{client.gstin}</td>
+                                <td> <Link to={`/EditClient/${client.id}`}>
+                      <Button variant="outline-primary" type="button">
+                        Edit
+                      </Button>
+                    </Link></td>
                             </tr>
                         ))}
                     </tbody>

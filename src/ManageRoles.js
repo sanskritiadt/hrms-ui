@@ -22,7 +22,7 @@ import AssignRole from "./AssignRole";
 import ManageAPI from './ManageAPI';
 import ManageAPIRoleMapping from "./ManageAPIRoleMapping";
 import LoadingPage from "./LoadingPage"; 
-
+import { useSelector } from 'react-redux';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -34,7 +34,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function ManageRoles() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  
   const [open, setOpen] = useState(false);
   const [roles, setRoles] = useState([]);
   const [newRole, setNewRole] = useState("");

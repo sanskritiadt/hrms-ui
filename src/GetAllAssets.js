@@ -5,9 +5,10 @@ import { toast } from "react-toastify";
 import "./Hrmscss/App.css";
 import { Button } from "react-bootstrap";
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
 const GetAllAssets = () => {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
