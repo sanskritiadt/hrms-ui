@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingPage from './LoadingPage'
-
+import { useSelector } from 'react-redux';
 const TimeSheet = () => {
   const [checkindisable, setcheckinDisable] = useState(false);
   const [checkoutdisable, setcheckoutDisable] = useState(false);
@@ -11,9 +11,13 @@ const TimeSheet = () => {
   const [getDate, setNewDate] = useState([]);
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
-  const token = localStorage.getItem("response-token");
-  const empId = localStorage.getItem("EmpID");
   const [loading, setLoading] = useState(false);
+
+  // const token = localStorage.getItem("response-token");
+  // const empId = localStorage.getItem("EmpID");
+  const  token = useSelector((state) => state.auth.token);
+  const  empId = useSelector((state) => state.auth.empId);
+
 
   const [date, setDate] = useState({
     fromDate: "",

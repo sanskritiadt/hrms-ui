@@ -3,10 +3,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import handleAuthError from "./CommonErrorHandling";
 import { Link } from "react-router-dom";
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 const CreatePayslip = () => {
-  const token = localStorage.getItem("response-token");
-  const empId = localStorage.getItem("EmpID");
+  // const token = localStorage.getItem("response-token");
+  // const empId = localStorage.getItem("EmpID");
+  const  token = useSelector((state) => state.auth.token);
+  const  empId = useSelector((state) => state.auth.empId);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     empId: "",

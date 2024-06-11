@@ -8,9 +8,12 @@ import "./Hrmscss/App.css";
 import FileUpload from "./FileUpload";
 import LoadingPage from "./LoadingPage";
 import { toast } from "react-toastify";
-
+import { useSelector } from 'react-redux';
 function EmployeeSalary() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  // const  EmpId = useSelector((state) => state.auth.empId);
+
   const [loading, setLoading] = useState(false);
   const EmpID = localStorage.getItem("EmpID");
   const [clientInfo, setClientInfo] = useState([]);
@@ -18,9 +21,8 @@ function EmployeeSalary() {
   const [rowsPerPage] = useState(4);
   const [year, setYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [searchName, setSearchName] = useState(""); // Added state for search query
-  // Inside the EmployeeSalary component, add the following state
-  const [paySlipData, setPaySlipData] = useState(null);
+  const [searchName, setSearchName] = useState(""); 
+
 
   useEffect(() => {
     setLoading(true);

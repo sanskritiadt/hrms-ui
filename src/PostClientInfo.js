@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {toast } from 'react-toastify';
-import handleAuthError from './CommonErrorHandling';
+import { useSelector } from 'react-redux';
 import LoadingPage from './LoadingPage'
 
 export default function Saveclientinfo() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     Companyname: "",

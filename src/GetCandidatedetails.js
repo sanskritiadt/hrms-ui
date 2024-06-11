@@ -3,14 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import './Hrmscss/App.css'
 import {toast } from 'react-toastify';
+import { Button } from "react-bootstrap";
 import './Hrmscss/App.css';
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
 export default function CandidateDetails() {
 
     const [Candidates, setCandidate] = useState([]);
     const [loading, setLoading] = useState(true);
-    const token = localStorage.getItem("response-token")
+    // const token = localStorage.getItem("response-token")
+    const  token = useSelector((state) => state.auth.token);
 
     useEffect(() => {
         axios.get(`/apigateway/hrms/interviewCandidate/allInterviewCandidate`, {
@@ -44,7 +46,7 @@ export default function CandidateDetails() {
             <table border='2' className="table table-striped table-bordered">
                 <thead className="head">
                     <tr className="table-danger table-striped">
-                        <th>CandidateId</th>
+                        {/* <th>CandidateId</th> */}
                         <th>Candidate Name</th>
                         <th>Email Id</th>
                         <th>Contact No</th>
@@ -56,6 +58,7 @@ export default function CandidateDetails() {
                         <th>Last CTC</th>
                         <th>Notice Period</th>
                         <th>Dob</th>
+                        <th>Edit</th>
                     </tr>
                 </thead>
                 <tbody className="body">
@@ -64,7 +67,7 @@ export default function CandidateDetails() {
                         // display a <div> element with the employees.emailId and employees.designation
                         // parent element needs to have a unique key
                         <tr key={Candidate.candidateId}>
-                            <td><Link to={`/EditCandidate/${Candidate.candidateId}`} className="Candidate-id">{Candidate.candidateId}</Link></td>
+                            {/* <td><Link to={`/EditCandidate/${Candidate.candidateId}`} className="Candidate-id">{Candidate.candidateId}</Link></td> */}
                             <td>{Candidate.candidateName}</td>
                             <td>{Candidate.emailId}</td>
                             <td>{Candidate.contactNo}</td>
@@ -76,6 +79,11 @@ export default function CandidateDetails() {
                             <td>{Candidate.lastCTC}</td>
                             <td>{Candidate.noticePeriod}</td>
                             <td>{Candidate.dob}</td>
+                            <td><Link  to={`/EditCandidate/${Candidate.candidateId}`} >
+                      <Button variant="outline-primary" type="button">
+                        Edit
+                      </Button>
+                    </Link></td>
                         </tr>
                     ))}
                 </tbody>

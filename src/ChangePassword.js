@@ -3,12 +3,14 @@ import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Alert, Container } from 'react-bootstrap';
+import { Alert, Container } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import './Hrmscss/CP.css'
 import { toast } from 'react-toastify';
 import LoadingPage from './LoadingPage'
 const ChangepasswordForm = () => {
-    const token = localStorage.getItem("response-token")
+   // const token = localStorage.getItem("response-token")
+   const  token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
     const initialValues = {
         oldPassword: '',

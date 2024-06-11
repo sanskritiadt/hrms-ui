@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import LoadingPage from './LoadingPage'
 
 const Registerformik = () => {
-  const token = localStorage.getItem("response-token");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const initialValues = {

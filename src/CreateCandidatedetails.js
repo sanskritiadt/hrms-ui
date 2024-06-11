@@ -4,9 +4,11 @@ import { useFormik } from "formik";
 import { CandidateSchema } from "./Validations/Candidate";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 export default function InterviewCandidate() {
-  const token = localStorage.getItem("response-token");
+ // const token = localStorage.getItem("response-token");
+ const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {

@@ -4,9 +4,12 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Hrmscss/App.css";
 import LoadingPage from "./LoadingPage";
+import { useSelector } from 'react-redux';
+import { Button } from "react-bootstrap";
 
 const GetGstDetails = () => {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [Gst, setGst] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -100,6 +103,7 @@ const GetGstDetails = () => {
                   <th>STATUS</th>
                   <th>TDS CREDITED</th>
                   <th>TDS BALANCE</th>
+                  <th>EDIT</th>
                 </tr>
               </thead>
               <tbody className="body">
@@ -107,14 +111,7 @@ const GetGstDetails = () => {
                   <tr key={gst.id}>
                     <td>{gst.id}</td>
                     {/* <td>{gst.invoiceNumber}</td> */}
-                    <td>
-                      <Link
-                        to={`/EditGstDetails/${gst.invoiceNumber}`}
-                        className="Candidate-id"
-                      >
-                        {gst.invoiceNumber}
-                      </Link>
-                    </td>
+                    <td> {gst.invoiceNumber}</td>
                     <td>{gst.fy}</td>
                     <td>{gst.invoiceDate}</td>
                     <td>{gst.gstPeriod}</td>
@@ -132,6 +129,11 @@ const GetGstDetails = () => {
                     <td>{gst.status}</td>
                     <td>{gst.tdsCredited}</td>
                     <td>{gst.tdsBalance}</td>
+                    <td> <Link to={`/EditGstDetails/${gst.invoiceNumber}`}>
+                      <Button variant="outline-primary" type="button">
+                        Edit
+                      </Button>
+                    </Link></td>
                   </tr>
                 ))}
               </tbody>

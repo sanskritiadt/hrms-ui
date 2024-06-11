@@ -5,12 +5,13 @@ import { toast } from "react-toastify";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
 export default function PositionDetails() {
   const [loading, setLoading] = useState(true);
   const [positions, setPosition] = useState([]);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     axios

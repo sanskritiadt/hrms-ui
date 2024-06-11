@@ -4,8 +4,10 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom';
 import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 const EditProjectEngagement = () => {
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
     const { projectId } = useParams();
     const navigate = useNavigate();

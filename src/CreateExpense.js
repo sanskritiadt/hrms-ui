@@ -2,11 +2,12 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import handleAuthError from "./CommonErrorHandling";
 import { Link } from "react-router-dom";
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 const CreateExpense = () => {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     amount: "",
@@ -296,26 +297,7 @@ const CreateExpense = () => {
                       />
                     </div>
                   </div>
-                  <div className="row mb-3">
-                    <label
-                      htmlFor="inputPassword3"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Comments
-                    </label>
-                    <div className="col-sm-10">
-                      <input
-                        onChange={(e) => {
-                          handle(e);
-                        }}
-                        value={data.comments}
-                        type="text"
-                        className="form-control"
-                        placeholder="enter your comments"
-                        id="comments"
-                      />
-                    </div>
-                  </div>
+                 
                   <div className="row mb-3">
                     <label
                       htmlFor="inputPassword3"

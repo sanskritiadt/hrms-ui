@@ -145,96 +145,42 @@
 // }
 
 // export default Login;
-
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useState } from 'react';
-import * as Yup from 'yup';
-import { jwtDecode } from "jwt-decode";
-import { toast } from 'react-toastify';
-import LoadingPage from "./LoadingPage";
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from './Store/authSlice';
 import './Hrmscss/App.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { toast } from 'react-toastify';
+import LoadingPage from './LoadingPage';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [logincheck, setlogincheck] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkTokenExpiration = () => {
-      const token = localStorage.getItem('response-token');
-      if (token) {
-        const decoded = jwtDecode(token);
-        const currentTime = Date.now() / 1000;
-        if (decoded.exp < currentTime) {
-          handleLogout();
-        }
-      }
-    };
-    const interval = setInterval(checkTokenExpiration, 60000); 
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('response-token');
-    localStorage.removeItem('refresh-token');
-    localStorage.removeItem('EmpID');
-    toast.info('Session expired. Please log in again.', { position: "top-center", theme: "colored" });
-    navigate('/login');
-  };
+  const { loading, error } = useSelector((state) => state.auth);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleSubmit = (values) => {
-    setlogincheck(true);
-    setLoading(true);
-    axios
-      .post(`/apigateway/api/auth/login`, {
-        email: values.email,
-        password: values.password,
-        deviceInfo: {
-          deviceId: 'D1',
-          deviceType: 'DEVICE_TYPE_ANDROID',
-        },
-      })
-      .then((response) => {
-        const token = response.data.jwtAuthenticationResponse.accessToken;
-        const decoded = jwtDecode(token);
-        const expirationTime = decoded.exp * 1000 - Date.now();
-          // console.log(decoded);
-        localStorage.setItem('response-token', token);
-        localStorage.setItem('refresh-token', response.data.jwtAuthenticationResponse.refreshToken);
-        localStorage.setItem('EmpID', response.data.employeeId);
-        toast.success('Login successful.', { position: "top-center", theme: "colored" });
+    dispatch(login(values)).unwrap()
+      .then(() => {
+        toast.success('Login Successful.', { position: "top-center", theme: "colored" });
         navigate('/');
-        window.location.reload();
+       // window.location.reload();
       })
       .catch((error) => {
-        console.log(error);
-        if (error.response) {
-          if (error.response.status === 417) {
-            setlogincheck(false);
-            toast.error("Bad credentials. Please try again.", { position: "top-center", theme: "colored" });
-          } else if(error.response.status === 500) {
-            toast.error("Internal Server Error, Please try again.", { position: "top-center", theme: "colored" });
-          }
-        }
-      })
-      .finally(() => {
-        setlogincheck(false);
-        setLoading(false);
+        toast.error(error, { position: "top-center", theme: "colored" });
       });
   };
 
   return (
-    <div className=' d-flex justify-content-center align-items-center ' style={{height:'100vh'}}>
-      {loading && <LoadingPage />}
+    <div className='d-flex justify-content-center align-items-center' style={{ height: '100vh' }}>
+      {loading ? <LoadingPage /> : ''}
       <div className='border-0 shadow' style={{ width: "550px", height: '420px', borderRadius: '50px' }}>
         <div className='card-body'>
           <svg className='bi bi-align-center mt-4' id='svgimg' xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" viewBox="0 0 16 16">
@@ -246,7 +192,7 @@ const Login = () => {
             initialValues={{ email: '', password: '' }}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, values }) => (
+            {({ values }) => (
               <Form>
                 <Field
                   type="email"
@@ -281,8 +227,8 @@ const Login = () => {
                 <div className="text-center mt-3">
                   <button
                     type='submit'
-                    className=" btn btn-outline-success py-2 px-4 "
-                    disabled={logincheck || !values.email || !values.password}
+                    className="btn btn-outline-success py-2 px-4"
+                    disabled={loading || !values.email || !values.password}
                   >
                     Login
                   </button>
@@ -302,17 +248,5 @@ const Login = () => {
 }
 
 export default Login;
-
-
-
-
-
-
-
-
-
-
-
-
 
 

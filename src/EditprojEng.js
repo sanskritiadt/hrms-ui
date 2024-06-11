@@ -2,10 +2,11 @@ import React ,{useState,useEffect}from 'react'
 import axios from 'axios'
 import {toast} from  'react-toastify';
 import { useParams,useNavigate } from 'react-router-dom';
-import handleAuthError from './CommonErrorHandling';
-import LoadingPage from './LoadingPage'
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 const EditprojEng = () => {
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
     const { id } = useParams();
     const navigate = useNavigate()
@@ -63,6 +64,9 @@ function HandleSubmit(e){
     })
 }
 function HandleDelete(){
+    if (!window.confirm("Are you sure you want to delete this Project?")) {
+        return;
+      }
     setLoading(true);
     axios.delete(`/apigateway/hrms/engagement/DeleteProjectEngagement/${id}`,{
         headers: {
@@ -111,6 +115,17 @@ function HandleDelete(){
                                             type="text"
                                             id="projectDescription"
                                          placeholder='enter Project Description'
+                                            className="form-control" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='emailId'>Engaged Employee</label>
+                                    <div className="col-sm-10">
+                                        <input value={data.engagedEmployee || ''}
+                                            onChange={e => setData({ ...data, engagedEmployee: e.target.value })}
+                                            type="text"
+                                            id="engagedEmployee"
+                                         placeholder='enter Engaged Employee'
                                             className="form-control" />
                                     </div>
                                 </div>

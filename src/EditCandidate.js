@@ -4,11 +4,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import LoadingPage from './LoadingPage'
-
+import { useSelector } from 'react-redux';
+import "./Hrmscss/App.css";
 const EditCandidate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         candidateName: "",
@@ -72,6 +74,10 @@ const EditCandidate = () => {
         })
     }
     function HandleDelete() {
+        if (!window.confirm("Are you sure you want to delete this candidate?")) {
+            return;
+          }
+          
         axios.delete(`/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -92,8 +98,8 @@ const EditCandidate = () => {
         <div className='container pt-3'>
              {loading ? <LoadingPage/> : ''}
             <div className='row'>
-                <div className='col-lg-8 col-md-10 mx-auto'>
-                    <div className='card border-0 shadow'>
+                <div className='col-md-8 mx-auto'>
+                    <div className='card border-0 shadow'  style={{ width: "700px", height: "1050px" }}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={HandleSubmit}>
                                 <div className="row mb-3">

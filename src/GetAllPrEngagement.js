@@ -2,13 +2,15 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { Button } from "react-bootstrap";
 import './Hrmscss/App.css';
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
 function GetAllPrEngagement() {
     const [project , setProject ] = useState([]);
     const [loading, setLoading] = useState(true);
-    const token = localStorage.getItem("response-token")
+    // const token = localStorage.getItem("response-token")
+    const  token = useSelector((state) => state.auth.token);
     React.useEffect(() => {
       axios.get(`/apigateway/hrms/engagement/allProjectEngagement`, {
          headers: {
@@ -44,25 +46,31 @@ function GetAllPrEngagement() {
       
           <thead className="head">
             <tr className="table-danger table-striped">
-              <th>Project Id</th>
+              {/* <th>Project Id</th> */}
               <th>Project Name</th>
               <th>Project Description</th>
               <th>Engaged Employee</th>
               <th>Start Date </th>
               <th>End Date</th>
               <th>Status</th>
+              <th>Edit</th>
             </tr>
           </thead>
           <tbody className="body">
             {project.map((project ) => (
               <tr key={project.projectId}>
-                <td><Link to={`/EditprojEng/${project.projectId}`} className="Candidate-id">{project.projectId}</Link></td>
+                {/* <td><Link to={`/EditprojEng/${project.projectId}`} className="Candidate-id">{project.projectId}</Link></td> */}
                 <td>{project.projectName}</td>
                 <td>{project.projectDescription}</td>
                 <td>{project.engagedEmployee}</td>
                 <td>{project.startDate}</td>
                 <td>{project.endDate}</td>
                 <td>{String(project.status)}</td>
+                <td> <Link to={`/EditprojEng/${project.projectId}`} >
+                      <Button variant="outline-primary" type="button">
+                        Edit
+                      </Button>
+                    </Link></td>
               </tr>
             ))}
           </tbody>

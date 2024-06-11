@@ -20,10 +20,12 @@ import {
 import { toast } from "react-toastify";
 import LoadingPage from "./LoadingPage";
 import { useParams } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const UpdateEmpDocumentByAdmin = () => {
     const { id } = useParams();
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [documents, setDocuments] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [documentTypes, setDocumentTypes] = useState([]);

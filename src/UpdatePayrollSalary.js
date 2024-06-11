@@ -5,7 +5,7 @@ import UpdateEmpDocumentByAdmin from "./UpdateEmpDocumentByAdmin";
 import { useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
 const UpdatePayrollSalary = () => {
   const [activeTab, setActiveTab] = useState("one");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -29,7 +29,8 @@ const UpdatePayrollSalary = () => {
     medicalInsurance: "",
   });
   const { id } = useParams();
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
 
   const baseURL = "/apigateway/payroll";
 

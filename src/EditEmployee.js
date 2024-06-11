@@ -6,25 +6,13 @@ import { toast } from "react-toastify";
 
 import LoadingPage from './LoadingPage'
 
-//   {
-//     "employeeId": 19,
-//     "updatedAt": "2024-04-04T14:58:27.225Z",
-//     "isActive": true,
-//     "dob": "08/05/1992",
-//     "email": "ajaymishra.adt@gmail.com",
-//     "firstName": "Ajay",
-//     "gender": "Male",
-//     "isEmailVerified": true,
-//     "lastName": "Mishra",
-//     "maritalStatus": "Married",
-//     "mobileNo": 8975663255,
-//     "userName": "ajaymishra"
-// }
+import { useSelector } from 'react-redux';
 
 const EditEmployee = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     employeeId: "",

@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import LoadingPage from './LoadingPage'
 import { toast } from 'react-toastify';
-
+import { useSelector } from 'react-redux';
 function FileUpload() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
 

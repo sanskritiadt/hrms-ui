@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
 const PriorTimeRow = ({ data, onUpdate }) => {
   const [checkIn, setCheckIn] = useState(data.checkIn);
   const [checkOut, setCheckOut] = useState(data.checkOut);
@@ -60,9 +60,11 @@ const PriorTimeRow = ({ data, onUpdate }) => {
 };
 
 export default function PriorTimeAdj() {
+  const  token = useSelector((state) => state.auth.token);
+  const  empId = useSelector((state) => state.auth.empId);
+  // const token = localStorage.getItem("response-token");
+  // const empId = localStorage.getItem("EmpID");
   const [priorData, setPriorData] = useState([]);
-  const token = localStorage.getItem("response-token");
-  const empId = localStorage.getItem("EmpID");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [loading, setLoading] = useState(true);

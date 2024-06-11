@@ -3,10 +3,13 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import LoadingPage from './LoadingPage'
-
+import { useSelector } from 'react-redux';
 const EmployeeExpense = () => {
-  const empId = localStorage.getItem("EmpID");
-  const token = localStorage.getItem("response-token");
+  // const empId = localStorage.getItem("EmpID");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  const  empId = useSelector((state) => state.auth.empId);
+
   const [loading, setLoading] = useState(false);
   const [expense, setExpense] = useState({
     expenseDescription: "",

@@ -4,12 +4,15 @@ import './Hrmscss/App.css'
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import LoadingPage from "./LoadingPage";
-
+import { useSelector } from 'react-redux';
+import { Button } from "react-bootstrap";
 export default function Getinterviewdetails() {
     const [positions, setPosition] = useState([]);
     const [loading, setLoading] = useState(true);
+    // const token = localStorage.getItem("response-token")
+    const  token = useSelector((state) => state.auth.token);
+
     
-    const token = localStorage.getItem("response-token")
     useEffect(() => {
         axios.get("/apigateway/hrms/interview/getAllInterviewDetails", {
             headers: {
@@ -62,6 +65,7 @@ export default function Getinterviewdetails() {
                         <th>CLIENT NAME</th>
                         <th>DATE</th>
                         <th>STATUS</th>
+                        <th>EDIT</th>
                     </tr>
                 </thead>
                 <tbody className="body">
@@ -70,9 +74,8 @@ export default function Getinterviewdetails() {
                         // display a <div> element with the employees.emailId and employees.designation
                         // parent element needs to have a unique key
                         <tr key={position.interviewId}>
-                            <td><Link to={`/EditInterviewDetails/${position.interviewId}/${position.rounds}`} className="Candidate-id">{position.interviewId}</Link></td>
-                            <td><Link to={`/EditInterviewDetails/${position.interviewId}/${position.rounds}`} className="Candidate-id">{position.rounds}
-                            </Link></td>
+                            <td>{position.interviewId}</td>
+                            <td>{position.rounds}</td>
                             <td>{position.tech_id.description}</td>
                             <td>{position.position_id.positionName}</td>
                             <td>{position.candidate_id.candidateName}</td>
@@ -89,6 +92,11 @@ export default function Getinterviewdetails() {
                             <td>{position.clientName}</td>
                             <td>{position.date}</td>
                             <td>{position.status}</td>
+                            <td> <Link to={`/EditInterviewDetails/${position.interviewId}/${position.rounds}`}>
+                      <Button variant="outline-primary" type="button">
+                        Edit
+                      </Button>
+                    </Link></td>
                         </tr>
                     ))}
                 </tbody>
