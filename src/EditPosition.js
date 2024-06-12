@@ -83,7 +83,7 @@ const EditPosition = () => {
     setLoading(true);
     axios
       .put(
-        `/apigateway/hrms/interview/updatePositionNew/${id}`,
+        `/apigateway/hrms/interview/updatePositionNew`,
         {
           ...data,
           techStack: selectedValue.map(option => option.value)  

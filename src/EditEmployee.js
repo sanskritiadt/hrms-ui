@@ -68,7 +68,7 @@ const EditEmployee = () => {
     };
    
     axios
-      .put(`/apigateway/hrms/employee/updateEmp`, body, {
+      .put(`/apigateway/hrms/employee/updateEmpById`, body, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
