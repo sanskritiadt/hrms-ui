@@ -89,7 +89,7 @@ const CreateEmpAssets = () => {
               <a href="">Employee Management</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Employee Position
+              Employee Asset
             </li>
           </ol>
         </nav>

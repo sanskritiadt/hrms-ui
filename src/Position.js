@@ -94,7 +94,7 @@ export default function PositionDetails() {
               {positions.map((position) => (
                 // display a <div> element with the employees.emailId and employees.designation
                 // parent element needs to have a unique key
-                <tr key={position.uiid}>
+                <tr key={position.positionId}>
                   <td>{position.positionName}</td>
                   <td>{position.techStack.join(",")}</td>
                   <td>{position.vacancy}</td>
@@ -105,7 +105,7 @@ export default function PositionDetails() {
                   <td>{String(position.remote)}</td>
                   <td>{position.positionType}</td>
                   <th>
-                    <Link to={`/EditPosition/${position.uiid}`}>
+                    <Link to={`/EditPosition/${position.positionId}`}>
                       <Button variant="outline-primary" type="button">
                         Edit
                       </Button>
