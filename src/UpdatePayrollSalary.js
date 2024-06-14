@@ -487,7 +487,7 @@ const UpdatePayrollSalary = () => {
   const { id } = useParams();
   const token = useSelector((state) => state.auth.token);
 
-  const baseURL = "/payroll";
+  const baseURL = "/apigateway/payroll";
 
   useEffect(() => {
     const handleResize = () => {
