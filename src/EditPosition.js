@@ -100,7 +100,7 @@ const EditPosition = () => {
           theme: 'colored'
         });
         console.log(response.data);
-        navigate('/Getclientinfo');
+        navigate('/positiondetails');
         setLoading(false);
       })
       .catch((error) => {

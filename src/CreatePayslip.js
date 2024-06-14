@@ -72,7 +72,7 @@ const CreatePayslip = () => {
         })
         .catch((error) => {
           console.log(error);
-          toast.error(error.response.data.message || 'Error creating salary details.');
+          toast.error( error.response.data.message || "Error saving details." );
           setLoading(false); 
         });
     
