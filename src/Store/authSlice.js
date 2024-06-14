@@ -93,7 +93,8 @@ const authSlice = createSlice({
     permissions: [],
     loading: false,
     error: null,
-    name:null
+    name:null,
+    roles:[]
   },
   reducers: {
     logout: (state) => {
@@ -116,7 +117,7 @@ const authSlice = createSlice({
         state.empId = action.payload.employeeId;
         state.permissions = [];
         state.name=action.payload.employeeName
-
+         state.roles = action.payload.roles.map(role =>  role.role, );
         // Iterate through each role and add its permissions to the state
         action.payload.apiNameResponse.forEach(role => {
             state.permissions = [...state.permissions, ...role.permission];

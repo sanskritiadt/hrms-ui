@@ -65,7 +65,7 @@ function EditHolidayCalender() {
     <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
         <li className="breadcrumb-item"><a href="">Employee Services</a></li>
-        <li className="breadcrumb-item active" aria-current="page">Holiday Calender </li>
+        <li className="breadcrumb-item active" aria-current="page">Holiday Calendar</li>
     </ol>
 </nav>
     <div style={{ margin: '100px 100px', height: '562px' }}>
