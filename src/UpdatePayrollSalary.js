@@ -606,6 +606,7 @@ const UpdatePayrollSalary = () => {
                           <div className="col-sm-10">
                             <input
                               value={data.salary || ""}
+                              onChange={handleInputChange}
                               type="text"
                               className="form-control"
                               id="salary"
