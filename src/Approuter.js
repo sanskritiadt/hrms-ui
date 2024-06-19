@@ -306,6 +306,7 @@ const Approuter = () => {
               <Route path="/UpdatePayrollSalary/:id" element={<UpdatePayrollSalary />} />
               <Route path="/ManageRoles" element={<ManageRoles />} />
               <Route path="/EditPosition/:id" element={<EditPosition />} />
+              <Route path="/RegisterUser" element={<RegisterUser />} />
             </Routes>
           </SideBar>
         </div>
@@ -317,7 +318,7 @@ const Approuter = () => {
       )}
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/RegisterUser" element={<RegisterUser />} />
+        {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
       </Routes>
       {!isLoggedIn && <Footer />}

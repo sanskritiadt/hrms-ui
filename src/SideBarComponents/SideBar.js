@@ -32,65 +32,65 @@ const routes = [
     icon: <FaUserAlt />,
     subRoutes: [
       {
-        path: "/empfunc",
-        name: "Employee Details",
+        path: "/RegisterUser",
+        name: "Add Employee",
         icon: <FaUserAlt />,
       },
       {
-        path: "/positiondetails",
-        name: " Employee Position",
-        icon: <FaBriefcase />,
+        path: "/empfunc",
+        name: "View Employee Details",
+        icon: <FaUserAlt />,
       },
       {
         path: "/GetAllEmpAttendance",
-        name: "Employee Attendence",
+        name: "View Employee Attendence",
         icon: <FaClock />,
       },
       {
-        path: "/GetAllAssets",
-        name: "Employee Assets",
-        icon: <AiOutlineLaptop />,
-      },
-      {
         path: "/CreateEmpAssets",
-        name: "Create Employee Asset",
+        name: "Add Employee Asset",
         icon: <FaLaptopMedical />,
       },
       {
+        path: "/GetAllAssets",
+        name: "View Employee Assets",
+        icon: <AiOutlineLaptop />,
+      },
+      {
         path: "/SearchEmpAssets",
-        name: "Search  Employee Asset",
+        name: "Search Employee Asset",
         icon: <FaLaptopMedical />,
       }
     ],
   },
   {
     path: "/",
-    name: "Expense",
+    name: "Expense Management",
     icon: <FaDollarSign />,
     subRoutes: [
       {
         path: "/Capex",
-        name: "Create Capital Expense  ",
+        name: "Add Capital Expense",
         icon:  <FaList />,
       },
       {
-        path: "/Getallexpenses",
-        name: "Get Expense Details",
-        icon: <FaLock />,
-      },
-      {
         path: "/createExpense",
-        name: "Create Expense ",
+        name: "Add Expense",
         icon: <FaReceipt />,
       },
       {
+        path: "/Getallexpenses",
+        name: "View Expense",
+        icon: <FaLock />,
+      },
+      {
         path: "/Gstinvoice",
-        name: "GST  Invoice",
+        name: "Add GST Invoice",
         icon: <FaReceipt />,
       },
       {
         path: "/GetGstDetails",
-        name: "Gst Details",
+        name: "View GST Invoice",
         icon: <FaList />,
       },
     ],
@@ -101,27 +101,26 @@ const routes = [
     icon: <FaHandshake />,
     subRoutes: [
       {
-        path: "/Getclientinfo",
-        name: "Get Client Info ",
-        icon: <FaInfoCircle />,
-      },
-      {
         path: "/createClientformik",
-        name: "Create Client",
+        name: "Add Client Info",
         icon: <FaUserPlus />,
       },
       {
-        path: "/GetAllPrEngagement",
-        name: "Project Engagement",
-        icon: <FaHandshake />,
-      }, {
+        path: "/Getclientinfo",
+        name: "View Client Info ",
+        icon: <FaInfoCircle />,
+      },
+      {
         path: "/CreateProjEng",
-        name: " Create Project Engagement",
+        name: "Add Project Engagement",
         icon: <MdCreateNewFolder />,
-      }
-    
-    
-    ],
+      },
+      {
+        path: "/GetAllPrEngagement",
+        name: "View Project Engagement",
+        icon: <FaHandshake />,
+      }, 
+      ],
   },
   {
     path: "/",
@@ -129,30 +128,30 @@ const routes = [
     icon: <FaUserPlus />,
     subRoutes: [
       {
+        path: "/CreatePayslip",
+        name: "Add Salary Details",
+        icon: <FaFileInvoice />,
+      },
+      {
         path: "/payslip",
         name: "View Payslip ",
         icon: <FaFileInvoice />,
       },
       {
-        path: "/CreatePayslip",
-        name: "Save Salary",
-        icon: <FaFileInvoice />,
-      },
-      {
         path: "/EmployeeSalary",
-        name: "Employee Salary ",
-        icon: <FaFileInvoice />,
-      },
-      {
-        path: "/HolidayCalender",
-        name: "Holiday Calender ",
+        name: "Employee Salary",
         icon: <FaFileInvoice />,
       },
       {
         path: "/EditHolidayCalender",
         name: "Add Holiday ",
         icon: <FaFileInvoice />,
-      }
+      },
+      {
+        path: "/HolidayCalender",
+        name: "View Holiday",
+        icon: <FaFileInvoice />,
+      },
     ],
   },
   {
@@ -163,28 +162,33 @@ const routes = [
     subRoutes: [
       {
         path: "/createposition",
-        name: "Create Position ",
+        name: "Add Position ",
         icon: <FaClipboardList />,
       },
       {
+        path: "/positiondetails",
+        name: " View Position",
+        icon: <FaBriefcase />,
+      },
+      {
+        path: "/createCandidate",
+        name: "Add Candidate Details",
+        icon:  <FaUserPlus />,
+      },
+      {
+        path: "/getcandidate",
+        name: "View Candidate Details ",
+        icon: <FaUser />,
+      },
+      {
         path: "/createinterview",
-        name: "Create Interview",
+        name: "Add Interview Details",
         icon: <FaPlus />,
       },
       {
         path: "/getinterviewdetails",
-        name: "Get Interview Details",
+        name: "View Interview Details",
         icon: <FaList />,
-      },
-      {
-        path: "/getcandidate",
-        name: "Get Candidate Details ",
-        icon: <FaUser />,
-      },
-      {
-        path: "/createCandidate",
-        name: "Create Candidate Details",
-        icon:  <FaUserPlus />,
       },
     ],
   },
