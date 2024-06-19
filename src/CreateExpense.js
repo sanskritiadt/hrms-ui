@@ -2,10 +2,13 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import handleAuthError from "./CommonErrorHandling";
 import { Link } from "react-router-dom";
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 const CreateExpense = () => {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     amount: "",
     description: "",
@@ -20,6 +23,7 @@ const CreateExpense = () => {
 
   function submit(e) {
     e.preventDefault();
+    setLoading(true); 
     axios
       .post(
         `/apigateway/expensemanagement/createExpenses`,
@@ -41,16 +45,19 @@ const CreateExpense = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
+      //  console.log(response.data);
         toast.success("Expense data created successfully!!", {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
-        handleAuthError(error);
-        // toast.error("error occured try after sometime.", { position: 'top-center', theme: "colored" })
+        toast.error(
+          error.response.data.message || "Error creating expense data"
+        );
+        setLoading(false); 
       });
   }
   var str2bool = (value) => {
@@ -71,27 +78,16 @@ const CreateExpense = () => {
     setData(newdata);
     console.log(newdata);
   }
-  // {
-  //     "amount" : 9000,
-  //     "description" : "Char",
-  //     "paymentMode" : "PhonePay",
-  //     "paymentDate" : "2023-02-15",
-  //     "createdBy" : "Nisha",
-  //     "category" : "Office",
-  //     "gst" : true,
-  //     "paidBy" : "NS",
-  //     "comments" : "decortion"
-  // }
   return (
     <div  className=" mt-3">
-      <div>
+      <div> {loading ? <LoadingPage/> : ''}
         <nav aria-label="breadcrumb"style={{ "--bs-breadcrumb-divider": "'>>'" }}>
           <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
             <li className="breadcrumb-item">
               <Link to="/">Home</Link>{" "}
             </li>
             <li className="breadcrumb-item">
-              <a href="">Expense</a>
+            <Link to="">Expense</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Create Expense
@@ -105,7 +101,7 @@ const CreateExpense = () => {
           <div className="col-md-8 mx-auto">
             <div
               className="card border-0 shadow"
-              style={{ marginLeft: "100px", width: "700px", height: "750PX" }}
+              style={{ marginLeft: "100px", width: "700px", height: "850PX" }}
             >
               <div className="card-body">
                 <form
@@ -301,26 +297,7 @@ const CreateExpense = () => {
                       />
                     </div>
                   </div>
-                  <div className="row mb-3">
-                    <label
-                      htmlFor="inputPassword3"
-                      className="col-sm-2 col-form-label"
-                    >
-                      Comments
-                    </label>
-                    <div className="col-sm-10">
-                      <input
-                        onChange={(e) => {
-                          handle(e);
-                        }}
-                        value={data.comments}
-                        type="text"
-                        className="form-control"
-                        placeholder="enter your comments"
-                        id="comments"
-                      />
-                    </div>
-                  </div>
+                 
                   <div className="row mb-3">
                     <label
                       htmlFor="inputPassword3"

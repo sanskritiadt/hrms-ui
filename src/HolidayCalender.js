@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Table, Form, Button } from 'react-bootstrap';
+import { Container, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-
-
+import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 function EditHolidayCalender() {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  
+  const [loading, setLoading] = useState(false);
   const [holiday, setHoliday] = useState([]);
-  const [searchId, setSearchId] = useState('');
-  const [searchedHoliday, setSearchedHoliday] = useState(null);
 
 
   useEffect(() => {
@@ -17,45 +18,24 @@ function EditHolidayCalender() {
   }, []);
 
   const fetchHolidayData = () => {
+    setLoading(true); 
     axios.get("/apigateway/hrms/holiday/getHolidayCalendar", {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     }).then((response) => {
-      console.log(response.data);
-      console.log(token)
       setHoliday(response.data);
-     // toast.success("Data found successfully!", { position: "top-center", theme: 'colored' });
+      setLoading(false); 
     }).catch(error => {
       console.log(error);
-      toast.error("Error occurred, please try again later.", { position: "top-center", theme: 'colored' });
+      toast.error( error.response.data.message || "Error fetching details" );
+      setLoading(false); 
     });
   };
 
-  // const handlePdf = () => {
-  //   axios.get(`/hrms/holiday/downloadHolidayCalendar`, {
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`
-  //     }
-  //   }).then((response) => {
-  //     console.log(response.data)
-  //     var pdf = response.data;
-  //     var url = `data:application/pdf;base64${pdf}`;
-  //     // Open the PDF in a new tab
-  //     var newTab = window.open(url, "_blank");
-  //     toast.success('Holiday calender generated successfully.', {
-  //       position: 'top-center',
-  //       theme: 'colored',
-  //     })
-  //   }).catch((error) => {
-  //     console.log(error)
-  //     toast.error('Error occured try after sometime.', {
-  //       position: 'top-center',
-  //       theme: 'colored',
-  //     })
-  //   })
-  // }
+
   const handlePdf = () => {
+    setLoading(true); 
     axios.get(`/apigateway/hrms/holiday/downloadHolidayCalendar`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -65,28 +45,27 @@ function EditHolidayCalender() {
       const pdfData = new Uint8Array(response.data);
       const blob = new Blob([pdfData], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
-      
-      // Open the PDF in a new tab
       var newTab = window.open(url, "_blank");
       
       toast.success('Holiday calendar generated successfully.', {
         position: 'top-center',
         theme: 'colored',
       });
+      setLoading(false); 
     }).catch((error) => {
       console.log(error);
-      toast.error('Error occurred, please try again later.', {
-        position: 'top-center',
-        theme: 'colored',
-      });
+      toast.error( error.response.data.message || "Error updating details" );
+      setLoading(false); 
     });
   };
   return (
-    <div  className="mt-3"><nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+    <div  className="mt-3">
+          {loading ? <LoadingPage/> : ''}
+      <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
     <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-        <li className="breadcrumb-item"><a href="">Employee Services</a></li>
-        <li className="breadcrumb-item active" aria-current="page">Holiday Calender </li>
+        <li className="breadcrumb-item"><Link to="">Employee Services</Link></li>
+        <li className="breadcrumb-item active" aria-current="page">Holiday Calendar</li>
     </ol>
 </nav>
     <div style={{ margin: '100px 100px', height: '562px' }}>
@@ -125,3 +104,4 @@ function EditHolidayCalender() {
 }
 
 export default EditHolidayCalender;
+

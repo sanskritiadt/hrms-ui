@@ -1,14 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Alert, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingPage from './LoadingPage'
 
 const Registerformik = () => {
-  const token = localStorage.getItem("response-token");
-  // const empId = localStorage.getItem("EmpID");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const initialValues = {
     email: "",
@@ -18,6 +18,7 @@ const Registerformik = () => {
   };
 
   const handleSubmit = (values, { setStatus, resetForm }) => {
+    setLoading(true); 
     axios
       .post("/apigateway/api/auth/register", {
         email: values.email,
@@ -38,13 +39,12 @@ const Registerformik = () => {
           theme: "colored",
         });
         navigate("/Login");
+        setLoading(false);
       })
       .catch((errors) => {
         console.log(errors);
-        toast.error("Cannot register try after sometime", {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error(errors.response.data.message || "Error updating details" );
+        setLoading(false);
       });
   };
 
@@ -53,12 +53,14 @@ const Registerformik = () => {
       .email("Invalid email address")
       .required("Email is required"),
     username: Yup.string().required("Username is required."),
-    password: Yup.string()
-      .required("Password is required.")
-      .min(8, "Password must be at least 8 characters long."),
+    password:  Yup.string().required('New password is required.')
+    .min(8, 'New password must be at least 8 characters long.')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+        'password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.')
   });
   return (
     <Container>
+        {loading ? <LoadingPage/> : ''}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

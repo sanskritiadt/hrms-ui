@@ -4,9 +4,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import handleAuthError from "./CommonErrorHandling";
 import { Link } from "react-router-dom";
+import LoadingPage from './LoadingPage';
+import { useSelector } from 'react-redux';
 
 const CreateInterview = () => {
-  const token = localStorage.getItem("response-token");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     interviewId: "",
     tech_id: "",
@@ -32,27 +36,9 @@ const CreateInterview = () => {
   const [technology, setTechnology] = useState([]);
   const [position, setPosition] = useState([]);
   const [candidate, setCandidate] = useState([]);
-
-  // "interviewId":3,
-  // "rounds":2,
-  // "candidate_id":123,
-  // "tech_id":1,
-  // "position_id":1,
-  // "marks":40,
-  // "communication":10,
-  // "enthusiasm":10,
-  // "notes":"good",
-  // "offerReleased":true,
-  // "workExInYears":3.5,
-  // "interviewerName":"Siddharth",
-  // "source":"LinkedIn",
-  // "offerAccepted":true,
-  // "type":"Inbound",
-  // "date":"2007-12-03",
-  // "clientName":"seuwehuyg",
-  // "status":"Accepted"
-
+  
   useEffect(() => {
+
     axios
       .get(`/apigateway/hrms/interview/alltech`, {
         headers: {
@@ -65,6 +51,9 @@ const CreateInterview = () => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(
+          error.response.data.message
+        );
       });
     axios
       .get(`/apigateway/hrms/interviewCandidate/allInterviewCandidate`, {
@@ -78,7 +67,11 @@ const CreateInterview = () => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(
+          error.response.data.message
+        );
       });
+    
     axios
       .get(`/apigateway/hrms/interview/getAllPositionNew`, {
         headers: {
@@ -91,13 +84,16 @@ const CreateInterview = () => {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.response.data.message);
       });
+
   }, []);
-  console.log(technology);
-  console.log(candidate);
-  console.log(position);
+//  console.log(technology);
+ // console.log(candidate);
+  //console.log(position);
   function submit(e) {
     e.preventDefault();
+    setLoading(true); 
     axios
       .post(
         `/apigateway/hrms/interview/saveInterviewNew`,
@@ -133,14 +129,15 @@ const CreateInterview = () => {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
-        handleAuthError(error);
-        // toast.error(error.response.data, { position: 'top-center', theme: "colored" })
+        toast.error( error.response.data.message);
+        setLoading(false); 
       });
   }
   var str2bool = (value) => {
@@ -152,24 +149,12 @@ const CreateInterview = () => {
   };
   function radiobutton1(e) {
     console.log(str2bool(e.target.value));
-    // Here we can send the data to further processing (Action/Store/Rest)
     data.offerReleased = str2bool(e.target.value);
   }
   function radiobutton2(e) {
     console.log(str2bool(e.target.value));
-    // Here we can send the data to further processing (Action/Store/Rest)
     data.offerAccepted = str2bool(e.target.value);
   }
-  // function radiobutton3(e) {
-  //     console.log(str2bool(e.target.value));
-  //     // Here we can send the data to further processing (Action/Store/Rest)
-  //     data.selected = str2bool(e.target.value);
-  // }
-  // function radiobutton4(e) {
-  //     console.log(str2bool(e.target.value));
-  //     // Here we can send the data to further processing (Action/Store/Rest)
-  //     data.screeningRound = str2bool(e.target.value);
-  // }
 
   function handle(e) {
     const newdata = { ...data };
@@ -180,6 +165,7 @@ const CreateInterview = () => {
   return (
     <div>
       <div className=" mt-3">
+         {loading ? <LoadingPage/> : ''}
         <nav
           aria-label="breadcrumb"
           style={{ "--bs-breadcrumb-divider": "'>>'" }}
@@ -189,7 +175,7 @@ const CreateInterview = () => {
               <Link to="/">Home</Link>{" "}
             </li>
             <li className="breadcrumb-item">
-              <a href="">Hiring</a>
+              <Link to="">Hiring</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Create Interview

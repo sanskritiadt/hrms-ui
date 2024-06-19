@@ -2,11 +2,12 @@ import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import handleAuthError from './CommonErrorHandling';
 import { Link } from 'react-router-dom';
-import Footer from './Footer';
+import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 const Capex = () => {
-    const token = localStorage.getItem("response-token");
+   // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [data, setData] = useState({
         date: "",
         expenseDetails: "",
@@ -17,9 +18,10 @@ const Capex = () => {
         mode: "",
         invoice:[]
     });
-
+    const [loading, setLoading] = useState(false);
     function submit(e) {
         e.preventDefault();
+        setLoading(true); 
         const formData = new FormData();
         const body = {
             "date": data.date,
@@ -38,15 +40,18 @@ const Capex = () => {
         axios.post(`/apigateway/expensemanagement/capExDetails/createCapExDetails`, formData, {
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'multipart/form-data' // Ensure proper content type for file uploads
+                'Content-Type': 'multipart/form-data' 
             }
         }).then(response => {
             console.log(response.data);
             toast.success("Data has been created successfully.", { position: 'top-center', theme: "colored" })
+            setLoading(false); 
         }).catch((error) => {
-            handleAuthError(error);
-            console.log(error);
-            // toast.error("error happend try after sometime.", { position: "top-center", theme: 'colored' })
+            toast.error(
+                error.response.data.message || "Error creating capex details."
+              );
+            console.log(error)
+            setLoading(false); 
         });
     };
     
@@ -58,10 +63,11 @@ const Capex = () => {
     }
     return (
         <div>     <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
+             {loading ? <LoadingPage/> : ''}
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Expense</a></li>
+            <li className="breadcrumb-item"><Link to="">Expense</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Capital Expense</li>
         </ol>
     </nav>
@@ -90,11 +96,11 @@ const Capex = () => {
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="gstBill">GstBill</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="gstBill">GstBill No</label>
                                     <div className="col-sm-10">
                                         <input onChange={(e) => { handle(e) }} value={data.gstBill}
                                             type="text" className="form-control"
-                                            placeholder='enter your gstBill'
+                                            placeholder='enter your Gst Bill number '
                                             id="gstBill" />
                                     </div>
                                 </div>

@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 const EditAssets = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const token = localStorage.getItem('response-token')
+    // const token = localStorage.getItem('response-token');
+    const  token = useSelector((state) => state.auth.token);
+    const [loading, setLoading] = useState(false);
     const [asset, setAsset] = useState({
         id: '',
         assetUser: "",
@@ -24,6 +28,7 @@ const EditAssets = () => {
     })
 
     useEffect(() => {
+        setLoading(true); 
         axios.get(`/apigateway/hrms/masterAsset/GetAssetById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -31,12 +36,18 @@ const EditAssets = () => {
         }).then((response) => {
             setAsset(response.data);
             console.log(response.data);
+            setLoading(false); 
         }).catch((error) => {
             console.log(error)
+            setLoading(false); 
+            toast.error(
+                error.response.data.message || "Error fetching data"
+              );
         })
     }, [token, id])
     function submit(e) {
         e.preventDefault();
+        setLoading(true); 
         axios.put(`/apigateway/hrms/masterAsset/updateMasterAssetbyid`, {
             id:asset.id,
             assetUser: asset.assetUser,
@@ -58,34 +69,18 @@ const EditAssets = () => {
             }
         }).then((response)=>{
         console.log(response.data);
+        setLoading(false); 
         navigate('/GetAllAssets')
         toast.success(response.data,{position:'top-center',theme:'colored'})
         }) .catch((error)=>{
             console.log(error);
-            toast.error('Error occured try after sometime',{position:'top-center',theme:'colored'})
+            toast.error(error.response.data.message || "Error updating asset");
+            setLoading(false); 
         }) 
     }
-function handle(){
-
-}
-
-    // {
-    //     "assetUser": "nidhi",
-    //     "assetName": "v djhdb",
-    //     "assetId": "235667",
-    //     "assetNo": " nn vvdv",
-    //     "assetType": "jhuisd",
-    //     "processor": "sakjhf",
-    //     "ram": "78",
-    //     "diskType": "askjdj",
-    //     "operatingSystem": "sakfn",
-    //     "purchesDate": "2023-06-01",
-    //     "warrenty": "sdkjhf",
-    //     "warrentyDate": "2023-06-09",
-    //     "status": "jksahu"
-    // }
     return (
         <div className='container pt-3'>
+             {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
                     <div className='card border-0 shadow'style={{width:'700px',height:'1060px'}}>

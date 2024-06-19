@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import {toast} from 'react-toastify';
-import handleAuthError from './CommonErrorHandling';
 import { Link } from 'react-router-dom';
+import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 const CreateProjEng = () => {
-    const token = localStorage.getItem("response-token");
+    // const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
+    const [loading, setLoading] = useState(false);
     const [data,setData] = useState({
         projectName:'',
         projectDescription:'',
@@ -13,17 +16,9 @@ const CreateProjEng = () => {
         endDate:'',
         status:''
     });
-    // {
-    //     "projectName":"HEB",
-    //     "projectDescription":"Online zilla booking site",
-    //     "engagedEmployee":"kailash",
-    //     "startDate":"01/05/2024",
-    //     "endDate":"20/05/2023",
-    //     "status":true
-        
-    // }
     function submit(e){
         e.preventDefault();
+        setLoading(true); 
         axios.post(`/apigateway/hrms/engagement/saveProjectEngagement`,{
             projectName:data.projectName,
             projectDescription:data.projectDescription,
@@ -36,10 +31,14 @@ const CreateProjEng = () => {
             'Authorization':`Bearer ${token}`
         }}).then((response)=>{
             console.log(response.data);
-            toast.success(response.data, { position: 'top-center', theme: "colored" })
+            toast.success(response.data, { position: 'top-center', theme: "colored" });
+            setLoading(false); 
         }).catch((error)=>{
             console.log(error);
-            handleAuthError(error);
+            toast.error(
+                error.response.data.message || "Error saving project details."
+              );
+            setLoading(false); 
         })
 
     }
@@ -64,11 +63,12 @@ const CreateProjEng = () => {
     }
     return (
         <div className=" mt-3">
+             {loading ? <LoadingPage/> : ''}
         <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Partner</a></li>
+            <li className="breadcrumb-item"><Link to="">Partner</Link></li>
             <li className="breadcrumb-item active" aria-current="page"> Create Project Engagement</li>
         </ol>
     </nav>
@@ -84,7 +84,7 @@ const CreateProjEng = () => {
                     <div className='card-body'>
                         <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                             <div className="row mb-3">
-                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='projectName'>Project Name</label>
+                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='projectName'>contractor</label>
                                 <div className="col-sm-10">
                                     <input onChange={(e) => { handle(e) }} value={data.projectName || ''}
                                         type="text"
@@ -95,7 +95,7 @@ const CreateProjEng = () => {
                             </div>
 
                             <div className="row mb-3">
-                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectDescription'>Project Description</label>
+                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectDescription'>End Client</label>
                                 <div className="col-sm-10">
                                     <input onChange={(e) => { handle(e) }} value={data.projectDescription || ''}
                                         type="text" className="form-control"

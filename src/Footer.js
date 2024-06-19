@@ -22,8 +22,6 @@ export default function Footer() {
               <li></li>
             </ul>
           </Col>
-
-         
           <Col md={3}>
             <h5 className="fw-bold">Contact Us</h5>
             <ul className="list-unstyled">
@@ -33,10 +31,13 @@ export default function Footer() {
             </ul>
           </Col>
 
-          <Col md={3}>
+          {/* <Col md={3}>
             <h5 className="fw-bold">Location</h5>
-            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=15xUB4cYspA_TzvfiVmZv9EkA2gekftE&ehbc=2E312F&noprof=1" height="200"></iframe>
-          </Col>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3681.0666354316254!2d75.8349824!3d22.6885632!3m2!1i1024!2i768!4f13.1!3m3
+            !1m2!1s0x39631dda7f0f6299%3A0xeb3565f797c941e!2sAlphaDot%20Technologies%20-%20Java%20%7C%20SpringBoot%20%7C%20Microservices%20%7C%20Backend%20De
+            velopment!5e0!3m2!1sen!2sin!4v1718277951849!5m2!1sen!2sin"
+             width="400" height="300" style="border:0;"></iframe>
+          </Col> */}    
         </Row>
       </Container>
       <div className="text-center py-4 mt-5" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>

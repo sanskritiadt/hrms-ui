@@ -6,19 +6,24 @@ import { format } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
+
 const LeaveForm = () => {
+  const [loading, setLoading] = useState(false);
   const [leaveForm, setLeaveForm] = useState({
-    leave: [],
+    leave: {},
     name: "",
     leaveBalance: "",
     leaveType: "",
     leaveReason: "",
     selectedDates: [],
   });
-  const empID = localStorage.getItem("EmpID");
-  const token = localStorage.getItem("response-token");
+  const token = useSelector((state) => state.auth.token);
+  const empID = useSelector((state) => state.auth.empId);
 
   useEffect(() => {
+    setLoading(true); 
     axios
       .get(`/apigateway/payroll/leave/getById/${empID}`, {
         headers: {
@@ -26,25 +31,25 @@ const LeaveForm = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
+        const leaveData = response.data;
         setLeaveForm((prevState) => ({
           ...prevState,
-          leave: response.data,
-          leaveBalance: response.data.leaveBalance,
+          leave: leaveData,
+          name: leaveData.name,
+          leaveBalance: leaveData.leaveBalance,
         }));
         toast.success("Leave data found successfully!!", {
           position: "top-center",
           theme: "colored",
         });
+        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Something went wrong. Please try again later.", {
-          position: "top-center",
-          theme: "colored",
-        });
+        toast.error(error.response.data.message || "Error fetching details");
+        setLoading(false); 
       });
-  }, []);
+  }, [empID, token]);
 
   const handleDateChange = (date) => {
     setLeaveForm((prevState) => ({
@@ -60,10 +65,9 @@ const LeaveForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, leaveBalance, leaveType, leaveReason, selectedDates } =
-      leaveForm;
+    const { name, leaveBalance, leaveType, leaveReason, selectedDates } = leaveForm;
     const payload = {
-      empid: 81,
+      empid: empID,
       leavedate: selectedDates.map((date) => format(date, "yyyy/MM/dd")),
       name: name,
       leaveBalance: leaveBalance,
@@ -71,6 +75,7 @@ const LeaveForm = () => {
       leaveReason: leaveReason,
     };
     try {
+      setLoading(true); 
       const response = await axios.post(
         `/apigateway/payroll/leave/leaveRequest`,
         payload,
@@ -84,24 +89,23 @@ const LeaveForm = () => {
         position: "top-center",
         theme: "colored",
       });
+      setLoading(false); 
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred. Please try again later.", {
-        position: "top-center",
-        theme: "colored",
-      });
+      toast.error(error.response.data.message || "Error creating details");
+      setLoading(false);
     }
   };
 
-  const { leave, name, leaveBalance, leaveType, leaveReason, selectedDates } =
-    leaveForm;
+  const { leave, name, leaveBalance, leaveType, leaveReason, selectedDates } = leaveForm;
 
   return (
     <div>
       <nav
         aria-label="breadcrumb"
         style={{ "--bs-breadcrumb-divider": "'>>'" }}
-      >
+      >     
+        {loading && <LoadingPage/>}
         <ol className="breadcrumb" style={{ color: "white" }}>
           <li className="breadcrumb-item">
             <Link to="/">Home</Link>{" "}
@@ -151,28 +155,30 @@ const LeaveForm = () => {
                   type="text"
                   name="name"
                   placeholder="Name"
-                  value={leave.name || ""}
+                  value={name}
+                  onChange={handleChange}
                 />
                 <label htmlFor="Leave Balance">Leave Balance</label>
                 <input
                   type="text"
                   name="leaveBalance"
                   placeholder="Leave Balance"
-                  value={leaveBalance || ""}
+                  value={leaveBalance}
+                  onChange={handleChange}
                 />
                 <label htmlFor="Leave Type">Leave Type</label>
                 <input
                   type="text"
                   name="leaveType"
                   placeholder="Leave Type"
-                  value={leaveType || ""}
+                  value={leaveType}
                   onChange={handleChange}
                 />
                 <label htmlFor="Leave Reason">Leave Reason</label>
                 <textarea
                   name="leaveReason"
                   placeholder="Leave Reason"
-                  value={leaveReason || ""}
+                  value={leaveReason}
                   onChange={handleChange}
                 ></textarea>
                 <label htmlFor="Select Date">Select Date</label>
@@ -204,3 +210,4 @@ const LeaveForm = () => {
 };
 
 export default LeaveForm;
+

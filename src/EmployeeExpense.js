@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
+import LoadingPage from './LoadingPage'
+import { useSelector } from 'react-redux';
 const EmployeeExpense = () => {
-  const empId = localStorage.getItem("EmpID");
-  const token = localStorage.getItem("response-token");
+  // const empId = localStorage.getItem("EmpID");
+  // const token = localStorage.getItem("response-token");
+  const  token = useSelector((state) => state.auth.token);
+  const  empId = useSelector((state) => state.auth.empId);
+
+  const [loading, setLoading] = useState(false);
   const [expense, setExpense] = useState({
     expenseDescription: "",
     expenseCategory: "",
@@ -13,12 +19,16 @@ const EmployeeExpense = () => {
     paymentDate: "",
     paymentMode: "",
   });
+
   const [invoice, setInvoice] = useState([]);
+
   function handleFileChange(e) {
     const fileList = e.target.files;
     setInvoice(fileList);
     console.log(fileList);
   }
+
+
   function submit(e) {
     e.preventDefault();
     const formexpense = new FormData();
@@ -26,6 +36,7 @@ const EmployeeExpense = () => {
       formexpense.append("invoice", invoice[i]);
     }
     formexpense.append("expense", JSON.stringify(expense));
+     setLoading(true)
     axios
       .post(`/apigateway/payroll/timeSheet/employeeExpense/${empId}`, formexpense, {
         headers: {
@@ -34,13 +45,16 @@ const EmployeeExpense = () => {
     })
       .then((response) => {
         console.log(response.expense);
-        toast.success("Expense data created successfully!!", { position: 'top-center', theme: "colored" })
+        toast.success("Expense data created successfully!!", { position: 'top-center', theme: "colored" });
+        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
-        handleAuthError(error);
+        toast.error( error.response.data.message || "Error creating details" );
+        setLoading(false); 
       });
   }
+
   function handle(e) {
     const newexpense = { ...expense };
     newexpense[e.target.id] = e.target.value;
@@ -48,7 +62,8 @@ const EmployeeExpense = () => {
     console.log(newexpense);
   }
   return (
-    <div className="container pt-3">
+    <div className="container pt-3"> 
+       {loading ? <LoadingPage/> : ''}
       <div className="row">
         <div className="col-md-8 mx-auto">
           <div className="card border-0 shadow">

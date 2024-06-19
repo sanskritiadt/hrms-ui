@@ -3,10 +3,14 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingPage from './LoadingPage'
-
+import { useSelector } from 'react-redux';
 const GetAllAttendance = () => {
-    const token = localStorage.getItem("response-token")
-    const empid = localStorage.getItem("EmpID")
+    // const token = localStorage.getItem("response-token")
+    // const empid = localStorage.getItem("EmpID")
+
+    const  token = useSelector((state) => state.auth.token);
+    const  empid = useSelector((state) => state.auth.empId);
+  
     const [getAttendence, setAttendence] = useState({
         fromDate: "",
         toDate: ""
@@ -26,7 +30,7 @@ const GetAllAttendance = () => {
                 setLoading(false); 
                 //toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
             }).catch(error => {
-                toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
+                toast.error( error.response.data.message || "Error fetching details" );
                 console.log("error happend", error);
                 setLoading(false); 
             })
@@ -49,7 +53,7 @@ const GetAllAttendance = () => {
                <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
                 <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}> 
                     <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-                    <li className="breadcrumb-item"><a href="">Employee Management</a></li>
+                    <li className="breadcrumb-item"><Link to="">Employee Management</Link></li>
                     <li className="breadcrumb-item active" aria-current="page"> Attendance</li>
                 </ol>
             </nav>
