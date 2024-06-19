@@ -14,8 +14,8 @@ export default function CreatePosition() {
     positionName: "",
     techStack: "",
     vacancy: "",
-    positionopendate: "",
-    positionclosedate: "",
+    positionOpenDate: "",
+    positionCloseDate: "",
     status: "",
     experienceInYear: "",
     positionType: "",
@@ -55,8 +55,8 @@ export default function CreatePosition() {
           positionName: data.positionName,
           techStack: selectedValue,
           vacancy: data.vacancy,
-          positionopendate: data.positionopendate,
-          positionclosedate: data.positionclosedate,
+          positionOpenDate: data.positionOpenDate,
+          positionCloseDate: data.positionCloseDate,
           status: data.status,
           experienceInYear: data.experienceInYear,
           positionType: data.positionType,
@@ -124,7 +124,7 @@ export default function CreatePosition() {
               <Link to="/">Home</Link>
             </li>
             <li className="breadcrumb-item">
-              <a href="">Hiring</a>
+              <Link to="">Hiring</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Create Position
@@ -238,7 +238,7 @@ export default function CreatePosition() {
                           onChange={(e) => {
                             handle(e);
                           }}
-                          value={data.positionopendate}
+                          value={data.positionOpenDate}
                           type="date"
                           className="form-control"
                           id="positionopendate"
@@ -257,7 +257,7 @@ export default function CreatePosition() {
                           onChange={(e) => {
                             handle(e);
                           }}
-                          value={data.positionclosedate}
+                          value={data.positionCloseDate}
                           type="date"
                           className="form-control"
                           id="positionclosedate"

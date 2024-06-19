@@ -207,7 +207,7 @@ function GetAllPrEngagement() {
               <Link to="/">Home</Link>{" "}
             </li>
             <li className="breadcrumb-item">
-              <a href="">Partner</a>
+              <Link to="">Partner</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Project Engagement

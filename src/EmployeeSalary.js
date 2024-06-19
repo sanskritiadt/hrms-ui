@@ -137,7 +137,7 @@ function EmployeeSalary() {
             <Link to="/">Home</Link>{" "}
           </li>
           <li className="breadcrumb-item">
-            <a href="">Employee Services</a>
+            <Link to="">Employee Services</Link>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
             Employee Salary

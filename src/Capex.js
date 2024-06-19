@@ -67,7 +67,7 @@ const Capex = () => {
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Expense</a></li>
+            <li className="breadcrumb-item"><Link to="">Expense</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Capital Expense</li>
         </ol>
     </nav>

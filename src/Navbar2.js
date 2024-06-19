@@ -214,7 +214,7 @@ function AppNavbar() {
       {/* Modal to display user roles */}
       <Modal show={open} onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>User Roles</Modal.Title>
+          <Modal.Title  style={{ textAlign: "center" }}>Roles</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ul style={{ listStyleType: "none", padding: 0 }}>

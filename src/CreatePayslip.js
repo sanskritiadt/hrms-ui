@@ -99,7 +99,7 @@ const CreatePayslip = () => {
             <Link to="/">Home</Link>{" "}
           </li>
           <li className="breadcrumb-item">
-            <a href="">Payslip</a>
+            <Link to="">Payslip</Link>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
             Salary Details

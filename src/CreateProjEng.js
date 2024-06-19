@@ -68,7 +68,7 @@ const CreateProjEng = () => {
         <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
         
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Partner</a></li>
+            <li className="breadcrumb-item"><Link to="">Partner</Link></li>
             <li className="breadcrumb-item active" aria-current="page"> Create Project Engagement</li>
         </ol>
     </nav>
@@ -84,7 +84,7 @@ const CreateProjEng = () => {
                     <div className='card-body'>
                         <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                             <div className="row mb-3">
-                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='projectName'>Project Name</label>
+                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='projectName'>contractor</label>
                                 <div className="col-sm-10">
                                     <input onChange={(e) => { handle(e) }} value={data.projectName || ''}
                                         type="text"
@@ -95,7 +95,7 @@ const CreateProjEng = () => {
                             </div>
 
                             <div className="row mb-3">
-                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectDescription'>Project Description</label>
+                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectDescription'>End Client</label>
                                 <div className="col-sm-10">
                                     <input onChange={(e) => { handle(e) }} value={data.projectDescription || ''}
                                         type="text" className="form-control"

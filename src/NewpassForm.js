@@ -43,7 +43,6 @@ const PasswordForm = ({ token, email, type }) => {
         toast.success("Password change successfully.", { position: "top-center", theme: "colored" })
         navigate('/Login');
         setLoading(false);
-        // handle successful response
       })
       .catch((error) => {
         console.error(error);

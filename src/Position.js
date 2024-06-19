@@ -247,7 +247,7 @@ export default function PositionDetails() {
         <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
           <ol className="breadcrumb" style={{ color: "white", marginLeft: '20px' }}>
             <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-            <li className="breadcrumb-item"><a href="">Employee Management</a></li>
+            <li className="breadcrumb-item"><Link to="">Employee Management</Link></li>
             <li className="breadcrumb-item active" aria-current="page">Employee Position</li>
           </ol>
         </nav>
