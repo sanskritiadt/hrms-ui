@@ -74,7 +74,7 @@ export default function SaveClientFormik() {
               <Link to="/">Home</Link>{" "}
             </li>
             <li className="breadcrumb-item">
-              <a href="">Partner</a>
+            <Link to="">Partner</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Create Client Information

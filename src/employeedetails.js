@@ -151,39 +151,46 @@ export default function Empfunc() {
             <table border="2" className="table table-striped table-bordered">
               <thead className="head">
                 <tr className="table-danger table-striped">
-                  <th>EMPLOYEE ID</th>
+                  {/* <th>EMPLOYEE ID</th> */}
+                  <th>NAME</th>
                   <th>DOB</th>
                   <th>EMAIL</th>
-                  <th>FIRST NAME</th>
-                  <th>LAST NAME</th>
-                  <th>MARITAL STATUS</th>
-                  <th>GENDER</th>
-                  <th>EMAIL VERIFIED</th>
+                  {/* <th>FIRST NAME</th>
+                  <th>LAST NAME</th> */}
+                  {/* <th>MARITAL STATUS</th> */}
+                  {/* <th>GENDER</th> */}
+                  {/* <th>EMAIL VERIFIED</th> */}
                   <th>MOBILE NO</th>
-                  <th>USERNAME</th>
+                  {/* <th>USERNAME</th> */}
                   <th>PAYROLL DETAILS</th>
+                  <th>PERSONAL DETAILS</th>
                 </tr>
               </thead>
               <tbody className="body">
                 {currentEmployees.map((employee) => (
                   <tr key={employee.employeeId}>
-                    <td>
+                    {/* <td>
                       <Link to={`/EditEmployee/${employee.employeeId}`} className="Candidate-id">
                         {employee.employeeId}
                       </Link>
-                    </td>
+                    </td> */}
+                    <td>{employee.firstName} {employee.lastName}</td>
                     <td>{employee.dob}</td>
                     <td>{employee.email}</td>
-                    <td>{employee.firstName}</td>
-                    <td>{employee.lastName}</td>
-                    <td>{employee.maritalStatus}</td>
-                    <td>{employee.gender}</td>
-                    <td>{String(employee.isEmailVerified)}</td>
+                    {/* <td>{employee.lastName}</td> */}
+                    {/* <td>{employee.maritalStatus}</td> */}
+                    {/* <td>{employee.gender}</td> */}
+                    {/* <td>{String(employee.isEmailVerified)}</td> */}
                     <td>{employee.mobileNo}</td>
-                    <td>{employee.userName}</td>
+                    {/* <td>{employee.userName}</td> */}
                     <td>
                       <Link to={`/UpdatePayrollSalary/${employee.employeeId}`} className="Candidate-id" variant="btn btn-outline-info">
                         Payroll
+                      </Link>
+                    </td>
+                    <td>
+                      <Link to={`/EditEmployee/${employee.employeeId}`}  className="Candidate-id" variant="btn btn-outline-info">
+                        personal
                       </Link>
                     </td>
                   </tr>

@@ -320,7 +320,7 @@ function GetGstDetails() {
               <Link to="/">Home</Link>{" "}
             </li>
             <li className="breadcrumb-item">
-              <a href="">Employee Management</a>
+              <Link to="">Employee Management</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               GST Details

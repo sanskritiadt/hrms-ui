@@ -87,7 +87,7 @@ const CreateExpense = () => {
               <Link to="/">Home</Link>{" "}
             </li>
             <li className="breadcrumb-item">
-              <a href="">Expense</a>
+            <Link to="">Expense</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Create Expense
