@@ -23,7 +23,7 @@ export default function LoadingPage() {
           alignItems: 'center', 
           height: '100%', 
         }}
-      > 
+      >
         <MoonLoader
           color='black'
           size={50}

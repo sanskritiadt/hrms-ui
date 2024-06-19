@@ -3,14 +3,10 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import LoadingPage from './LoadingPage'
-import { useSelector } from 'react-redux';
-const GetAllAttendance = () => {
-    // const token = localStorage.getItem("response-token")
-    // const empid = localStorage.getItem("EmpID")
 
-    const  token = useSelector((state) => state.auth.token);
-    const  empid = useSelector((state) => state.auth.empId);
-  
+const GetAllAttendance = () => {
+    const token = localStorage.getItem("response-token")
+    const empid = localStorage.getItem("EmpID")
     const [getAttendence, setAttendence] = useState({
         fromDate: "",
         toDate: ""
@@ -30,7 +26,7 @@ const GetAllAttendance = () => {
                 setLoading(false); 
                 //toast.success("data found succesfully.", { position: 'top-center', theme: "colored" })
             }).catch(error => {
-                toast.error( error.response.data.message || "Error fetching details" );
+                toast.error("error occured data not found.", { position: 'top-center', theme: "colored" })
                 console.log("error happend", error);
                 setLoading(false); 
             })

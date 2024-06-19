@@ -4,13 +4,10 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Container, Table, Form, Button } from 'react-bootstrap';
 import './Hrmscss/App.css';
-import LoadingPage from './LoadingPage'
-import { useSelector } from 'react-redux';
+
 function SearchEmpAssets() {
-  // const token = localStorage.getItem("response-token");
-  const  token = useSelector((state) => state.auth.token);
+  const token = localStorage.getItem("response-token");
   const [searchAsset, setSearchAsset] = useState('');
-  const [loading, setLoading] = useState(false);
   const [asset, setAsset] = useState([]);
 
   const handleNameChange = (event) => {
@@ -18,7 +15,6 @@ function SearchEmpAssets() {
   }
 
   const handleSubmit = () => {
-    setLoading(true); 
     axios.get(`/apigateway/hrms/masterAsset/searchByAssetUser?query=${searchAsset}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -28,22 +24,18 @@ function SearchEmpAssets() {
         console.log(response.data);
         setAsset(response.data);
         toast.success('Assets data found successfully', { position: 'top-center', theme: 'colored' });
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error( error.response.data.message || "Error fetching details" );
-        setLoading(false);
+        toast.error('Error occurred, try again later.', { position: 'top-center', theme: 'colored' });
       });
   }
 
-  const [assetTypes, setAssetTypes] = useState([]); 
-  const [selectedAssetType, setSelectedAssetType] = useState(''); 
-  const [selectedAssetStatus, setSelectedAssetStatus] = useState(''); 
-
-
+  const [assetTypes, setAssetTypes] = useState([]); // State for asset types
+  const [selectedAssetType, setSelectedAssetType] = useState(''); // State for selected asset type
+  const [selectedAssetStatus, setSelectedAssetStatus] = useState(''); // State for selected asset status
   const handleSearchByTypeAndStatus = () => {
-    setLoading(true); 
+    // Second API call: Search by asset type
     axios.get(`/apigateway/hrms/masterAsset/searchByAssetType?query=${selectedAssetType}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -51,19 +43,18 @@ function SearchEmpAssets() {
     })
       .then((response) => {
         console.log(response.data);
+        // Update the asset state with the data from the second API call
         setAsset(response.data);
         toast.success('Assets data found successfully', { position: 'top-center', theme: 'colored' });
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error( error.response.data.message || "Error fetching asset type  details" );
-        setLoading(false);
+        toast.error('Error occurred while searching by asset type.', { position: 'top-center', theme: 'colored' });
       });
   };
 
   const handleSearchByStatus = () => {
-    setLoading(true); 
+    // Third API call: Search by asset status
     axios.get(`/apigateway/hrms/masterAsset/searchByStatus?query=${selectedAssetStatus}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -74,12 +65,10 @@ function SearchEmpAssets() {
         // Update the asset state with the data from the third API call
         setAsset(response.data);
         toast.success('Assets data found successfully', { position: 'top-center', theme: 'colored' });
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
-        toast.error( error.response.data.message || "Error fetching asset" );
-        setLoading(false);
+        toast.error('Error occurred while searching by asset status.', { position: 'top-center', theme: 'colored' });
       });
   };
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -98,7 +87,6 @@ function SearchEmpAssets() {
   }, []);
   return (
     <div className="table-responsive-sm">
-        {loading ? <LoadingPage/> : ''}
       <div className=" mt-3">
         <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
           <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
@@ -166,6 +154,8 @@ function SearchEmpAssets() {
               </thead>
               <tbody className="body">
                 {asset.map((assets) => (
+                  // display a <div> element with the asset.id and other asset details
+                  // parent element needs to have a unique key
                   <tr key={assets.id}>
                     <td><Link to={`/EditAssets/${assets.id}`} className="Candidate-id">{assets.id}</Link></td>
                     <td>{assets.assetUser}</td>

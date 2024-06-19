@@ -2,12 +2,9 @@ import React ,{useState,useEffect}from 'react'
 import axios from 'axios'
 import {toast} from  'react-toastify';
 import { useParams,useNavigate } from 'react-router-dom';
-import LoadingPage from './LoadingPage';
-import { useSelector } from 'react-redux';
+import handleAuthError from './CommonErrorHandling';
 const EditprojEng = () => {
-    // const token = localStorage.getItem("response-token");
-    const  token = useSelector((state) => state.auth.token);
-    const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("response-token")
     const { id } = useParams();
     const navigate = useNavigate()
     const [data,setData] = useState({
@@ -21,24 +18,19 @@ const EditprojEng = () => {
     });
 
 useEffect(() => {
-    setLoading(true);
 axios.get(`/apigateway/hrms/engagement/ProjectEngagementDetailById/${id}`,{
     headers:{
     'Authorization' : `Bearer ${token}`
 }}).then((response)=>{
     console.log(response.data);
     setData(response.data);
-    setLoading(false); 
 }).catch((error)=>{
     console.log(error);
-    toast.error( error.response.data.message || "Error fetching details" );
-    setLoading(false); 
 })
 }, [token,id])
 
 
 function HandleSubmit(e){
-    setLoading(true);
     e.preventDefault();
     axios.put(`/apigateway/hrms/engagement/updateProjectEngagement/${id}`,{
         projectId:data.projectId,
@@ -56,18 +48,12 @@ function HandleSubmit(e){
         console.log(response.data);
         navigate('/GetAllPrEngagement');
         toast.success(response.data,{ position: 'top-center', theme: "colored" })
-        setLoading(false); 
     }).catch((error)=>{
         console.log(error)
-        toast.error( error.response.data.message || "Error updating details" );
-        setLoading(false); 
+        handleAuthError(error);
     })
 }
 function HandleDelete(){
-    if (!window.confirm("Are you sure you want to delete this Project?")) {
-        return;
-      }
-    setLoading(true);
     axios.delete(`/apigateway/hrms/engagement/DeleteProjectEngagement/${id}`,{
         headers: {
             'Authorization' :`Bearer ${token}`
@@ -75,16 +61,22 @@ function HandleDelete(){
     }).then((response)=>{
         console.log(response.data);
         toast.success(response.data, { position: 'top-center', theme: "colored" })
-        setLoading(false); 
     }).catch((error)=>{
         console.log(error);
-        toast.error( error.response.data.message || "Error deleting details" );  
-        setLoading(false); 
-      })
+        handleAuthError(error);
+    })
 }
+
+    // {
+    //     "projectName":"HEB",
+    //     "projectDescription":"Online zilla booking site",
+    //     "engagedEmployee":"kailash",
+    //     "startDate":"01/05/2024",
+    //     "endDate":"20/05/2023",
+    //     "status":true   
+    // }
   return (
   <div className='container pt-3'style={{  marginLeft:'100px',width:'1100px',height:'650PX'}}>
-    {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className='col-lg-8 col-md-8 mx-auto'>
                     <div className='card border-0 shadow'>
@@ -115,17 +107,6 @@ function HandleDelete(){
                                             type="text"
                                             id="projectDescription"
                                          placeholder='enter Project Description'
-                                            className="form-control" />
-                                    </div>
-                                </div>
-                                <div className="row mb-3">
-                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='emailId'>Engaged Employee</label>
-                                    <div className="col-sm-10">
-                                        <input value={data.engagedEmployee || ''}
-                                            onChange={e => setData({ ...data, engagedEmployee: e.target.value })}
-                                            type="text"
-                                            id="engagedEmployee"
-                                         placeholder='enter Engaged Employee'
                                             className="form-control" />
                                     </div>
                                 </div>

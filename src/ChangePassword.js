@@ -1,24 +1,20 @@
-import React,{useState} from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Alert, Container } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { Button, Alert, Container } from 'react-bootstrap';
 import './Hrmscss/CP.css'
 import { toast } from 'react-toastify';
-import LoadingPage from './LoadingPage'
+
 const ChangepasswordForm = () => {
-   // const token = localStorage.getItem("response-token")
-   const  token = useSelector((state) => state.auth.token);
-    const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("response-token")
     const initialValues = {
         oldPassword: '',
         newPassword: '',
         showPassword: false
     };
     const handleSubmit = (values, { setStatus, resetForm }) => {
-        setLoading(true); 
         axios.post(`/apigateway/api/user/password/update`, {
             oldPassword: values.oldPassword,
             newPassword: values.newPassword
@@ -30,14 +26,11 @@ const ChangepasswordForm = () => {
             setStatus(response.data.message);
             resetForm(initialValues)
             console.log(response.data);
-            setLoading(false); 
             toast.success("Password changed successfully.", { position: 'top-center', theme: "colored" })
+
         }).catch((errors) => {
             console.log(errors);
-            toast.error(
-                errors.response.data.message || "Error changing Password"
-              );
-              setLoading(false); 
+            toast.error('error!!', { position: 'top-center', theme: "colored" })
         })
     }
     const validationSchema = Yup.object().shape({
@@ -49,7 +42,6 @@ const ChangepasswordForm = () => {
     });
     return (
         <Container>
-             {loading ? <LoadingPage/> : ''}
             <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}

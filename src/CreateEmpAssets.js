@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import LoadingPage from './LoadingPage';
-import { useSelector } from 'react-redux';
 const CreateEmpAssets = () => {
-  // const token = localStorage.getItem("response-token");
-  const  token = useSelector((state) => state.auth.token);
-  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("response-token");
   const [data, setData] = useState({
     assetUser: "",
     assetName: "",
@@ -23,10 +19,8 @@ const CreateEmpAssets = () => {
     warrentyDate: "",
     status: "",
   });
-
   function submit(e) {
     e.preventDefault();
-    setLoading(true); 
     axios
       .post(
         `/apigateway/hrms/masterAsset/insertAssets`,
@@ -52,36 +46,49 @@ const CreateEmpAssets = () => {
         }
       )
       .then((response) => {
+        console.log(response.data);
         toast.success(response.data, {
           position: "top-center",
           theme: "colored",
         });
-        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
-        toast.error(
-          error.response.data.message || "Error creating employee asset."
-        );
-        setLoading(false); 
+        toast.error("Error occured try after sometime!!", {
+          position: "top-center",
+          theme: "colored",
+        });
       });
   }
-
   function handle(e) {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
     setData(newData);
+    console.log(newData);
   }
-
+  // {
+  //     "assetUser": "nidhi",
+  //     "assetName": "v djhdb",
+  //     "assetId": "235667",
+  //     "assetNo": " nn vvdv",
+  //     "assetType": "jhuisd",
+  //     "processor": "sakjhf",
+  //     "ram": "78",
+  //     "diskType": "askjdj",
+  //     "operatingSystem": "sakfn",
+  //     "purchesDate": "2023-06-01",
+  //     "warrenty": "sdkjhf",
+  //     "warrentyDate": "2023-06-09",
+  //     "status": "jksahu"
+  // }
   return (
     <div>
-      {loading && <LoadingPage />}
-      <div className="mt-3">
+      <div className=" mt-3">
         <nav
           aria-label="breadcrumb"
           style={{ "--bs-breadcrumb-divider": "'>>'" }}
         >
-          <ol className="breadcrumb" style={{ color: "white", marginLeft: '20px' }}>
+          <ol className="breadcrumb" style={{ color: "white" ,marginLeft:'20px'}}>
             <li className="breadcrumb-item">
               <Link to="/">Home</Link>{" "}
             </li>
@@ -89,7 +96,7 @@ const CreateEmpAssets = () => {
               <a href="">Employee Management</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Employee Asset
+              Employee Position
             </li>
           </ol>
         </nav>
@@ -100,24 +107,29 @@ const CreateEmpAssets = () => {
           <div className="col-md-8 mx-auto">
             <div
               className="card border-0 shadow"
-              style={{ marginLeft: "100px", width: "700px", height: "1100px" }}
+              style={{ marginLeft: "100px", width: "700px", height: "1100PX" }}
             >
               <div className="card-body">
                 <form
-                  className="container py-3 mb-3"
-                  onSubmit={submit}
+                  className="container py-3  mb-3"
+                  onSubmit={(e) => {
+                    submit(e);
+                  }}
                 >
                   <div className="row mb-3">
                     <label
-                      htmlFor="assetUser"
+                      htmlFor="inputEmail3"
                       className="col-sm-2 col-form-label"
+                      name="assetUser"
                     >
                       Asset User
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.assetUser}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.assetUser || ""}
                         type="text"
                         id="assetUser"
                         placeholder="Enter asset user name"
@@ -127,15 +139,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="assetName"
+                      htmlFor="inputEmail3"
                       className="col-sm-2 col-form-label"
+                      name="assetName"
                     >
                       Asset Name
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.assetName}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.assetName || ""}
                         type="text"
                         id="assetName"
                         placeholder="Enter asset name"
@@ -145,15 +160,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="assetId"
+                      htmlFor="inputEmail3"
                       className="col-sm-2 col-form-label"
+                      name="assetId"
                     >
                       Asset Id
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.assetId}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.assetId || ""}
                         type="text"
                         id="assetId"
                         placeholder="Enter asset Id"
@@ -163,15 +181,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="assetNo"
+                      htmlFor="inputEmail3"
                       className="col-sm-2 col-form-label"
+                      name="assetNo"
                     >
                       Asset Number
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.assetNo}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.assetNo || ""}
                         type="text"
                         id="assetNo"
                         placeholder="Enter asset number"
@@ -181,15 +202,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="assetType"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="assetType"
                     >
                       Asset Type
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.assetType}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.assetType || ""}
                         type="text"
                         className="form-control"
                         placeholder="Enter asset asset type."
@@ -199,15 +223,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="processor"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="processor"
                     >
                       Processor
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.processor}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.processor || ""}
                         type="text"
                         className="form-control"
                         placeholder="Enter asset processor"
@@ -217,15 +244,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="ram"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="ram"
                     >
                       RAM
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.ram}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.ram || ""}
                         type="text"
                         className="form-control"
                         placeholder="Enter asset ram."
@@ -235,15 +265,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="diskType"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="diskType"
                     >
                       Disk Type
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.diskType}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.diskType || ""}
                         type="text"
                         className="form-control"
                         placeholder="Enter asset disk type"
@@ -253,15 +286,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="operatingSystem"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="operatingSystem"
                     >
                       Operating System
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.operatingSystem}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.operatingSystem || ""}
                         type="text"
                         className="form-control"
                         placeholder="Enter asset operating system"
@@ -269,17 +305,21 @@ const CreateEmpAssets = () => {
                       />
                     </div>
                   </div>
+
                   <div className="row mb-3">
                     <label
-                      htmlFor="purchesDate"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="purchesDate"
                     >
                       Purchase Date
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.purchesDate}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.purchesDate || ""}
                         type="date"
                         className="form-control"
                         id="purchesDate"
@@ -288,15 +328,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="warrenty"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="warrenty"
                     >
                       Warranty
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.warrenty}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.warrenty || ""}
                         type="text"
                         className="form-control"
                         placeholder="Enter warranty."
@@ -306,15 +349,18 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="warrentyDate"
+                      htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
+                      name="warrentyDate"
                     >
                       Warranty Date
                     </label>
                     <div className="col-sm-10">
                       <input
-                        onChange={handle}
-                        value={data.warrentyDate}
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={data.warrentyDate || ""}
                         type="date"
                         className="form-control"
                         id="warrentyDate"
@@ -328,34 +374,38 @@ const CreateEmpAssets = () => {
                     <div className="col-sm-10">
                       <div className="form-check form-check-inline">
                         <input
-                          onChange={handle}
+                          onChange={(e) => {
+                            handle(e);
+                          }}
                           value="true"
                           className="form-check-input"
                           type="radio"
-                          name="status"
-                          id="statusActive"
+                          name="inlineRadioOptions"
+                          id="status"
                         />
                         <label
                           className="form-check-label"
-                          htmlFor="statusActive"
+                          htmlFor="inlineRadio1"
                         >
                           Active
                         </label>
                       </div>
                       <div className="form-check form-check-inline">
                         <input
-                          onChange={handle}
+                          onChange={(e) => {
+                            handle(e);
+                          }}
                           value="false"
                           className="form-check-input"
                           type="radio"
-                          name="status"
-                          id="statusInactive"
+                          name="inlineRadioOptions"
+                          id="status"
                         />
                         <label
                           className="form-check-label"
-                          htmlFor="statusInactive"
+                          htmlFor="inlineRadio2"
                         >
-                          Inactive
+                          InActive
                         </label>
                       </div>
                     </div>
@@ -376,4 +426,3 @@ const CreateEmpAssets = () => {
 };
 
 export default CreateEmpAssets;
-

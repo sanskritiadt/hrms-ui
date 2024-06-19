@@ -3,15 +3,12 @@ import axios from 'axios'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-import LoadingPage from './LoadingPage'
-import { useSelector } from 'react-redux';
-import "./Hrmscss/App.css";
+
+
 const EditCandidate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    // const token = localStorage.getItem("response-token");
-    const  token = useSelector((state) => state.auth.token);
-    const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
         candidateName: "",
         emailId: "",
@@ -27,7 +24,6 @@ const EditCandidate = () => {
     });
 
     useEffect(() => {
-        setLoading(true); 
         axios.get(`/apigateway/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -35,15 +31,25 @@ const EditCandidate = () => {
         })
             .then((response) => {
                 setData(response.data)
-               // console.log(response);
-                setLoading(false); 
+                console.log(response);
             }).catch((error) => {
-                toast.error( error.response.data.message || "Error updating details" );
-                // console.log(error);
-                // console.log(error.response.data)
-                setLoading(false); 
+                handleAuthError(error);
+                console.log(error);
+                console.log(error.response.data)
             })
     }, [])
+
+    //     "candidateName": "Rahul Tichkule",
+    //     "emailId": "rahul@gmail.com",
+    //     "contactNo": "9575258566",
+    //     "address": "Indore, MP",
+    //     "highestQualification": "BE",
+    //     "workExperience": "3.5 Year",
+    //     "technicalStack": "Java",
+    //     "cvShortlisted": true,
+    //     "lastCTC": 3.0,
+    //     "noticePeriod": 90
+
     function HandleSubmit(e) {
         e.preventDefault();
         axios.put(`/apigateway/hrms/interviewCandidate/updateInterviewCandidate/${id}`, {
@@ -74,10 +80,6 @@ const EditCandidate = () => {
         })
     }
     function HandleDelete() {
-        if (!window.confirm("Are you sure you want to delete this candidate?")) {
-            return;
-          }
-          
         axios.delete(`/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -96,10 +98,9 @@ const EditCandidate = () => {
 
     return (
         <div className='container pt-3'>
-             {loading ? <LoadingPage/> : ''}
             <div className='row'>
-                <div className='col-md-8 mx-auto'>
-                    <div className='card border-0 shadow'  style={{ width: "700px", height: "1050px" }}>
+                <div className='col-lg-8 col-md-10 mx-auto'>
+                    <div className='card border-0 shadow'>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={HandleSubmit}>
                                 <div className="row mb-3">

@@ -2,14 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import LoadingPage from './LoadingPage';
-import { useSelector } from 'react-redux';
 const EditExpenses = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    // const token = localStorage.getItem("response-token");
-    const  token = useSelector((state) => state.auth.token);
-    const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("response-token");
     const [data, setData] = useState({
         amount: "",
         description: "",
@@ -23,7 +19,6 @@ const EditExpenses = () => {
     });
 
     useEffect(() => {
-        setLoading(true);
         axios.get(`/apigateway/expensemanagement/getExpenseById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -31,15 +26,22 @@ const EditExpenses = () => {
         }).then(res => {
             setData(res.data)
             console.log(res.data.gst)
-            setLoading(false); 
-        }).catch(error => {
-            console.log(error);
-            toast.error( error.response.data.message || "Error fetching details" );
-            setLoading(false); 
-    })
+        }).catch(error => console.log(error))
     }, [])
+
+    // {
+    //     "amount": 200,
+    //     "description": "Desktop Repair",
+    //     "paymentMode": "PhonePay",
+    //     "paymentDate": "2023-02-09",
+    //     "createdBy": "Vialp",
+    //     "category": "Office",
+    //     "gst": true,
+    //     "paidBy": "SR",
+    //     "comments": "decortion"
+    // }
+
     function handleSubmit(e) {
-        setLoading(true);
         e.preventDefault();
         axios.put(`/apigateway/expensemanagement/updateExpense/${id}`, {
             amount: parseInt(data.amount),
@@ -59,16 +61,19 @@ const EditExpenses = () => {
             console.log(response.data)
             toast.success("data has been updated successfully!!", { position: "top-center", theme: 'colored' })
             navigate('/Getallexpenses');
-            setLoading(false); 
         }).catch(error => {
             console.log(error)
-            toast.error( error.response.data.message || "Error updating details" );
-            setLoading(false); 
+            toast.error("error happened try after sometime.", { position: "top-center", theme: 'colored' })
         })
     }
+    // function handleradio(e) {
+    //     const val = e.target.value
+
+
+    //     console.log(val)
+    // }
     return (
         <div className='container pt-3'>
-             {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className=' col-md-8 mx-auto'>
                     <div className='card border-0 shadow'style={{width:'600px',height:'870px'}}>

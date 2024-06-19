@@ -3,12 +3,9 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-import LoadingPage from './LoadingPage'
-import { useSelector } from 'react-redux';
+
 const EditInterviewDetails = () => {
-    // const token = localStorage.getItem("response-token");
-    const  token = useSelector((state) => state.auth.token);
-    const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("response-token")
     const { id } = useParams();
     const { id2 } = useParams();
     const navigate = useNavigate();
@@ -36,7 +33,6 @@ const EditInterviewDetails = () => {
         status:""
     });
     useEffect(() => {
-        setLoading(true);
         axios.get(`/apigateway/hrms/interview/getInterviewDetailByIdAndRound?interviewId=${id}&round=${id2}`,
             {
                 headers: {
@@ -45,16 +41,13 @@ const EditInterviewDetails = () => {
             }).then(response => {
                 console.log(response.data);
                 setData(response.data);
-                setLoading(false); 
             }).catch(error => {
-                toast.error( error.response.data.message || "Error fetching details" );
+                handleAuthError(error);
                 console.log(error)
-                setLoading(false); 
             })
     }, [id, id2]);
 
     function handleSubmit(e) {
-        setLoading(true);
         e.preventDefault();
         axios.put(`/apigateway/hrms/interview/updateInterviewByIdAndRound`, {
             interviewId: data.interviewId,
@@ -86,17 +79,14 @@ const EditInterviewDetails = () => {
             console.log(response.data);
             toast.success("Interview details has been updated successfully.", { position: "top-center", theme: 'colored' });
             navigate('/getinterviewdetails')
-            setLoading(false); 
         }).catch(error => {
             console.log(error.response.data);
             console.log(error);
-            toast.error( error.response.data.message || "Error updating details" );
-            setLoading(false); 
+            // toast.error("error occured try after sometime.", { position: "top-center", theme: 'colored' });
         })
     }
     return (
         <div className='container pt-3'>
-             {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className='col-lg-8 col-md-10 mx-auto'>
                     <div className='card border-0 shadow'style={{  marginLeft:'100px',width:'800px',height:'1550PX'}}>

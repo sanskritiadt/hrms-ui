@@ -130,12 +130,7 @@ const routes = [
     subRoutes: [
       {
         path: "/payslip",
-        name: "View Payslip ",
-        icon: <FaFileInvoice />,
-      },
-      {
-        path: "/CreatePayslip",
-        name: "Save Salary",
+        name: "Pay Slip ",
         icon: <FaFileInvoice />,
       },
       {

@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import LoadingPage from './LoadingPage';
-import { useSelector } from 'react-redux';
 const EditGstDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    // const token = localStorage.getItem("response-token");
-    const  token = useSelector((state) => state.auth.token);
-    const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("response-token")
   const [data, setData] = useState({
     invoiceNumber: "",
     fy: "",
@@ -32,7 +28,6 @@ const EditGstDetails = () => {
   });
   
   useEffect(() => {
-    setLoading(true);
     axios.get(`/apigateway/expensemanagement/gst/displayGSTDetailsByInvoiceNumber/${id}`, {
         headers: {
             'Authorization': `Bearer ${token}`
@@ -40,18 +35,14 @@ const EditGstDetails = () => {
     }).then((response) => {
         setData(response.data);
         console.log(response.data);
-        setLoading(false); 
     }).catch((error) => {
         console.log(error)
-        toast.error( error.response.data.message || "Error fetching details" );
-        setLoading(false); 
     })
 }, [token, id])
 
 
   function submit(e) {
     e.preventDefault();
-    setLoading(true);
     axios
       .put(
         `/apigateway/expensemanagement/gst/updateGSTDetailsByInvoiceNumber/${id}`,
@@ -87,17 +78,15 @@ const EditGstDetails = () => {
           position: "top-center",
           theme: "colored",
         });
-        setLoading(false); 
       })
       .catch((error) => {
+        handleAuthError(error);
         console.log(error);
-        toast.error( error.response.data.message || "Error updating details" );
-        setLoading(false); 
+        // toast.error("cannot create the position values!!", { position: 'top-center', theme: "colored" })
       });
   }
 
   function HandleDelete() {
-    setLoading(true);
     axios.delete(`/apigateway/expensemanagement/gst/deleteGSTInvoiceByInvoiceNumber/${id}`, {
         headers: {
             'Authorization': `Bearer ${token}`
@@ -107,18 +96,16 @@ const EditGstDetails = () => {
             console.log(response)
             toast.success("Gst Data Deleted successfully.", { position: 'top-center', theme: "colored" });
             navigate('/GetGstDetails');
-            setLoading(false); 
         }).catch((error) => {
-            toast.error( error.response.data.message || "Error deleting details" );
+            handleAuthError(error);
             console.log(error);
-            setLoading(false); 
+            // toast.error("Cannot delete Candidate Details Try after sometime.", { position: 'top-center', theme: "colored" })
         })
 }
 
     return (
         <div>
              <div className='container pt-3'>
-           {loading ? <LoadingPage/> : ''}
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
                     <div className='card border-0 shadow'style={{width:'700px',height:'1000px'}}>

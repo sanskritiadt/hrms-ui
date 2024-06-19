@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import LoadingPage from './LoadingPage'
+import handleAuthError from './CommonErrorHandling';
 
 export default function Saveclientinfo() {
-  // const token = localStorage.getItem("response-token");
-  const  token = useSelector((state) => state.auth.token);
-  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("response-token");
   const [data, setData] = useState({
     Companyname: "",
     Address: "",
@@ -16,11 +13,15 @@ export default function Saveclientinfo() {
     Cperson: "",
     GST: "",
   });
-
+  // "companyName":"Wipro",
+  // "address": " WIPRO Enterprises Pvt Ltd (Branch Office) in Dewas Naka Indore, ",
+  // "phone":8028440011,
+  // "mailto:email":"reachus@wipro.com",
+  // "contactPerson":"abc",
+  // "gstin":"29GYFUDG1314R9Z6" 
 
   function submit(e) {
     e.preventDefault();
-    setLoading(true); 
     axios.post(`/apigateway/expenseManagement/clientInfo/saveClientInfo`, {
       companyName: data.Companyname,
       address: data.Address,
@@ -36,12 +37,11 @@ export default function Saveclientinfo() {
     }
     ).then((response) => {
       console.log(response);
-      toast.success("Client info created Successfully!!", { position: "top-center", theme: "colored" });
-      setLoading(false); 
+      toast.success("Client info created Successfully!!", { position: "top-center", theme: "colored" })
     }).catch((error) => {
-      toast.error( error.response.data.message || "Error creating details" );
+      handleAuthError(error);
       console.log(error)
-      setLoading(false); 
+      // toast.error("cannot generate client info!!", { position: "top-center", theme: "colored" })
 
     })
   }
@@ -54,7 +54,6 @@ export default function Saveclientinfo() {
   return (
     <>
       <div className='container pt-3'>
-      {loading ? <LoadingPage/> : ''}
         <div className='row'>
           <div className='col-lg-8 col-md-10 mx-auto'>
             <div className='card border-0 shadow'style={{width:'810px',height:'750px'}}>
@@ -70,6 +69,7 @@ export default function Saveclientinfo() {
                         className="form-control" />
                     </div>
                   </div>
+
                   <div className="row mb-3">
                     <label htmlFor="Address" className="col-sm-2 col-form-label" name='Address'>Address</label>
                     <div className="col-sm-10">

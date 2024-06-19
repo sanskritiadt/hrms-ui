@@ -2,16 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {toast} from  'react-toastify';
 import handleAuthError from './CommonErrorHandling';
-import LoadingPage from './LoadingPage'
-import { useSelector } from 'react-redux';
 
 export default function EmpPayrollDetail() {
-  // const token = localStorage.getItem("response-token");
-  // const EmpId = localStorage.getItem("EmpID");
-  const  token = useSelector((state) => state.auth.token);
-  const  EmpId = useSelector((state) => state.auth.empId);
-
-  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("response-token");
+  const EmpId = localStorage.getItem("EmpID");
   const [data, setData] = useState({
     empId: '',
     designation: '',
@@ -24,7 +18,6 @@ export default function EmpPayrollDetail() {
 
   function HandleSubmit(e) {
     e.preventDefault();
-    setLoading(true); 
     axios
       .post(
         `/apigateway/hrms/employee/updatePayrollByUser`,
@@ -49,17 +42,14 @@ export default function EmpPayrollDetail() {
           position: "top-center",
           theme: "colored",
         });
-        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message || "Error updating details" );
-        setLoading(false); 
+        handleAuthError(error);
       });
   }
 
   useEffect(() => {
-    setLoading(true); 
     axios
       .get(`/apigateway/hrms/employee/getEmpPayrollById/${EmpId}`, {
         headers: {
@@ -67,13 +57,11 @@ export default function EmpPayrollDetail() {
         },
       })
       .then((response) => {
+        //console.log(response.data);
         setData(response.data);
-        setLoading(false); 
       })
       .catch((error) => {
         console.log(error);
-        toast.error( error.response.data.message || "Error fetching details" );
-        setLoading(false); 
       });
   }, []);
 
@@ -82,7 +70,7 @@ export default function EmpPayrollDetail() {
       <div
         className="container pt-3"
         style={{ width: "1000px", height: "800px" }}
-      >    {loading ? <LoadingPage/> : ''}
+      >
         <div className="row">
           <div className="col-lg-8 col-md-8 mx-auto">
             <div className="card border-0 shadow">

@@ -7,10 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from 'react-toastify';
-import LoadingPage from './LoadingPage'
 
 const PasswordForm = ({ token, email, type }) => {
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -30,7 +28,6 @@ const PasswordForm = ({ token, email, type }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     const email = urlParams.get("email");
-    setLoading(true); 
     axios
       .post(`/apigateway/api/auth/password/reset`, {
         email: email,
@@ -42,13 +39,12 @@ const PasswordForm = ({ token, email, type }) => {
         console.log(response.data);
         toast.success("Password change successfully.", { position: "top-center", theme: "colored" })
         navigate('/Login');
-        setLoading(false);
         // handle successful response
       })
       .catch((error) => {
         console.error(error);
-        toast.error( error.response.data.message || "Error creating details" );
-        setLoading(false);
+        toast.error("Error found in change Password!!", { position: "top-center", theme: "colored" })
+        // handle error
       })
       .finally(() => {
         setSubmitting(false);
@@ -58,9 +54,8 @@ const PasswordForm = ({ token, email, type }) => {
 
 
   return (
-    <Container> 
-       {loading ? <LoadingPage/> : ''}
-      <Row>   
+    <Container>
+      <Row>
         <Col md={{ span: 6, offset: 3 }}  style={{ margin:'100px' ,width:'810px'}}>
           <h3>{type === "new-password" ? "Create" : "Reset"} Password</h3>
           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>

@@ -1,12 +1,10 @@
-import React,{useState} from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import "./Hrmscss/FPF.css";
 import { toast } from "react-toastify";
-import LoadingPage from './LoadingPage'
 
 function ForgotPassword1() {
-  const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -18,7 +16,6 @@ function ForgotPassword1() {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        setLoading(true); 
         const response = await fetch(
           `/apigateway/api/auth/password/resetlink`,
           {
@@ -36,11 +33,12 @@ function ForgotPassword1() {
           position: "top-center",
           theme: "colored",
         });
-        setLoading(false); 
       } catch (error) {
         console.error(error);
-        toast.error( error.response.data.message || "Error updating details" );
-        setLoading(false); 
+        toast.error("Error happend try after sometime.", {
+          position: "top-center",
+          theme: "colored",
+        });
       } finally {
         setSubmitting(false);
       }
@@ -49,10 +47,10 @@ function ForgotPassword1() {
 
   return (
     <div className="forgot-password-container" style={{ margin: "0px 15rem" }}>
-      {loading ? <LoadingPage/> : ''}
       <div className="forgot-password-box">
         <h2 className="forgot-password-title">Forgot Password <i className="fas fa-lock"></i></h2>
         <form onSubmit={formik.handleSubmit}>
+        
           <input  style={{ fontSize: "0.8em", padding: "0.5em 1em" }} 
             id="email"
             placeholder='Enter email id'
