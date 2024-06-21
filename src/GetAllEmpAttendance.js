@@ -420,11 +420,7 @@ const GetAllEmpAttendance = () => {
         }
       })
       .then(response => {
-<<<<<<< Updated upstream
         console.log("API Response Data:", response.data); // Log response data
-=======
-       // console.log("API Response Data:", response.data); // Log response data
->>>>>>> Stashed changes
         setData(response.data);
         setLoading(false);
       })
@@ -745,7 +741,6 @@ function DebouncedInput({
 }
 
 export default GetAllEmpAttendance;
-
 
 
 
