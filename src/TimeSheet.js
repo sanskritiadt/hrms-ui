@@ -4,6 +4,27 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingPage from './LoadingPage'
 import { useSelector } from 'react-redux';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 const TimeSheet = () => {
   const [checkindisable, setcheckinDisable] = useState(false);
   const [checkoutdisable, setcheckoutDisable] = useState(false);
@@ -12,6 +33,7 @@ const TimeSheet = () => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [loading, setLoading] = useState(false);
+  const [graphData, setGraphData] = useState(null);
 
   // const token = localStorage.getItem("response-token");
   // const empId = localStorage.getItem("EmpID");
@@ -133,6 +155,7 @@ const TimeSheet = () => {
       )
       .then((response) => {
         setNewDate(response.data);
+        setGraphData(prepareGraphData(response.data)); 
         console.log(response.data);
         toast.success("Data found successfully.", {
           position: "top-center",
@@ -153,6 +176,26 @@ const TimeSheet = () => {
     setDate(newdate);
     console.log(newdate);
   }
+ 
+  const prepareGraphData = (data) => {
+      const dates = data.map((entry) => entry.date);
+      const workingHours = data.map((entry) => {
+        return entry.workingHour ? parseInt(entry.workingHour) : 0;
+   });    
+      return {
+        labels: dates,
+        datasets: [
+          {
+            label: 'Working Performance',
+            data: workingHours,
+            fill: false,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+          },
+        ],
+      };
+    };
+
   return (
     <>
       <div className="container">
@@ -314,6 +357,20 @@ const TimeSheet = () => {
                 ))}
               </tbody>
             </table>
+        {graphData && (
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-body">
+                  <h5 className="card-title">Graphical Representation (Hour/Date)</h5>
+                  <Line data={graphData} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        )}
           </div>
         </div>
       </div>
