@@ -1,7 +1,6 @@
 import React ,{useState,useEffect}from 'react'
 import axios from 'axios'
 import {toast} from  'react-toastify';
-import handleAuthError from './CommonErrorHandling';
 import LoadingPage from './LoadingPage'
 import { useSelector } from 'react-redux';
 export default function EmpPersonalDetail() {

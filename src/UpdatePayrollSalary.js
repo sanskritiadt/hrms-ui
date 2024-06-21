@@ -1407,7 +1407,7 @@ const UpdatePayrollSalary = () => {
                             htmlFor="netSalary"
                             className="col-sm-2 col-form-label"
                           >
-                            Net 
+                            Variable
                           </label>
                           <div className="col-sm-10">
                             <input
