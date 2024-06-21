@@ -28,7 +28,7 @@ const Registerformik = () => {
       .post("/apigateway/api/auth/register", {
         firstName:values.firstName,
         middleName:values.middleName,
-        lastName:values.middleName,
+        lastName:values.lastName,
         email: values.email,
         password: values.password,
         confirmPassword: values.confirmPassword
