@@ -228,7 +228,7 @@ export default function CreatePosition() {
                     </div>
                     <div className="row mb-3">
                       <label
-                        htmlFor="positionopendate"
+                        htmlFor="positionOpenDate"
                         className="col-sm-2 col-form-label"
                       >
                         Position open date
@@ -241,13 +241,13 @@ export default function CreatePosition() {
                           value={data.positionOpenDate}
                           type="date"
                           className="form-control"
-                          id="positionopendate"
+                          id="positionOpenDate"
                         />
                       </div>
                     </div>
                     <div className="row mb-3">
                       <label
-                        htmlFor="positionclosedate"
+                        htmlFor="positionCloseDate"
                         className="col-sm-2 col-form-label"
                       >
                         Position close date
@@ -260,7 +260,7 @@ export default function CreatePosition() {
                           value={data.positionCloseDate}
                           type="date"
                           className="form-control"
-                          id="positionclosedate"
+                          id="positionCloseDate"
                         />
                       </div>
                     </div>

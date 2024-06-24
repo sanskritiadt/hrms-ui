@@ -27,7 +27,7 @@
 //     employeePFAmount: "",
 //     employerPFAmount: "",
 //     grossSalary: "",
-//     netSalary: "",
+//     variableAmount: "",
 //     medicalInsurance: "",
 //   });
 //   const { id } = useParams();
@@ -406,19 +406,19 @@
 //                         </div>
 //                         <div className="row mb-3">
 //                           <label
-//                             htmlFor="netSalary"
+//                             htmlFor="variableAmount"
 //                             className="col-sm-2 col-form-label"
 //                           >
 //                             Net Salary
 //                           </label>
 //                           <div className="col-sm-10">
 //                             <input
-//                               value={data.netSalary || ""}
-//                               name="netSalary"
+//                               value={data.variableAmount || ""}
+//                               name="variableAmount"
 //                               onChange={handleInputChange}
 //                               type="text"
 //                               className="form-control"
-//                               id="netSalary"
+//                               id="variableAmount"
 //                             />
 //                           </div>
 //                         </div>
@@ -493,7 +493,7 @@
 //     employeePFAmount: "",
 //     employerPFAmount: "",
 //     grossSalary: "",
-//     netSalary: "",
+//     variableAmount: "",
 //     medicalInsurance: "",
 // 	 onlyBasic: false,
 //   });
@@ -558,7 +558,7 @@
 //       employeePFAmount: null,
 //       employerPFAmount: null,
 //       grossSalary: null,
-//       netSalary: 0,
+//       variableAmount: 0,
 //       medicalInsurance: 0.0
 //     };
 //     setLoading(true);
@@ -907,19 +907,19 @@
 //                         </div>
 //                         <div className="row mb-3">
 //                           <label
-//                             htmlFor="netSalary"
+//                             htmlFor="variableAmount"
 //                             className="col-sm-2 col-form-label"
 //                           >
 //                             Net Salary
 //                           </label>
 //                           <div className="col-sm-10">
 //                             <input
-//                               value={data.netSalary || ""}
-//                               name="netSalary"
+//                               value={data.variableAmount || ""}
+//                               name="variableAmount"
 //                               onChange={handleInputChange}
 //                               type="text"
 //                               className="form-control"
-//                               id="netSalary"
+//                               id="variableAmount"
 //                             />
 //                           </div>
 //                         </div>
@@ -994,7 +994,7 @@ const UpdatePayrollSalary = () => {
     employeePFAmount: "",
     employerPFAmount: "",
     grossSalary: "",
-    netSalary: "",
+    variableAmount: "",
     medicalInsurance: "",
     onlyBasic: false
   });
@@ -1054,9 +1054,7 @@ const UpdatePayrollSalary = () => {
       employerESICAmount: null,
       employeePFAmount: null,
       employerPFAmount: null,
-      grossSalary: null,
-      netSalary: 0,
-      medicalInsurance: 0.0,
+      grossSalary: null
     };
     setLoading(true);
     axios
@@ -1404,19 +1402,19 @@ const UpdatePayrollSalary = () => {
                         </div>
                         <div className="row mb-3">
                           <label
-                            htmlFor="netSalary"
+                            htmlFor="variableAmount"
                             className="col-sm-2 col-form-label"
                           >
-                            Net 
+                            Variable
                           </label>
                           <div className="col-sm-10">
                             <input
-                              value={data.netSalary || ""}
-                              name="netSalary"
+                              value={data.variableAmount || ""}
+                              name="variableAmount"
                               onChange={handleInputChange}
                               type="number"
                               className="form-control"
-                              id="netSalary"
+                              id="variableAmount"
                             />
                           </div>
                         </div>

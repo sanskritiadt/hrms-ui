@@ -242,7 +242,7 @@ const Login = () => {
                   <div style={{ marginTop: '20px' }}>
                     <Link to="/Forgotpassword" className="nav-link pt-2 fp"><i className="fas fa-lock"></i> Forget password</Link>
                     {/* <Link to="/ChangepasswordForm" className="nav-link pt-2 cp"><i className="fas fa-key"></i> Change password</Link> */}
-                    <Link to="/RegisterUser" className="nav-link pt-2 ru"><i className="fas fa-user-plus"></i> Register User</Link>
+                    {/* <Link to="/RegisterUser" className="nav-link pt-2 ru"><i className="fas fa-user-plus"></i> Register User</Link> */}
                   </div>
                 </div>
               </Form>
