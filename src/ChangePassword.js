@@ -48,7 +48,12 @@ const ChangepasswordForm = () => {
                 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.')
     });
     return (
-        <Container>
+        <Container style={{
+            marginTop: "50px",
+            marginLeft: "200px",
+            width: "30rem",
+            height: "60rem",
+          }}>
              {loading ? <LoadingPage/> : ''}
             <Formik
                 initialValues={initialValues}
@@ -61,7 +66,7 @@ const ChangepasswordForm = () => {
                         {status && <Alert variant="success">{status}</Alert>}
                         <div className="form-group">
                             <label htmlFor="oldPassword">Current Password</label>
-                            <Field type="password" name="oldPassword" className={`form-control ${touched.oldPassword && errors.oldPassword ? 'is-invalid' : ''}`} />
+                            <Field type={values.showPassword ? "text" : "password"} name="oldPassword" className={`form-control ${touched.oldPassword && errors.oldPassword ? 'is-invalid' : ''}`} />
                             <ErrorMessage name="oldPassword" component="div" className="invalid-feedback" />
                         </div>
                         <div className="form-group">
