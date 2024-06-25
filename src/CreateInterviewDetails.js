@@ -25,8 +25,6 @@ const CreateInterview = () => {
     interviewerName: "",
     source: "",
     offerAccepted: "",
-    screeningRound: "",
-    selected: "",
     type: "",
     clientName: "",
     rounds: "",
@@ -124,7 +122,7 @@ const CreateInterview = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
+       // console.log(response.data);
         toast.success(response.data, {
           position: "top-center",
           theme: "colored",
@@ -308,13 +306,13 @@ const CreateInterview = () => {
                         onChange={(e) => {
                           handle(e);
                         }}
-                        value={position.uiid}
+                        value={position.positionId}
                         className="form-control"
                         id="position_id"
                       >
                         <option defaultValue>Select Position Name</option>
                         {position.map((pos) => (
-                          <option key={pos.uiid} value={pos.uiid}>
+                          <option key={pos.positionId} value={pos.positionId}>
                             {pos.positionName} ({pos.experienceInYear}yrs)
                           </option>
                         ))}

@@ -304,7 +304,7 @@ function HolidayCalender() {
                               "Are you sure you wish to delete this Holiday?"
                             )
                           ) {
-                            handleDelete(searchedHoliday.hid);
+                            handleDelete(holiday.hid);
                           }
                         }}
                       >
