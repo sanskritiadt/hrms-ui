@@ -12,9 +12,10 @@ const EditprojEng = () => {
     const navigate = useNavigate()
     const [data,setData] = useState({
         projectId:'',
-        projectName:'',
-        projectDescription:'',
-        engagedEmployee:'',
+        contractor:'',
+        endClient:'',
+        primaryResource:'',
+        secondaryResource:'',
         startDate:'',
         endDate:'',
         status:'',
@@ -42,9 +43,10 @@ function HandleSubmit(e){
     e.preventDefault();
     axios.put(`/apigateway/hrms/engagement/updateProjectEngagement/${id}`,{
         projectId:data.projectId,
-        projectName:data.projectName,
-        projectDescription:data.projectDescription,
-        engagedEmployee:data.engagedEmployee,
+        contractor:data.contractor,
+        endClient:data.endClient,
+        primaryResource:data.primaryResource,
+        secondaryResource:data.secondaryResource,
         startDate:data.startDate,
         endDate:data.endDate,
         status:data.status
@@ -99,33 +101,45 @@ function HandleDelete(){
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectName'>Project Name</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='contractor'>Contractor</label>
                                     <div className="col-sm-10">
-                                        <input value={data.projectName || ''}
-                                            onChange={e => setData({ ...data, projectName: e.target.value })}
+                                        <input value={data.contractor || ''}
+                                            onChange={e => setData({ ...data, contractor: e.target.value })}
                                             type="text" className="form-control"
-                                            id="projectName" />
+                                            id="contractor"
+                                            placeholder='enter contractor' />
                                     </div>   
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='emailId'>Project Description</label>
+                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='endClient'>End Client</label>
                                     <div className="col-sm-10">
-                                        <input value={data.projectDescription || ''}
-                                            onChange={e => setData({ ...data, projectDescription: e.target.value })}
+                                        <input value={data.endClient || ''}
+                                            onChange={e => setData({ ...data, endClient: e.target.value })}
                                             type="text"
-                                            id="projectDescription"
-                                         placeholder='enter Project Description'
+                                            id="endClient"
+                                         placeholder='enter end client'
                                             className="form-control" />
                                     </div>
                                 </div>
                                 <div className="row mb-3">
-                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='emailId'>Engaged Employee</label>
+                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='primaryResource'>Primary Resource</label>
                                     <div className="col-sm-10">
-                                        <input value={data.engagedEmployee || ''}
-                                            onChange={e => setData({ ...data, engagedEmployee: e.target.value })}
+                                        <input value={data.primaryResource || ''}
+                                            onChange={e => setData({ ...data, primaryResource: e.target.value })}
                                             type="text"
-                                            id="engagedEmployee"
-                                         placeholder='enter Engaged Employee'
+                                            id="primaryResource"
+                                         placeholder='enter primary resource name'
+                                            className="form-control" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='secondaryResource'>Secondary Employee</label>
+                                    <div className="col-sm-10">
+                                        <input value={data.secondaryResource || ''}
+                                            onChange={e => setData({ ...data, secondaryResource: e.target.value })}
+                                            type="text"
+                                            id="secondaryResource"
+                                         placeholder='enter secondary resource name'
                                             className="form-control" />
                                     </div>
                                 </div>
