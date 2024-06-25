@@ -222,7 +222,7 @@ import CreatePayslip from './CreatePayslip';
 import UpdatePayrollSalary from "./UpdatePayrollSalary";
 import ManageRoles from "./ManageRoles";
 import EditPosition from "./EditPosition";
-
+import AddProjRevenue from'./AddProjRevenue';
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -307,6 +307,7 @@ const Approuter = () => {
               <Route path="/ManageRoles" element={<ManageRoles />} />
               <Route path="/EditPosition/:id" element={<EditPosition />} />
               <Route path="/RegisterUser" element={<RegisterUser />} />
+              <Route path="/add-proj-revenue" element={<AddProjRevenue />} />
             </Routes>
           </SideBar>
         </div>

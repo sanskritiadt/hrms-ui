@@ -3,9 +3,10 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import handleAuthError from './CommonErrorHandling';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const AddProjRevenue = () => {
-    const token = localStorage.getItem("response-token");
+    const  token = useSelector((state) => state.auth.token);
     const [data, setData] = useState({
         endClient: '',
         year: '',
@@ -94,7 +95,7 @@ const AddProjRevenue = () => {
             <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
                 <ol className="breadcrumb" style={{ color: "white", marginLeft: '20px' }}>
                     <li className="breadcrumb-item"><Link to="/">Home</Link></li>
-                    <li className="breadcrumb-item"><Link to="/create-project-engagement">Create Project Engagement</Link></li>
+                    <li className="breadcrumb-item"><Link to="/">Partner</Link></li>
                     <li className="breadcrumb-item active" aria-current="page">Project Revenue Details</li>
                 </ol>
             </nav>

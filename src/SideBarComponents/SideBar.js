@@ -120,6 +120,11 @@ const routes = [
         name: "View Project Engagement",
         icon: <FaHandshake />,
       }, 
+      {
+        path: "/add-proj-revenue",
+        name: "Add Project Revenue",
+        icon: <MdCreateNewFolder />,
+      },
       ],
   },
   {
