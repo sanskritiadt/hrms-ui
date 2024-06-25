@@ -9,18 +9,20 @@ function FileUpload() {
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
-
+  const [email, setEmail] = useState(null);
   function handleFileChange(event) {
     setFile(event.target.files[0]);
   }
-
+  function handleEmailChange(event) {
+    setEmail(event.target.value);
+  }
+  
   function Submit(event) {
     event.preventDefault();
     setLoading(true);
     axios
-      .post(
-        `/apigateway/payroll/generatePaySlipForAll`,
-        {},
+      .get(
+        `/apigateway/payroll/generatePaySlipForAll?emailInput=${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -69,7 +71,7 @@ function FileUpload() {
       {" "}
       {loading ? <LoadingPage /> : ""}
       <form onSubmit={Submit}>
-        {/* <input type="file" onChange={handleFileChange} /> */}
+        Email  <input type="email" onChange={handleEmailChange} placeholder="Enter Email."/> 
         <button type="submit">
           generate all Payslip from DB{" "}
         </button>
