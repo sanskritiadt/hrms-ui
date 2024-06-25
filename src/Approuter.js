@@ -223,6 +223,8 @@ import UpdatePayrollSalary from "./UpdatePayrollSalary";
 import ManageRoles from "./ManageRoles";
 import EditPosition from "./EditPosition";
 import AddProjRevenue from'./AddProjRevenue';
+import AddAppraisalDetails from './AddAppraisalDetails';
+import GetAllEmpAppraisalDetails from './GetAllEmpAppraisalDetails';
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -308,6 +310,8 @@ const Approuter = () => {
               <Route path="/EditPosition/:id" element={<EditPosition />} />
               <Route path="/RegisterUser" element={<RegisterUser />} />
               <Route path="/add-proj-revenue" element={<AddProjRevenue />} />
+              <Route path="/AddAppraisalDetails" element={<AddAppraisalDetails />} />
+              <Route path="/GetAllEmpAppraisalDetails" element={<GetAllEmpAppraisalDetails />} />
             </Routes>
           </SideBar>
         </div>

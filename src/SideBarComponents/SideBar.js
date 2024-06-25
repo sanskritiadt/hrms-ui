@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './SideBar.css';
 
 import {  BiSearch} from "react-icons/bi";
-import { FaHome, FaUser,  FaUserPlus, FaClock,  FaFileInvoice } from 'react-icons/fa';
+import { FaHome, FaUser,  FaUserPlus, FaClock,  FaFileInvoice,FaAward } from 'react-icons/fa';
 import { FaList, FaClipboardList } from 'react-icons/fa';
 import {  FaInfoCircle } from 'react-icons/fa';
 import {AiOutlineLaptop} from 'react-icons/ai';
@@ -155,6 +155,23 @@ const routes = [
       {
         path: "/HolidayCalender",
         name: "View Holiday",
+        icon: <FaFileInvoice />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    name: "Performance & Rewards",
+    icon: <FaAward />,
+    subRoutes: [
+      {
+        path: "/AddAppraisalDetails",
+        name: "Add Appraisal Details",
+        icon: <FaFileInvoice />,
+      },
+      {
+        path: "/GetAllEmpAppraisalDetails",
+        name: "View Appraisal Details",
         icon: <FaFileInvoice />,
       },
     ],
