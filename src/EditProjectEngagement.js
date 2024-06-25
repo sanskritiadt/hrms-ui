@@ -13,9 +13,10 @@ const EditProjectEngagement = () => {
     const navigate = useNavigate();
     const [data, setData] = useState({
         projectId:'',
-        projectName: '',
-        projectDescription: '',
-        engagedEmployee: '',
+        contractor: '',
+        endClient: '',
+        primaryResource: '',
+        secondaryResource: '',
         startDate: '',
         endDate: '',
         status: ''
@@ -36,24 +37,16 @@ const EditProjectEngagement = () => {
             setLoading(false); 
         })
     }, []);
-    var str2bool = (value) => {
-        if (value && typeof value === "string") {
-            if (value.toLowerCase() === "true") return true;
-            if (value.toLowerCase() === "false") return false;
-        }
-    }
-    var radiobut = (e) => {
-        console.log(e.target.value);
-        data.status = str2bool(e.target.value);
-    }
+
     function handleSubmit(e) {
         setLoading(true);
         e.preventDefault();
         axios.put(`/hrms/engagement/updateProjectEngagement/${projectId}`, {
             projectId:data.projectId,
-            projectName: data.projectName,
-            projectDescription: data.projectDescription,
-            engagedEmployee: data.engagedEmployee,
+            contractor: data.contractor,
+            endClient: data.endClient,
+            primaryResource: data.primaryResource,
+            secondaryResource: data.secondaryResource,
             startDate: data.startDate,
             endDate: data.endDate,
             status: data.status
@@ -94,37 +87,50 @@ const EditProjectEngagement = () => {
                                     </div>
                                 </div>
                                 <div className='row mb-3 '>
-                                    <label className='col-sm-2 col-form-label' name='projectName' >Project Name:</label>
+                                    <label className='col-sm-2 col-form-label' name='contractor' >Contractor:</label>
                                     <div className='col-sm-10'>
                                         <input className='form-control' onChange={(e) => { handle(e) }}
-                                            value={data.projectName}
-                                            type='text' id='projectName'
-                                            placeholder='Enter Project Name' >
+                                            value={data.contractor}
+                                            type='text' id='contractor'
+                                            placeholder='Enter Contractor Name' >
                                         </input>
                                     </div>
                                 </div>
                                 <div className='row mb-3 '>
-                                    <label className='col-sm-2 col-form-label' name='projectDescription' >Project Description:</label>
+                                    <label className='col-sm-2 col-form-label' name='endClient' >End Client:</label>
                                     <div className='col-sm-10'>
                                         <input className='form-control' onChange={(e) => { handle(e) }}
-                                            value={data.projectDescription}
-                                            type='text' id='projectDescription'
-                                            placeholder='Enter project Description'>
+                                            value={data.endClient}
+                                            type='text' id='endClient'
+                                            placeholder='Enter End Client'>
                                         </input>
                                     </div>
                                 </div>
                                 <div className='row mb-3 '>
-                                    <label className='col-sm-2 col-form-label' name='engagedEmployee' >Engaged Employee:</label>
+                                    <label className='col-sm-2 col-form-label' name='primaryResource' >Primary Resource:</label>
                                     <div className='col-sm-10'>
                                         <input className='form-control' onChange={(e) => { handle(e) }}
-                                            value={data.engagedEmployee}
-                                            type='text' id='engagedEmployee'
-                                            placeholder='Enter Engaged Employee.'
+                                            value={data.primaryResource}
+                                            type='text' id='primaryResource'
+                                            placeholder='Enter Primary Resource Name.'
                                         >
 
                                         </input>
                                     </div>
                                 </div>
+                                <div className='row mb-3 '>
+                                    <label className='col-sm-2 col-form-label' name='secondaryResource' >Secondary Resource:</label>
+                                    <div className='col-sm-10'>
+                                        <input className='form-control' onChange={(e) => { handle(e) }}
+                                            value={data.secondaryResource}
+                                            type='text' id='secondaryResource'
+                                            placeholder='Enter Secondary Resource Name.'
+                                        >
+
+                                        </input>
+                                    </div>
+                                </div>
+
                                 <div className='row mb-3 '>
                                     <label className='col-sm-2 col-form-label' name='startDate' >Start Date:</label>
                                     <div className='col-sm-10'>

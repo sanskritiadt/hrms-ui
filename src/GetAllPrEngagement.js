@@ -130,18 +130,23 @@ function GetAllPrEngagement() {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "projectName",
-        header: "Project Name",
+        accessorKey: "contractor",
+        header: "Contractor",
         meta: { filterVariant: "select" },
       },
       {
-        accessorKey: "projectDescription",
-        header: "Project Description",
+        accessorKey: "endClient",
+        header: "End Client",
         meta: { filterVariant: "select" },
       },
       {
-        accessorKey: "engagedEmployee",
-        header: "Engaged Employee",
+        accessorKey: "primaryResource",
+        header: "Primary Resource",
+        meta: { filterVariant: "select" },
+      },
+      {
+        accessorKey: "secondaryResource",
+        header: "Secondary Resource",
         meta: { filterVariant: "select" },
       },
       {
@@ -210,7 +215,7 @@ function GetAllPrEngagement() {
               <Link to="">Partner</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Project Engagement
+              View Project Engagement
             </li>
           </ol>
         </nav>

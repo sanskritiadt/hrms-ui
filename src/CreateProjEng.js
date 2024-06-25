@@ -9,9 +9,10 @@ const CreateProjEng = () => {
     const  token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
     const [data,setData] = useState({
-        projectName:'',
-        projectDescription:'',
-        engagedEmployee:'',
+        contractor:'',
+        endClient:'',
+        primaryResource:'',
+        secondaryResource:'',
         startDate:'',
         endDate:'',
         status:''
@@ -20,9 +21,10 @@ const CreateProjEng = () => {
         e.preventDefault();
         setLoading(true); 
         axios.post(`/apigateway/hrms/engagement/saveProjectEngagement`,{
-            projectName:data.projectName,
-            projectDescription:data.projectDescription,
-            engagedEmployee:data.engagedEmployee,
+            contractor:data.contractor,
+            endClient:data.endClient,
+            primaryResource:data.primaryResource,
+            secondaryResource:data.secondaryResource,
             startDate:data.startDate,
             endDate:data.endDate,
             status:data.status
@@ -84,30 +86,38 @@ const CreateProjEng = () => {
                     <div className='card-body'>
                         <form className='container py-3  mb-3' onSubmit={(e) => { submit(e) }}>
                             <div className="row mb-3">
-                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='projectName'>contractor</label>
+                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" name='contractor'>contractor</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.projectName || ''}
+                                    <input onChange={(e) => { handle(e) }} value={data.contractor || ''}
                                         type="text"
-                                        id="projectName"
+                                        id="contractor"
                                        placeholder='Enter project name'
                                         className="form-control" />
                                 </div>
                             </div>
 
                             <div className="row mb-3">
-                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectDescription'>End Client</label>
+                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='endClient'>End Client</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.projectDescription || ''}
+                                    <input onChange={(e) => { handle(e) }} value={data.endClient || ''}
                                         type="text" className="form-control"
-                                        id="projectDescription" />
+                                        id="endClient" />
                                 </div>
                             </div>
                             <div className="row mb-3">
-                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='engagedEmployee'>Engaged Employee</label>
+                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='primaryResource'>Primary Resource</label>
                                 <div className="col-sm-10">
-                                    <input onChange={(e) => { handle(e) }} value={data.engagedEmployee || ''}
+                                    <input onChange={(e) => { handle(e) }} value={data.primaryResource || ''}
                                         type="text" className="form-control"
-                                        id="engagedEmployee" />
+                                        id="primaryResource" />
+                                </div>
+                            </div>
+                            <div className="row mb-3">
+                                <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='secondaryResource'>Secondary Resource</label>
+                                <div className="col-sm-10">
+                                    <input onChange={(e) => { handle(e) }} value={data.secondaryResource || ''}
+                                        type="text" className="form-control"
+                                        id="secondaryResource" />
                                 </div>
                             </div>
 
