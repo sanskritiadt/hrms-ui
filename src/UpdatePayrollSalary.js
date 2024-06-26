@@ -968,7 +968,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Container, Box, Tabs, Tab, IconButton } from "@mui/material";
-import UpdateEmpDocumentByAdmin from "./UpdateEmpDocumentByAdmin";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -1109,7 +1108,6 @@ const UpdatePayrollSalary = () => {
           >
             <Tab value="one" label="Payroll Details" />
             <Tab value="two" label="Salary Details" />
-            <Tab value="three" label="Document Details" />
           </Tabs>
         </Box>
         <Container>
@@ -1450,7 +1448,6 @@ const UpdatePayrollSalary = () => {
               </div>
             </div>
           )}
-          {activeTab === "three" && <UpdateEmpDocumentByAdmin />}
         </Container>
       </Container>
     </div>
