@@ -1,14 +1,17 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Container, Box, Tabs, Tab, IconButton } from "@mui/material";
 import { useParams, useNavigate, json } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import UpdateEmpDocumentByAdmin from "./UpdateEmpDocumentByAdmin";
 import LoadingPage from './LoadingPage'
 
 import { useSelector } from 'react-redux';
 
 const EditEmployee = () => {
+  const [activeTab, setActiveTab] = useState("one");
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const { id } = useParams();
   const navigate = useNavigate();
   // const token = localStorage.getItem("response-token");
@@ -28,6 +31,16 @@ const EditEmployee = () => {
     isEmailVerified: "",
     userName: "",
   });
+ 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -48,6 +61,11 @@ const EditEmployee = () => {
         setLoading(false); 
       });
   }, []);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
   function handleSubmit(e) {
     setLoading(true);
     e.preventDefault();
@@ -90,15 +108,29 @@ const EditEmployee = () => {
   }
   
   return (
-    <div className="container pt-3"> 
-    {loading ? <LoadingPage/> : ''}
-      <div className="row">
-        <div className="col-lg-8 col-md-10 mx-auto">
-          <div
-            className="card border-0 shadow"
-            style={{ width: "700px", height: "850px" }}
+    <div style={{ width: screenWidth - 70 }}>
+      {loading && <LoadingPage />}
+      <Container>
+        <Box sx={{ borderBottom: 2, borderColor: "divider", width: "100%" }}>
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            aria-label="Tabs example"
           >
-            <div className="card-body">
+            <Tab value="one" label="Edit Employee" />
+            <Tab value="two" label="Document Details" />
+          </Tabs>
+        </Box>
+        <Container>
+          {activeTab === "one" && (
+            <div
+              className="container pt-3"
+              style={{ width: "1000px", height: "800px" }}
+            >
+              <div className="row">
+                <div className="col-lg-8 col-md-8 mx-auto">
+                  <div className="card border-0 shadow">
+                                <div className="card-body">
               <form className="container py-3  mb-3" onSubmit={handleSubmit}>
                 <div className="row mb-3">
                   <label
@@ -318,9 +350,14 @@ const EditEmployee = () => {
                 </div>
               </form>
             </div>
-          </div>
-        </div>
-      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {activeTab === "two" && <UpdateEmpDocumentByAdmin />}
+        </Container>
+      </Container>
     </div>
   );
 };
