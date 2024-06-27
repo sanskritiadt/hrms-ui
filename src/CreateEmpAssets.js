@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import LoadingPage from './LoadingPage';
 import { useSelector } from 'react-redux';
+
 const CreateEmpAssets = () => {
   // const token = localStorage.getItem("response-token");
   const  token = useSelector((state) => state.auth.token);
@@ -23,6 +24,32 @@ const CreateEmpAssets = () => {
     warrentyDate: "",
     status: "",
   });
+  const [AssetType, setAssetType] = useState([]);
+
+  useEffect(() => {
+
+    axios
+      .get(`/apigateway/hrms/masterAsset/getAllAssetType`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data);
+        setAssetType(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(
+          error.response.data.message
+        );
+      });
+  
+    
+   
+
+  }, []);
+
 
   function submit(e) {
     e.preventDefault();
@@ -181,20 +208,29 @@ const CreateEmpAssets = () => {
                   </div>
                   <div className="row mb-3">
                     <label
-                      htmlFor="assetType"
+                      htmlFor="inputEmail3"
                       className="col-sm-2 col-form-label"
+                      name="tech_id"
                     >
-                      Asset Type
+                      AssetType
                     </label>
                     <div className="col-sm-10">
-                      <input
-                        onChange={handle}
-                        value={data.assetType}
-                        type="text"
+                      <select
+                        required
+                        onChange={(e) => {
+                          handle(e);
+                        }}
+                        value={AssetType.id}
+                        id="tech_id"
                         className="form-control"
-                        placeholder="Enter asset asset type."
-                        id="assetType"
-                      />
+                      >
+                        <option defaultValue>Select AssetType</option>
+                        {AssetType.map((asset) => (
+                          <option key={asset.id} value={asset.id}>
+                            {asset.assetName}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   <div className="row mb-3">
