@@ -151,6 +151,11 @@ function Getinterviewdetails() {
   const columns = useMemo(
     () => [
       {
+        accessorKey: "candidate_id.candidateName",
+        header: "Candidate Name",
+        meta: { filterVariant: "select" },
+      },
+      {
         accessorKey: "tech_id.description",
         header: "Tech Description",
         meta: { filterVariant: "select" },
@@ -160,11 +165,7 @@ function Getinterviewdetails() {
         header: "Position Name",
         meta: { filterVariant: "select" },
       },
-      {
-        accessorKey: "candidate_id.candidateName",
-        header: "Candidate Name",
-        meta: { filterVariant: "select" },
-      },
+     
       { accessorKey: "marks", header: "Marks", meta: { filterable: true } },
       {
         accessorKey: "communication",
