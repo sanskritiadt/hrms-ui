@@ -254,9 +254,9 @@ const GetAllEmpAttendance = () => {
                                 header.getContext()
                               )}
                               {header.column.getIsSorted() === "asc"
-                                ? " 🔼"
+                                ? " ??"
                                 : header.column.getIsSorted() === "desc"
-                                  ? " 🔽"
+                                  ? " ??"
                                   : null}
                             </div>
                             {header.column.getCanFilter() ? (
@@ -354,9 +354,3 @@ function DebouncedInput({ value: initialValue, onChange, debounce = 500, ...prop
 }
 
 export default GetAllEmpAttendance;
-
-
-
-
-
-
