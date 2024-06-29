@@ -4,46 +4,49 @@ import { Line } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+const generateColors = (numColors) => {
+  const colors = [];
+  for (let i = 0; i < numColors; i++) {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    colors.push(`rgba(${r},${g},${b},0.4)`);
+    colors.push(`rgba(${r},${g},${b},1)`);
+  }
+  return colors;
+};
+
 const prepareGraphData = (data) => {
-  const dates = data.map((entry) => entry.date);
-  const workingHours = data.map((entry) => {
-    if(entry.workingHour){
-      const [hours, minutes, seconds] = entry.workingHour.split(':').map(Number);
-      const totalHours = hours + (minutes / 60) + (seconds / 3600);
-      return parseFloat(totalHours.toFixed(2));
-    }else{
-      return 0;
-    }
+  const employees = Array.from(new Set(data.map((entry) => entry.employeeName)));
+  const dates = Array.from(new Set(data.map((entry) => entry.date)));
+
+  const colors = generateColors(employees.length);
+
+  const datasets = employees.map((employee, index) => {
+    const employeeData = data.filter(entry => entry.employeeName === employee);
+    const workingHours = dates.map(date => {
+      const entry = employeeData.find(d => d.date === date);
+      return entry ? parseInt(entry.workingHour) : null;
+    });
+
+    return {
+      label: employee,
+      data: workingHours,
+      fill: true,
+      backgroundColor: colors[index * 2],
+      borderColor: colors[index * 2 + 1],
+      pointBackgroundColor: colors[index * 2 + 1],
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: colors[index * 2 + 1],
+      pointRadius: 5,
+      pointHoverRadius: 7,
+    };
   });
+
   return {
     labels: dates,
-    datasets: [
-      {
-        label: 'Working Performance',
-        data: workingHours,
-        fill: true,
-        backgroundColor: (context) => {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
-
-          if (!chartArea) {
-            // This case happens on initial chart creation
-            return;
-          }
-          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, 'rgba(75,192,192,0.4)');
-          gradient.addColorStop(1, 'rgba(75,192,192,0)');
-          return gradient;
-        },
-        borderColor: 'rgba(75,192,192,1)',
-        pointBackgroundColor: 'rgba(75,192,192,1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(75,192,192,1)',
-        pointRadius: 5,
-        pointHoverRadius: 7,
-      },
-    ],
+    datasets,
   };
 };
 
@@ -130,9 +133,14 @@ const Graph = ({ data }) => {
         },
       },
     },
+    spanGaps: true, // Ensure lines span over null data points
   };
 
   return <Line data={chartData} options={options} />;
 };
 
 export default Graph;
+
+
+
+
