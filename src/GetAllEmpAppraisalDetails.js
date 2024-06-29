@@ -19,6 +19,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
+import { object } from "yup";
 
 function GetAllEmpAppraisalDetails() {
   const token = useSelector((state) => state.auth.token);
@@ -28,6 +29,7 @@ function GetAllEmpAppraisalDetails() {
   const [appraisalHistory, setAppraisalHistory] = useState([]);
   const [showAppraisalHistoryModal, setShowAppraisalHistoryModal] = useState(false);
   const [type, setType] = useState('');
+  const [empId, setEmpId] = useState();
 
   useEffect(() => {
     axios
@@ -50,7 +52,7 @@ function GetAllEmpAppraisalDetails() {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "employeeName",
+        accessorKey: "name",
         header: "Name",
         meta: { filterVariant: false },
       },
@@ -88,7 +90,7 @@ function GetAllEmpAppraisalDetails() {
               variant="contained"
               color="primary"
               size="small"
-              onClick={() => handleAppraisalHistoryOnClick(cell.row.original.empid)}
+              onClick={() => handleAppraisalHistoryOnClick(cell.row.original.empId)}
             //onClick={handleAppraisalHistoryOnClick1}
             >
               View Appraisal
@@ -104,7 +106,7 @@ function GetAllEmpAppraisalDetails() {
               variant="contained"
               color="primary"
               size="small"
-              onClick={() => handleRewardHistoryOnClick(cell.row.original.empid)}
+              onClick={() => handleRewardHistoryOnClick(cell.row.original.empId)}
               //onClick={handleAppraisalHistoryOnClick2}
             >View Reward
             </Button>
@@ -125,7 +127,7 @@ function GetAllEmpAppraisalDetails() {
   // }
   const handleAppraisalHistoryOnClick = (empId) => {
     axios
-      .get(`/apigateway/payroll/salarydetails/getAllAppraisalDetailsbyId/${empid}`, {
+      .get(`/apigateway/payroll/salarydetails/getAllAppraisalDetailsbyId/${empId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -143,7 +145,7 @@ function GetAllEmpAppraisalDetails() {
 
   const handleRewardHistoryOnClick = (empId) => {
     axios
-      .get(`/apigateway/payroll/salarydetails/getRewardDetails/${empid}`, {
+      .get(`/apigateway/payroll/salarydetails/getRewardDetails/${empId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
