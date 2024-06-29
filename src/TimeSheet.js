@@ -751,7 +751,13 @@ const TimeSheet = () => {
   const prepareGraphData = (data) => {
       const dates = data.map((entry) => entry.date);
       const workingHours = data.map((entry) => {
-        return entry.workingHour ? parseInt(entry.workingHour) : 0;
+        if(entry.workingHour){
+          const [hours, minutes, seconds] = entry.workingHour.split(':').map(Number);
+          const totalHours = hours + (minutes / 60) + (seconds / 3600);
+          return parseFloat(totalHours.toFixed(2));
+        }else{
+          return 0;
+        }
    });    
       return {
         labels: dates,
