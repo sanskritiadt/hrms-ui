@@ -174,6 +174,8 @@ const GetAllEmpAttendance = () => {
     if (selectedEmployee.length === 0) return getData;
     return getData.filter((item) => selectedEmployee.includes(item.employeeName));
   }, [selectedEmployee, getData]);  
+  
+  const todayDate = new Date().toISOString().split("T")[0];
   return (
     <div>
       <div className='mt-3'>
@@ -199,9 +201,9 @@ const GetAllEmpAttendance = () => {
               {loading && <LoadingPage />}
               <div className='mb-2 d-grid gap-1 d-md-flex justify-content-center my-4'>
                 <label className='pt-2 fs-5 mb-0' htmlFor='fromDate'>From Date:</label>
-                <input onChange={handle} value={getAttendence.fromDate} type='date' className='form-control mb-0' id='fromDate' />
+                <input onChange={handle} value={getAttendence.fromDate} type='date' className='form-control mb-0' id='fromDate'   max={todayDate}/>
                 <label className='pt-2 fs-5 mb-0' htmlFor='toDate'>To Date:</label>
-                <input onChange={handle} value={getAttendence.toDate} type='date' className='form-control mb-0' id='toDate' />
+                <input onChange={handle} value={getAttendence.toDate} type='date' className='form-control mb-0' id='toDate'  max={todayDate} />
                 {/* <label className='pt-2 fs-5 mb-0' htmlFor='employeeSelect'>Employee:</label>
                 <select
                   id="employeeSelect"

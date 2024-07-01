@@ -509,7 +509,20 @@ function RevenueDetailsModal({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  
+    // Regular expression to match integers and decimals
+    const numericValue = /^[+-]?([0-9]*[.])?[0-9]+$/;
+  
+    // Check if the entered value is a valid numeric value
+    if (value === '' || numericValue.test(value)) {
+      // Update formData state with the new value
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+    // If the entered value is not a valid numeric value, do not update formData
+    // This will prevent non-numeric values from being displayed
   };
 
   const handleSave = () => {
