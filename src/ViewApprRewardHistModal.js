@@ -21,7 +21,7 @@ function ViewApprRewardHistModal({ show, onHide, appraisalHistory, type }) {
             </tr>
           </thead>
           <tbody>
-          {/* {appraisalHistory.length > 0 ? (
+           {appraisalHistory.length > 0 ? (
               appraisalHistory.map((appraisal, index) => (
                 <tr key={index}>
                   <td>{appraisal.name}</td>
@@ -30,14 +30,14 @@ function ViewApprRewardHistModal({ show, onHide, appraisalHistory, type }) {
                   <td>{appraisal.salary}</td>
                   <td>{appraisal.bonus}</td>
                   <td>{appraisal.variable}</td>
-                  <td>{appraisal.rewardType}</td>
+                  {type === 'reward' && <td>{appraisal.rewardType}</td>}  
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan="5" className="text-center">No Appraisal History</td>
               </tr>
-            )} */}
+            )} 
           </tbody>
         </Table>
       </Modal.Body>

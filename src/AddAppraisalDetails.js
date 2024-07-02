@@ -23,23 +23,25 @@ const AddAppraisalDetails = () => {
   const  empId = useSelector((state) => state.auth.empId);
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState('appraisal');
-
-const initialappraisalData ={
+const commonInput ={
   empId: "",
-  year: "",
-  month: null,
   appraisalDate: null,
-  amount: null,
-  salary: null,
+  amount: "",
+}
+
+const initialappraisalData ={ 
+  ...commonData,
+  year: "",
+  month: "",
+  salary: "",
   variable: "",
   bonus: ""
 }
 const initalrewardsData={
-  empId: "",
+  ...commonData,
   rewardType: "",
-  appraisalDate: null,
-  amount: null
 }
+const [commonData, setCommonData] = useState(commonInput);
 const [appraisalData, setAppraisalData] = useState(initialappraisalData);
   const [rewardsData, setRewardsData] = useState(initalrewardsData);
   const years = Array.from(new Array(10), (val, index) => new Date().getFullYear() + index);
@@ -176,7 +178,7 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
-                      value={appraisalData.empId}
+                      value={commonData.empId}
                       type="text"
                       id="empId"
                       placeholder="Enter Emp id"
@@ -193,10 +195,12 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                   </label>
                   <div className="col-sm-10">
                     <input
-                      onChange={handle}
-                      value={appraisalData.appraisalDate}
+                     onChange={(e) => {
+                      handle(e);
+                    }}
+                      value={commonData.appraisalDate}
                       type="date"
-                      id="date"
+                      id="appraisalDate"
                       className="form-control"
                     />
                   </div>
@@ -211,7 +215,7 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
-                      value={appraisalData.amount}
+                      value={commonData.amount}
                       type="number"
                       id="amount"
                       placeholder="Enter Amount"
