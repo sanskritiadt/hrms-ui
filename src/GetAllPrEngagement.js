@@ -22,20 +22,235 @@ const years = Array.from(
   new Array(10),
   (val, index) => new Date().getFullYear() + index
 );
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+function RevenueDetailsModal({
+  show,
+  onHide,
+  revenueDetails,
+  currentDetail,
+  projectId,
+  token,
+  onSave,
+  handleAddNewRevenueDetail,
+  handleEditRevenueDetail,
+}) {
+  const [formData, setFormData] = useState({
+    year: "",
+    month: "",
+    projectRevenue: "",
+    resourceExpense: "",
+    contractorRevenue: "",
+  });
+
+  useEffect(() => {
+    if (currentDetail) {
+      setFormData({
+        year: currentDetail.year || "",
+        month: currentDetail.month || "",
+        projectRevenue: currentDetail.projectRevenue || "",
+        resourceExpense: currentDetail.resourceExpense || "",
+        contractorRevenue: currentDetail.contractorRevenue || "",
+      });
+    }
+  }, [currentDetail]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // Regular expression to match integers and decimals
+    const numericValue = /^[+-]?([0-9]*[.])?[0-9]+$/;
+
+    // Check if the entered value is a valid numeric value
+    if (name !== 'month' && (value === '' || numericValue.test(value))) {
+      // Update formData state with the new value
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    } else if (name === 'month') {
+      // Allow non-numeric values for month
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+  };
+
+  const handleSave = () => {
+    const newId = currentDetail && currentDetail.id ? currentDetail.id : null;
+    axios
+      .post(
+        `/apigateway/hrms/engagement/saveProjectRevenue`,
+        {
+          id: newId,
+          projectEngagement: {
+            projectId: projectId,
+          },
+          ...formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        toast.success(response.data, {
+          position: "top-center",
+          theme: "colored",
+        });
+        onSave();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(
+          error.response.data.message || "Error saving revenue detail"
+        );
+      });
+  };
+
+  return (
+    <Modal
+      show={show}
+      onHide={onHide}
+      style={{ maxWidth: "100%", margin: "auto" }}
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Revenue Details</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={{ overflowX: "auto" }}>
+          <Table striped bordered hover style={{ minWidth: "100%" }}>
+            <thead style={{ backgroundColor: "#f8d7da", textAlign: "center" }}>
+              <tr>
+                <th style={{ width: "20%" }}>End Client</th>
+                <th style={{ width: "15%" }}>Year</th>
+                <th style={{ width: "15%" }}>Month</th>
+                <th style={{ width: "15%" }}>Project Revenue</th>
+                <th style={{ width: "15%" }}>Resource Expense</th>
+                <th style={{ width: "15%" }}>Contractor Expense</th>
+                <th style={{ width: "5%" }}>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {revenueDetails.map((detail) => (
+                <tr key={detail.id} style={{ textAlign: "center" }}>
+                  <td>{detail.projectEngagement.endClient}</td>
+                  <td>{detail.year}</td>
+                  <td>{detail.month}</td>
+                  <td>{detail.projectRevenue}</td>
+                  <td>{detail.resourceExpense}</td>
+                  <td>{detail.contractorRevenue}</td>
+                  <td>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleEditRevenueDetail(detail)}
+                    >
+                      <EditIcon />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+              <tr style={{ textAlign: "center" }}>
+                <td colSpan={7}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAddNewRevenueDetail}
+                  >
+                    Add New
+                  </Button>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </div>
+        <Form>
+          <Form.Group controlId="formYear">
+            <Form.Label>Year</Form.Label>
+            <Form.Control
+              as="select"
+              name="year"
+              value={formData.year}
+              onChange={handleChange}
+            >
+              <option value="">Select Year</option>
+              {Array.from(
+                { length: 11 },
+                (_, i) => new Date().getFullYear() - 3 + i
+              ).map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="formMonth">
+            <Form.Label>Month</Form.Label>
+            <Form.Control
+              as="select"
+              name="month"
+              value={formData.month}
+              onChange={handleChange}
+            >
+              <option value="">Select Month</option>
+              {[
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+              ].map((month, index) => (
+                <option key={index} value={month}>
+                  {month}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="formProjectRevenue">
+            <Form.Label>Project Revenue</Form.Label>
+            <Form.Control
+              type="text"
+              name="projectRevenue"
+              value={formData.projectRevenue}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="formResourceExpense">
+            <Form.Label>Resource Expense</Form.Label>
+            <Form.Control
+              type="text"
+              name="resourceExpense"
+              value={formData.resourceExpense}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="formContractorExpense">
+            <Form.Label>Contractor Expense</Form.Label>
+            <Form.Control
+              type="text"
+              name="contractorRevenue"
+              value={formData.contractorRevenue}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Button variant="primary" onClick={handleSave}>
+            Save
+          </Button>
+        </Form>
+      </Modal.Body>
+    </Modal>
+  );
+}
+
 
 function GetAllPrEngagement() {
   const token = useSelector((state) => state.auth.token);
@@ -291,6 +506,8 @@ function GetAllPrEngagement() {
   );
 }
 
+
+
 // function RevenueDetailsModal({
 //   show,
 //   onHide,
@@ -307,7 +524,7 @@ function GetAllPrEngagement() {
 //     month: "",
 //     projectRevenue: "",
 //     resourceExpense: "",
-//     contractorExpense: "", // Add contractorExpense to the form state
+//     contractorRevenue: "",
 //   });
 
 //   useEffect(() => {
@@ -317,14 +534,27 @@ function GetAllPrEngagement() {
 //         month: currentDetail.month || "",
 //         projectRevenue: currentDetail.projectRevenue || "",
 //         resourceExpense: currentDetail.resourceExpense || "",
-//         contractorExpense: currentDetail.contractorExpense || "", // Set initial value of contractorExpense
+//         contractorRevenue: currentDetail.contractorRevenue || "",
 //       });
 //     }
 //   }, [currentDetail]);
 
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
+  
+//     // Regular expression to match integers and decimals
+//     const numericValue = /^[+-]?([0-9]*[.])?[0-9]+$/;
+  
+//     // Check if the entered value is a valid numeric value
+//     if (value === '' || numericValue.test(value)) {
+//       // Update formData state with the new value
+//       setFormData({
+//         ...formData,
+//         [name]: value
+//       });
+//     }
+//     // If the entered value is not a valid numeric value, do not update formData
+//     // This will prevent non-numeric values from being displayed
 //   };
 
 //   const handleSave = () => {
@@ -347,66 +577,77 @@ function GetAllPrEngagement() {
 //       )
 //       .then((response) => {
 //         console.log(response.data);
-//         toast.success(response.data, { position: "top-center", theme: "colored" });
+//         toast.success(response.data, {
+//           position: "top-center",
+//           theme: "colored",
+//         });
 //         onSave();
 //       })
 //       .catch((error) => {
 //         console.log(error);
-//         toast.error(error.response.data.message || "Error saving revenue detail");
+//         toast.error(
+//           error.response.data.message || "Error saving revenue detail"
+//         );
 //       });
 //   };
 
 //   return (
-//     <Modal show={show} onHide={onHide}>
+//     <Modal
+//       show={show}
+//       onHide={onHide}
+//       style={{ maxWidth: "100%", margin: "auto" }}
+//     >
 //       <Modal.Header closeButton>
 //         <Modal.Title>Revenue Details</Modal.Title>
 //       </Modal.Header>
-//       <Modal.Body >
-//         <Table striped bordered hover className="custom-table">
-//           <thead className="table-danger table-striped">
-//             <tr>
-//               <th>End Client</th>
-//               <th>Year</th>
-//               <th>Month</th>
-//               <th>Project Revenue</th>
-//               <th>Resource Expense</th>
-//               <th>Contractor Expense</th> {/ Add Contractor Expense column /}
-//               <th>Edit</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {revenueDetails.map((detail) => (
-//               <tr key={detail.id}>
-//                 <td>{detail.projectEngagement.endClient}</td>
-//                 <td>{detail.year}</td>
-//                 <td>{detail.month}</td>
-//                 <td>{detail.projectRevenue}</td>
-//                 <td>{detail.resourceExpense}</td>
-//                 <td>{detail.contractorExpense}</td> {/ Display Contractor Expense /}
-//                 <td>
+//       <Modal.Body>
+//         <div style={{ overflowX: "auto" }}>
+//           <Table striped bordered hover style={{ minWidth: "100%" }}>
+//             <thead style={{ backgroundColor: "#f8d7da", textAlign: "center" }}>
+//               <tr>
+//                 <th style={{ width: "20%" }}>End Client</th>
+//                 <th style={{ width: "15%" }}>Year</th>
+//                 <th style={{ width: "15%" }}>Month</th>
+//                 <th style={{ width: "15%" }}>Project Revenue</th>
+//                 <th style={{ width: "15%" }}>Resource Expense</th>
+//                 <th style={{ width: "15%" }}>Contractor Expense</th>
+//                 <th style={{ width: "5%" }}>Edit</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {revenueDetails.map((detail) => (
+//                 <tr key={detail.id} style={{ textAlign: "center" }}>
+//                   <td>{detail.projectEngagement.endClient}</td>
+//                   <td>{detail.year}</td>
+//                   <td>{detail.month}</td>
+//                   <td>{detail.projectRevenue}</td>
+//                   <td>{detail.resourceExpense}</td>
+//                   <td>{detail.contractorRevenue}</td>
+//                   <td>
+//                     <Button
+//                       variant="contained"
+//                       color="primary"
+//                       onClick={() => handleEditRevenueDetail(detail)}
+//                     >
+//                       <EditIcon />
+//                     </Button>
+//                   </td>
+//                 </tr>
+//               ))}
+//               <tr style={{ textAlign: "center" }}>
+//                 <td colSpan={7}>
 //                   <Button
 //                     variant="contained"
 //                     color="primary"
-//                     onClick={() => handleEditRevenueDetail(detail)}
+//                     onClick={handleAddNewRevenueDetail}
 //                   >
-//                     <EditIcon />
+//                     Add New
 //                   </Button>
 //                 </td>
 //               </tr>
-//             ))}
-//             <tr>
-//               <td colSpan={7}>
-//                 <Button
-//                   variant="contained"
-//                   color="primary"
-//                   onClick={handleAddNewRevenueDetail} // Using the passed function
-//                 >
-//                   Add New
-//                 </Button>
-//               </td>
-//             </tr>
-//           </tbody>
-//         </Table>
+//             </tbody>
+//           </Table>
+//         </div>
 //         <Form>
 //           <Form.Group controlId="formYear">
 //             <Form.Label>Year</Form.Label>
@@ -417,7 +658,10 @@ function GetAllPrEngagement() {
 //               onChange={handleChange}
 //             >
 //               <option value="">Select Year</option>
-//               {years.map((year) => (
+//               {Array.from(
+//                 { length: 11 },
+//                 (_, i) => new Date().getFullYear() - 3 + i
+//               ).map((year) => (
 //                 <option key={year} value={year}>
 //                   {year}
 //                 </option>
@@ -433,7 +677,20 @@ function GetAllPrEngagement() {
 //               onChange={handleChange}
 //             >
 //               <option value="">Select Month</option>
-//               {months.map((month, index) => (
+//               {[
+//                 "January",
+//                 "February",
+//                 "March",
+//                 "April",
+//                 "May",
+//                 "June",
+//                 "July",
+//                 "August",
+//                 "September",
+//                 "October",
+//                 "November",
+//                 "December",
+//               ].map((month, index) => (
 //                 <option key={index} value={month}>
 //                   {month}
 //                 </option>
@@ -458,16 +715,16 @@ function GetAllPrEngagement() {
 //               onChange={handleChange}
 //             />
 //           </Form.Group>
-//           <Form.Group controlId="formContractorExpense"> {/ Add form group for Contractor Expense /}
+//           <Form.Group controlId="formContractorExpense">
 //             <Form.Label>Contractor Expense</Form.Label>
 //             <Form.Control
 //               type="text"
-//               name="contractorExpense"
-//               value={formData.contractorExpense}
+//               name="contractorRevenue"
+//               value={formData.contractorRevenue}
 //               onChange={handleChange}
 //             />
 //           </Form.Group>
-//           <Button variant="contained" color="success" onClick={handleSave}>
+//           <Button variant="primary" onClick={handleSave}>
 //             Save
 //           </Button>
 //         </Form>
@@ -475,231 +732,6 @@ function GetAllPrEngagement() {
 //     </Modal>
 //   );
 // }
-
-function RevenueDetailsModal({
-  show,
-  onHide,
-  revenueDetails,
-  currentDetail,
-  projectId,
-  token,
-  onSave,
-  handleAddNewRevenueDetail,
-  handleEditRevenueDetail,
-}) {
-  const [formData, setFormData] = useState({
-    year: "",
-    month: "",
-    projectRevenue: "",
-    resourceExpense: "",
-    contractorRevenue: "",
-  });
-
-  useEffect(() => {
-    if (currentDetail) {
-      setFormData({
-        year: currentDetail.year || "",
-        month: currentDetail.month || "",
-        projectRevenue: currentDetail.projectRevenue || "",
-        resourceExpense: currentDetail.resourceExpense || "",
-        contractorRevenue: currentDetail.contractorRevenue || "",
-      });
-    }
-  }, [currentDetail]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-  
-    // Regular expression to match integers and decimals
-    const numericValue = /^[+-]?([0-9]*[.])?[0-9]+$/;
-  
-    // Check if the entered value is a valid numeric value
-    if (value === '' || numericValue.test(value)) {
-      // Update formData state with the new value
-      setFormData({
-        ...formData,
-        [name]: value
-      });
-    }
-    // If the entered value is not a valid numeric value, do not update formData
-    // This will prevent non-numeric values from being displayed
-  };
-
-  const handleSave = () => {
-    const newId = currentDetail && currentDetail.id ? currentDetail.id : null;
-    axios
-      .post(
-        `/apigateway/hrms/engagement/saveProjectRevenue`,
-        {
-          id: newId,
-          projectEngagement: {
-            projectId: projectId,
-          },
-          ...formData,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-        toast.success(response.data, {
-          position: "top-center",
-          theme: "colored",
-        });
-        onSave();
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error(
-          error.response.data.message || "Error saving revenue detail"
-        );
-      });
-  };
-
-  return (
-    <Modal
-      show={show}
-      onHide={onHide}
-      style={{ maxWidth: "100%", margin: "auto" }}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>Revenue Details</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div style={{ overflowX: "auto" }}>
-          <Table striped bordered hover style={{ minWidth: "100%" }}>
-            <thead style={{ backgroundColor: "#f8d7da", textAlign: "center" }}>
-              <tr>
-                <th style={{ width: "20%" }}>End Client</th>
-                <th style={{ width: "15%" }}>Year</th>
-                <th style={{ width: "15%" }}>Month</th>
-                <th style={{ width: "15%" }}>Project Revenue</th>
-                <th style={{ width: "15%" }}>Resource Expense</th>
-                <th style={{ width: "15%" }}>Contractor Expense</th>
-                <th style={{ width: "5%" }}>Edit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {revenueDetails.map((detail) => (
-                <tr key={detail.id} style={{ textAlign: "center" }}>
-                  <td>{detail.projectEngagement.endClient}</td>
-                  <td>{detail.year}</td>
-                  <td>{detail.month}</td>
-                  <td>{detail.projectRevenue}</td>
-                  <td>{detail.resourceExpense}</td>
-                  <td>{detail.contractorRevenue}</td>
-                  <td>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleEditRevenueDetail(detail)}
-                    >
-                      <EditIcon />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-              <tr style={{ textAlign: "center" }}>
-                <td colSpan={7}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAddNewRevenueDetail}
-                  >
-                    Add New
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </div>
-        <Form>
-          <Form.Group controlId="formYear">
-            <Form.Label>Year</Form.Label>
-            <Form.Control
-              as="select"
-              name="year"
-              value={formData.year}
-              onChange={handleChange}
-            >
-              <option value="">Select Year</option>
-              {Array.from(
-                { length: 11 },
-                (_, i) => new Date().getFullYear() - 3 + i
-              ).map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="formMonth">
-            <Form.Label>Month</Form.Label>
-            <Form.Control
-              as="select"
-              name="month"
-              value={formData.month}
-              onChange={handleChange}
-            >
-              <option value="">Select Month</option>
-              {[
-                "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
-              ].map((month, index) => (
-                <option key={index} value={month}>
-                  {month}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="formProjectRevenue">
-            <Form.Label>Project Revenue</Form.Label>
-            <Form.Control
-              type="text"
-              name="projectRevenue"
-              value={formData.projectRevenue}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formResourceExpense">
-            <Form.Label>Resource Expense</Form.Label>
-            <Form.Control
-              type="text"
-              name="resourceExpense"
-              value={formData.resourceExpense}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formContractorExpense">
-            <Form.Label>Contractor Expense</Form.Label>
-            <Form.Control
-              type="text"
-              name="contractorRevenue"
-              value={formData.contractorRevenue}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Button variant="primary" onClick={handleSave}>
-            Save
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
-  );
-}
 
 function Filter({ column }) {
   const { filterVariant } = column.columnDef.meta || {};
