@@ -23,14 +23,11 @@ const AddAppraisalDetails = () => {
   const  empId = useSelector((state) => state.auth.empId);
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState('appraisal');
-const commonInput ={
+
+const initialappraisalData ={ 
   empId: "",
   appraisalDate: null,
   amount: "",
-}
-
-const initialappraisalData ={ 
-  ...commonData,
   year: "",
   month: "",
   salary: "",
@@ -38,10 +35,11 @@ const initialappraisalData ={
   bonus: ""
 }
 const initalrewardsData={
-  ...commonData,
+  empId: "",
+  appraisalDate: null,
+  amount: "",
   rewardType: "",
 }
-const [commonData, setCommonData] = useState(commonInput);
 const [appraisalData, setAppraisalData] = useState(initialappraisalData);
   const [rewardsData, setRewardsData] = useState(initalrewardsData);
   const years = Array.from(new Array(10), (val, index) => new Date().getFullYear() + index);
@@ -171,14 +169,17 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                 </div>
               </FormControl>
               <form className="container py-3  mb-3" style={{ marginTop: "-50px" }}>
-                <div className="row mb-3">
+               
+                {selectedOption !== 'appraisal' && (
+                  <>
+                   <div className="row mb-3">
                   <label htmlFor="EmpId" className="col-sm-2 col-form-label">
                     Emp ID
                   </label>
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
-                      value={commonData.empId}
+                      value={rewardsData.empId}
                       type="text"
                       id="empId"
                       placeholder="Enter Emp id"
@@ -198,7 +199,7 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                      onChange={(e) => {
                       handle(e);
                     }}
-                      value={commonData.appraisalDate}
+                      value={rewardsData.appraisalDate}
                       type="date"
                       id="appraisalDate"
                       className="form-control"
@@ -215,7 +216,7 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                   <div className="col-sm-10">
                     <input
                       onChange={handle}
-                      value={commonData.amount}
+                      value={rewardsData.amount}
                       type="number"
                       id="amount"
                       placeholder="Enter Amount"
@@ -223,8 +224,6 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                     />
                   </div>
                 </div>
-                {selectedOption !== 'appraisal' && (
-                  <>
                    <div className="row mb-3">
                   <label
                     htmlFor="details"
@@ -257,6 +256,58 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
             )}
                 {selectedOption === 'appraisal' && (
                   <>
+                   <div className="row mb-3">
+                  <label htmlFor="EmpId" className="col-sm-2 col-form-label">
+                    Emp ID
+                  </label>
+                  <div className="col-sm-10">
+                    <input
+                      onChange={handle}
+                      value={appraisalData.empId}
+                      type="text"
+                      id="empId"
+                      placeholder="Enter Emp id"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <label
+                    htmlFor="details"
+                    className="col-sm-2 col-form-label"
+                  >
+                        Effective Date   
+                  </label>
+                  <div className="col-sm-10">
+                    <input
+                     onChange={(e) => {
+                      handle(e);
+                    }}
+                      value={appraisalData.appraisalDate}
+                      type="date"
+                      id="appraisalDate"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <label
+                    htmlFor="details"
+                    className="col-sm-2 col-form-label"
+                  >
+                   Amount
+                  </label>
+                  <div className="col-sm-10">
+                    <input
+                      onChange={handle}
+                      value={appraisalData.amount}
+                      type="number"
+                      id="amount"
+                      placeholder="Enter Amount"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
                 <div className="row mb-3">
                   <label htmlFor="details" className="col-sm-2 col-form-label">
                     Year
