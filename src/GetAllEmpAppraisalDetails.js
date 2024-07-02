@@ -67,7 +67,7 @@ function GetAllEmpAppraisalDetails() {
         meta: { filterVariant: false },
       },
       {
-        accessorKey: "Date",
+        accessorKey: "appraisalDate",
         header: "Date",
         meta: { filterVariant: false },
       },
