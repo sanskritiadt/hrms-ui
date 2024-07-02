@@ -8,56 +8,53 @@ import "./Hrmscss/App.css";
 import FileUpload from "./FileUpload";
 import LoadingPage from "./LoadingPage";
 import { toast } from "react-toastify";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 function EmployeeSalary() {
   // const token = localStorage.getItem("response-token");
-  const  token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.auth.token);
   // const  EmpId = useSelector((state) => state.auth.empId);
-
   const [loading, setLoading] = useState(false);
-  const EmpID = localStorage.getItem("EmpID");
   const [clientInfo, setClientInfo] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage] = useState(4);
   const [year, setYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [searchName, setSearchName] = useState(""); 
+  const [searchName, setSearchName] = useState("");
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   axios
+  //     .get(`/apigateway/payroll/salary/getAllEmpSalary`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setClientInfo(response.data);
+  //       console.log(response.data);
+  //       toast.success("Employee Salary found successfully!!", {
+  //         position: "top-center",
+  //         theme: "colored",
+  //       });
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       toast.error(error.response.data.message || "Error fetching details");
+  //       setLoading(false);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`/apigateway/payroll/salary/getAllEmpSalary`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setClientInfo(response.data);
-        console.log(response.data);
-        toast.success("Employee Salary found successfully!!", {
-          position: "top-center",
-          theme: "colored",
-        });
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error(error.response.data.message || "Error fetching details");
-        setLoading(false);
-      });
-  }, []);
+  // const indexOfLastRow = currentPage * rowsPerPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
 
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  // const filteredClientInfo = clientInfo.filter((client) =>
+  //   client.empName.toLowerCase().includes(searchName.toLowerCase())
+  // );
 
-  const filteredClientInfo = clientInfo.filter((client) =>
-    client.empName.toLowerCase().includes(searchName.toLowerCase())
-  );
+  // const currentRows = filteredClientInfo.slice(indexOfFirstRow, indexOfLastRow);
 
-  const currentRows = filteredClientInfo.slice(indexOfFirstRow, indexOfLastRow);
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  // const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleYearChange = (event) => {
     setYear(event.target.value);
@@ -71,60 +68,77 @@ function EmployeeSalary() {
     setSearchName(event.target.value);
   };
 
-  const handleGeneratePaySlip = (empId) => {
-    const selectedEmployee = clientInfo.find(
-      (employee) => employee.empId === empId
-    );
+  // const handleGeneratePaySlip = (empId) => {
+  //   const selectedEmployee = clientInfo.find(
+  //     (employee) => employee.empId === empId
+  //   );
 
-    if (selectedEmployee) {
-      const requestBody = {
-        empName: selectedEmployee.empName,
-        empId: selectedEmployee.empId,
-        email: selectedEmployee.email,
-        joinDate: selectedEmployee.joinDate,
-        bankName: selectedEmployee.bankName,
-        accountNumber: selectedEmployee.accountNumber,
-        role: selectedEmployee.role,
-        salary: selectedEmployee.salary,
-      };
-      setLoading(true);
-      axios
-        .post(
-          `/apigateway/payroll/viewPay?month=${selectedMonth}&year=${year}`,
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
+  //   if (selectedEmployee) {
+  //     const requestBody = {
+  //       empName: selectedEmployee.empName,
+  //       empId: selectedEmployee.empId,
+  //       email: selectedEmployee.email,
+  //       joinDate: selectedEmployee.joinDate,
+  //       bankName: selectedEmployee.bankName,
+  //       accountNumber: selectedEmployee.accountNumber,
+  //       role: selectedEmployee.role,
+  //       salary: selectedEmployee.salary,
+  //     };
+  //     setLoading(true);
+  //     axios
+  //       .post(
+  //         `/apigateway/payroll/viewPay?month=${selectedMonth}&year=${year}`,
+  //         requestBody,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       )
+  //       .then((response) => {
+  //         console.log(response.data);
 
-          var pdfData = response.data;
+  //         var pdfData = response.data;
 
-          var url = `data:application/pdf;base64,${pdfData}`;
+  //         var url = `data:application/pdf;base64,${pdfData}`;
 
-          // Open the PDF in a new tab
-          var newTab = window.open(url, "_blank");
+  //         // Open the PDF in a new tab
+  //         var newTab = window.open(url, "_blank");
 
-          toast.success("Pay slip generated successfully.", {
-            position: "top-center",
-            theme: "colored",
-          });
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error(error.response.data.message || "Error creating details");
-          setLoading(false);
-        });
-    }
-  };
-
+  //         toast.success("Pay slip generated successfully.", {
+  //           position: "top-center",
+  //           theme: "colored",
+  //         });
+  //         setLoading(false);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         toast.error(error.response.data.message || "Error creating details");
+  //         setLoading(false);
+  //       });
+  //   }
+  // };
+  const years = Array.from(
+    new Array(10),
+    (val, index) => new Date().getFullYear() + index
+  );
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   return (
     <div className=" mt-3">
-          {loading ? <LoadingPage/> : ''}
+      {loading ? <LoadingPage /> : ""}
       <nav
         aria-label="breadcrumb"
         style={{ "--bs-breadcrumb-divider": "'>>'" }}
@@ -172,19 +186,12 @@ function EmployeeSalary() {
                 value={year}
                 onChange={handleYearChange}
               >
-                <option value="">Enter Year</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
-                <option value="2031">2031</option>
-                <option value="2032">2032</option>
+                <option value="">Year</option>
+                {years.map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
             <Form.Group controlId="selectedMonth">
@@ -194,43 +201,35 @@ function EmployeeSalary() {
                 value={selectedMonth}
                 onChange={handleMonthChange}
               >
-                <option value="">Enter Month </option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
+                <option value="">Month</option>
+                {months.map((month, index) => (
+                  <option key={index} value={month}>
+                    {month}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
           </Form>
           <Table striped bordered hover className="custom-table">
             <thead>
               <tr>
-                <th>Serial number</th>
                 <th>Employee ID</th>
                 <th>Employee Name</th>
-                <th>Email</th>
-                <th>Join Date</th>
                 <th>Bank Name</th>
                 <th>Account Number</th>
-                <th>Role</th>
-                <th>Salary</th>
-                <th>Payslip</th>
+                <th>Net Pay</th>
+                <th>Employeer PF</th>
+                <th>Employee PF</th>
+                <th>Employeer ESIC</th>
+                <th>Employee ESIC</th>
+                <th>Medical Amount</th>
               </tr>
             </thead>
-            <tbody>
+            {/* <tbody>
               {currentRows.map((client) => (
                 <tr key={client.id}>
-                  <td>{client.serialNo}</td>
                   <td>{client.empId}</td>
-                  <td>{client.empName}</td>
+                  <td>{client.employee.firstName}</td>
                   <td>{client.email}</td>
                   <td>{client.joinDate}</td>
                   <td>{client.bankName}</td>
@@ -244,9 +243,9 @@ function EmployeeSalary() {
                   </td>
                 </tr>
               ))}
-            </tbody>
+            </tbody> */}
           </Table>
-          <Pagination>
+          {/* <Pagination>
             {Array.from({
               length: Math.ceil(filteredClientInfo.length / rowsPerPage),
             }).map((_, index) => (
@@ -258,7 +257,7 @@ function EmployeeSalary() {
                 {index + 1}
               </Pagination.Item>
             ))}
-          </Pagination>
+          </Pagination> */}
         </Container>
 
         <FileUpload />
