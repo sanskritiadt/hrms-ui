@@ -222,7 +222,6 @@ import CreatePayslip from './CreatePayslip';
 import UpdatePayrollSalary from "./UpdatePayrollSalary";
 import ManageRoles from "./ManageRoles";
 import EditPosition from "./EditPosition";
-import AddProjRevenue from'./AddProjRevenue';
 import AddAppraisalDetails from './AddAppraisalDetails';
 import GetAllEmpAppraisalDetails from './GetAllEmpAppraisalDetails';
 const Approuter = () => {
@@ -309,7 +308,6 @@ const Approuter = () => {
               <Route path="/ManageRoles" element={<ManageRoles />} />
               <Route path="/EditPosition/:id" element={<EditPosition />} />
               <Route path="/RegisterUser" element={<RegisterUser />} />
-              <Route path="/add-proj-revenue" element={<AddProjRevenue />} />
               <Route path="/AddAppraisalDetails" element={<AddAppraisalDetails />} />
               <Route path="/GetAllEmpAppraisalDetails" element={<GetAllEmpAppraisalDetails />} />
             </Routes>

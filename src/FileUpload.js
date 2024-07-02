@@ -48,7 +48,7 @@ function FileUpload() {
     formData.append("file", file);
     setLoading(true);
     axios
-      .post(`/apigateway/payroll/genPayAll`, formData, {
+      .post(`/apigateway/payroll/genPayAll?email=${email}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -77,6 +77,7 @@ function FileUpload() {
         </button>
       </form>
       <form onSubmit={handleSubmit} >
+      Email  <input type="email" onChange={handleEmailChange} placeholder="Enter Email."/> 
         <input type="file" onChange={handleFileChange} className="mb-4" />
 
         <button type="submit">generate all Payslip with excel</button>

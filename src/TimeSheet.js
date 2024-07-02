@@ -772,6 +772,7 @@ const TimeSheet = () => {
         ],
       };
     };
+  const todayDate = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
   return (
     <>
@@ -879,6 +880,7 @@ const TimeSheet = () => {
                   type="date"
                   className="form-control"
                   id="fromDate"
+                  max={todayDate}
                 />
                 <label className="pt-2 fs-5" htmlFor="todate">
                   ToDate:
@@ -891,6 +893,7 @@ const TimeSheet = () => {
                   type="date"
                   className="form-control"
                   id="toDate"
+                  max={todayDate}
                 />
                 <button
                   className=" btn btn-primary m-0"

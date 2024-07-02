@@ -19,7 +19,6 @@ const Registerformik = () => {
     confirmPassword:"",
     showPassword: false,
   };
-
   const token = useSelector((state) => state.auth.token);
 
   const handleSubmit = (values, { setStatus, resetForm }) => {
@@ -55,11 +54,20 @@ const Registerformik = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    firstName:Yup.string().required("First name is required"),
-    lastName:Yup.string().required("Last name is required"),
+    firstName:Yup.string().required("First name is required")
+    .matches(/^[a-zA-Z]+$/, 'First name can only contain letters')
+    .max(30, 'First name must be at most 30 characters long'),
+    middleName:Yup.string().matches(/^[a-zA-Z]+$/, 'Middle name can only contain letters')
+    .max(30, 'Middle name must be at most 30 characters long'),
+    lastName:Yup.string().required("Last name is required")
+    .matches(/^[a-zA-Z]*$/, 'Last name can only contain letters')
+    .max(30, 'Last name must be at most 30 characters long'),
     email: Yup.string()
       .email("Invalid email address")
-      .required("Email is required"),
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|co\.in|in)$/,
+        "Email must be a valid email address ending with .com, .co.in, or .in"
+      ).required("Email is required"),
     password:  Yup.string().required('New password is required.')
     .min(8, 'New password must be at least 8 characters long.')
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
