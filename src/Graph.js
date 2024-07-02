@@ -26,7 +26,13 @@ const prepareGraphData = (data) => {
     const employeeData = data.filter(entry => entry.employeeName === employee);
     const workingHours = dates.map(date => {
       const entry = employeeData.find(d => d.date === date);
-      return entry ? parseInt(entry.workingHour) : null;
+      if (entry && entry.workingHour) {
+        const [hours, minutes, seconds] = entry.workingHour.split(':').map(Number);
+        const totalHours = hours + (minutes / 60) + (seconds / 3600);
+        return parseFloat(totalHours.toFixed(2));
+      } else {
+        return null;
+      }
     });
 
     return {
