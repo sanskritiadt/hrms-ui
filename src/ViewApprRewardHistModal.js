@@ -35,7 +35,7 @@ function ViewApprRewardHistModal({ show, onHide, appraisalHistory, type }) {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center">No Appraisal History</td>
+                <td colSpan={type === 'reward' ? "4" : "6"} className="text-center">No data found</td>
               </tr>
             )} 
           </tbody>
