@@ -103,7 +103,7 @@ function EmployeeSalary() {
       },
       {
         accessorKey: "view",
-        header: "View",
+        header: " View Archive",
         meta: { filterable: false },
         cell: (cell) => (
           <Link to={`/view-salary-details/${cell.row.original.empId}`}>
