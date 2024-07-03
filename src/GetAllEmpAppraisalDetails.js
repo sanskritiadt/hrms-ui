@@ -24,6 +24,8 @@ import { object } from "yup";
 function GetAllEmpAppraisalDetails() {
   const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [data, setData] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [appraisalHistory, setAppraisalHistory] = useState([]);
@@ -31,23 +33,50 @@ function GetAllEmpAppraisalDetails() {
   const [type, setType] = useState('');
   const [empId, setEmpId] = useState();
 
+  // useEffect(() => {
+  //   axios
+  //     .get("/apigateway/payroll/salarydetails/getAllEmployeesWithLatestAppraisal", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setData(response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       toast.error(error.response.data.message || "Error fetching details");
+  //       setLoading(false);
+  //     });
+  // }, [token]);
+
   useEffect(() => {
-    axios
-      .get("/apigateway/payroll/salarydetails/getAllEmployeesWithLatestAppraisal", {
+    fetchAppraisal(currentPage);
+  }, [currentPage]);
+
+  const fetchAppraisal = async (page) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/apigateway/payroll/salarydetails/getAllEmployeesWithLatestAppraisal`, {
+        params: {
+          page: page - 1,
+          size: 10, // assuming 10 employees per page
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error(error.response.data.message || "Error fetching details");
-        setLoading(false);
       });
-  }, [token]);
+        setData(response.data.content);
+        setTotalPages(response.data.totalPages);
+        setLoading(false);
+      }catch(error){
+          console.log(error);
+          toast.error(error.response.data.message || "Error fetching details");
+          setLoading(false);
+        };
+  };
+
 
   const columns = useMemo(
     () => [
@@ -157,7 +186,7 @@ function GetAllEmpAppraisalDetails() {
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data || "Error fetching appraisal history");
+        toast.error(error.response.data || "Error fetching reward history");
       });
   };
   const table = useReactTable({
@@ -201,7 +230,7 @@ function GetAllEmpAppraisalDetails() {
         </nav>
       </div>
       <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
-        <h1 className="Heading1">Employee List</h1>
+        <h1 className="Heading1">Appraisal Details</h1>
         <div>
           <Table striped bordered hover className="custom-table">
             <thead className="table-danger table-striped">
@@ -257,6 +286,17 @@ function GetAllEmpAppraisalDetails() {
             </tbody>
           </Table>
         </div>
+        <nav>
+            <ul className="pagination justify-content-center mt-2">
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
+                  <button onClick={() => setCurrentPage(index + 1)} className="page-link mx-1">
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
       </div>
       
       <ViewApprRewardHistModal
