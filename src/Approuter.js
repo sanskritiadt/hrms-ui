@@ -224,6 +224,7 @@ import ManageRoles from "./ManageRoles";
 import EditPosition from "./EditPosition";
 import AddAppraisalDetails from './AddAppraisalDetails';
 import GetAllEmpAppraisalDetails from './GetAllEmpAppraisalDetails';
+import ViewSalaryDetails from './ViewSalaryDetails'
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -279,7 +280,6 @@ const Approuter = () => {
               <Route path="/Capex" element={<Capex />} />
               <Route path="/NewpassForm" element={<NewpassForm />} />
               <Route path="/Getallexpenses" element={<Getallexpenses />} />
-              <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
               <Route path="/getcandidate" element={<CandidateDetails />} />
               <Route path="/createCandidate" element={<InterviewCandidate />} />
               <Route
@@ -310,6 +310,7 @@ const Approuter = () => {
               <Route path="/RegisterUser" element={<RegisterUser />} />
               <Route path="/AddAppraisalDetails" element={<AddAppraisalDetails />} />
               <Route path="/GetAllEmpAppraisalDetails" element={<GetAllEmpAppraisalDetails />} />
+              <Route path="/view-salary-details/:id" element={<ViewSalaryDetails />} />
             </Routes>
           </SideBar>
         </div>
@@ -323,6 +324,7 @@ const Approuter = () => {
         <Route path="/login" element={<Login />} />
         {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
       </Routes>
       {!isLoggedIn && <Footer />}
     </div>
