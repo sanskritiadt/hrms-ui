@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import Graph from './Graph'; // Ensure the path matches the location of Graph.js
+import Graph from "./Graph";
 import LoadingPage from "./LoadingPage";
-import Select from 'react-select';
+import Select from "react-select";
 import {
   flexRender,
   getCoreRowModel,
@@ -23,30 +25,33 @@ const GetAllEmpAttendance = () => {
   const empid = useSelector((state) => state.auth.empId);
 
   const [getAttendence, setAttendence] = useState({
-    fromDate: '',
-    toDate: ''
+    fromDate: "",
+    toDate: "",
   });
   const [loading, setLoading] = useState(false);
   const [getData, setData] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState([]); // New state for selected employee
 
   const submit = (e) => {
     e.preventDefault();
     setLoading(true);
     axios
-      .get(`/apigateway/payroll/timeSheet/allEmpAttendence?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      .get(
+        `/apigateway/payroll/timeSheet/allEmpAttendence?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
-      .then(response => {
+      )
+      .then((response) => {
         setData(response.data);
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         toast.error(error.response?.data?.message || "Error fetching details");
         setLoading(false);
       });
@@ -60,14 +65,14 @@ const GetAllEmpAttendance = () => {
 
   const handle = (e) => {
     const { id, value } = e.target;
-    setAttendence(prevState => ({
+    setAttendence((prevState) => ({
       ...prevState,
-      [id]: value
+      [id]: value,
     }));
-     if (id === 'toDate' && value < getAttendence.fromDate) {
-      setError('To Date cannot be less than From Date');
+    if (id === "toDate" && value < getAttendence.fromDate) {
+      setError("To Date cannot be less than From Date");
     } else {
-      setError('');
+      setError("");
     }
   };
   const handleSelectChange = (options) => {
@@ -77,21 +82,22 @@ const GetAllEmpAttendance = () => {
     setLoading(true);
     axios({
       url: `/apigateway/payroll/timeSheet/exporttoexcel?fromDate=${getAttendence.fromDate}&toDate=${getAttendence.toDate}`,
-      method: 'GET',
-      responseType: 'blob',
+      method: "GET",
+      responseType: "blob",
       headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then(response => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'timesheet.xlsx');
-      document.body.appendChild(link);
-      link.click();
-      setLoading(false);
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .catch(error => {
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "timesheet.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        setLoading(false);
+      })
+      .catch((error) => {
         toast.error(error.response?.data?.message || "Error uploading excel.");
         setLoading(false);
       });
@@ -103,9 +109,9 @@ const GetAllEmpAttendance = () => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -184,38 +190,67 @@ const GetAllEmpAttendance = () => {
   // Filter data based on selected employee
   const filteredData = useMemo(() => {
     if (selectedEmployee.length === 0) return getData;
-    return getData.filter((item) => selectedEmployee.includes(item.employeeName));
-  }, [selectedEmployee, getData]);  
-  
+    return getData.filter((item) =>
+      selectedEmployee.includes(item.employeeName)
+    );
+  }, [selectedEmployee, getData]);
+
   const todayDate = new Date().toISOString().split("T")[0];
   return (
     <div>
-      <div className='mt-3'>
-        <nav aria-label='breadcrumb' style={{ '--bs-breadcrumb-divider': "'>>'" }}>
-          <ol className='breadcrumb' style={{ color: 'white', marginLeft: '20px' }}>
-            <li className='breadcrumb-item'>
-              <Link to='/'>Home</Link>{' '}
+      <div className="mt-3">
+        <nav
+          aria-label="breadcrumb"
+          style={{ "--bs-breadcrumb-divider": "'>>'" }}
+        >
+          <ol
+            className="breadcrumb"
+            style={{ color: "white", marginLeft: "20px" }}
+          >
+            <li className="breadcrumb-item">
+              <Link to="/">Home</Link>{" "}
             </li>
-            <li className='breadcrumb-item'>
-              <a href=''>Employee Management</a>
+            <li className="breadcrumb-item">
+              <a href="">Employee Management</a>
             </li>
-            <li className='breadcrumb-item active' aria-current='page'>
+            <li className="breadcrumb-item active" aria-current="page">
               Employee Attendance
             </li>
           </ol>
         </nav>
       </div>
-      <div className='d-flex justify-content-center' style={{ width: screenWidth - 50 }}>
+      <div
+        className="d-flex justify-content-center"
+        style={{ width: screenWidth - 50 }}
+      >
         <div>
-          <div className='pt-2'>
-            <h1 className='Heading1 my-4'>Employee Attendance</h1>
+          <div className="pt-2">
+            <h1 className="Heading1 my-4">Employee Attendance</h1>
             <form onSubmit={submit}>
               {loading && <LoadingPage />}
-              <div className='mb-2 d-grid gap-1 d-md-flex justify-content-center my-4'>
-                <label className='pt-2 fs-5 mb-0' htmlFor='fromDate'>From Date:</label>
-                <input onChange={handle} value={getAttendence.fromDate} type='date' className='form-control mb-0' id='fromDate'   max={todayDate}/>
-                <label className='pt-2 fs-5 mb-0' htmlFor='toDate'>To Date:</label>
-                <input onChange={handle} value={getAttendence.toDate} type='date' className='form-control mb-0' id='toDate'  max={todayDate} />
+              <div className="mb-2 d-grid gap-1 d-md-flex justify-content-center my-4">
+                <label className="pt-2 fs-5 mb-0" htmlFor="fromDate">
+                  From Date:
+                </label>
+                <input
+                  onChange={handle}
+                  value={getAttendence.fromDate}
+                  type="date"
+                  className="form-control mb-0"
+                  id="fromDate"
+                  max={todayDate}
+                />
+                <label className="pt-2 fs-5 mb-0" htmlFor="toDate">
+                  To Date:
+                </label>
+                <input
+                  onChange={handle}
+                  value={getAttendence.toDate}
+                  type="date"
+                  className="form-control mb-0"
+                  id="toDate"
+                  max={todayDate}
+                />
                 {/* <label className='pt-2 fs-5 mb-0' htmlFor='employeeSelect'>Employee:</label>
                 <select
                   id="employeeSelect"
@@ -228,26 +263,50 @@ const GetAllEmpAttendance = () => {
                     <option key={employee} value={employee}>{employee}</option>
                   ))}
                 </select> */}
-                <button className='btn btn-outline-primary mt-0'  disabled={loading || !getAttendence.fromDate || !getAttendence.toDate}>Get</button>
+                <button
+                  className="btn btn-outline-primary mt-0"
+                  disabled={
+                    loading || !getAttendence.fromDate || !getAttendence.toDate
+                  }
+                >
+                  Get
+                </button>
               </div>
-              {error && <div className='alert alert-danger'>{error}</div>}
+              {error && <div className="alert alert-danger">{error}</div>}
             </form>
-            <button onClick={exportToExcel} className='btn btn-outline-primary mt-0'>Export to Excel</button>
-
-            <button id="employeeSelect" onClick={() => setShowGraph(!showGraph)} className='btn btn-outline-primary mt-0'>View Graph</button>
+            <Tooltip title="Download employee attendence data" arrow>
+              <Button
+                onClick={exportToExcel}
+                variant="contained"
+                startIcon={<FileDownloadOutlinedIcon />}
+              >
+                Download
+              </Button>
+            </Tooltip>
+            <Button
+              id="employeeSelect"
+              onClick={() => setShowGraph(!showGraph)}
+              variant="contained"
+            >
+              View Graph
+            </Button>
             {showGraph && <Graph data={filteredData} />}
             <Select
               id="employeeSelect"
               isMulti // Enable multi-select
-              value={selectedEmployee.map((employee) => ({ value: employee, label: employee }))}
+              value={selectedEmployee.map((employee) => ({
+                value: employee,
+                label: employee,
+              }))}
               onChange={handleSelectChange}
-              options={Array.from(new Set(getData.map((item) => item.employeeName))).map((employee) => ({ value: employee, label: employee }))}
+              options={Array.from(
+                new Set(getData.map((item) => item.employeeName))
+              ).map((employee) => ({ value: employee, label: employee }))}
               placeholder="All"
               className="form-control mb-0"
             />
-
           </div>
-          <div className='table-responsive-sm my-4'>
+          <div className="table-responsive-sm my-4">
             <Table striped bordered hover className="custom-table">
               <thead className="table-danger table-striped">
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -271,8 +330,8 @@ const GetAllEmpAttendance = () => {
                               {header.column.getIsSorted() === "asc"
                                 ? " ??"
                                 : header.column.getIsSorted() === "desc"
-                                  ? " ??"
-                                  : null}
+                                ? " ??"
+                                : null}
                             </div>
                             {header.column.getCanFilter() ? (
                               <div>
@@ -312,12 +371,18 @@ function Filter({ column }) {
   const { filterVariant } = column.columnDef.meta || {};
   const columnFilterValue = column.getFilterValue();
   const sortedUniqueValues = useMemo(
-    () => (filterVariant === "select" ? Array.from(column.getFacetedUniqueValues().keys()).sort() : []),
+    () =>
+      filterVariant === "select"
+        ? Array.from(column.getFacetedUniqueValues().keys()).sort()
+        : [],
     [column.getFacetedUniqueValues(), filterVariant]
   );
 
   return filterVariant === "select" ? (
-    <select onChange={(e) => column.setFilterValue(e.target.value)} value={columnFilterValue?.toString() || ""}>
+    <select
+      onChange={(e) => column.setFilterValue(e.target.value)}
+      value={columnFilterValue?.toString() || ""}
+    >
       <option value="">All</option>
       {sortedUniqueValues.map((value) => (
         <option key={value} value={value}>
@@ -333,9 +398,14 @@ function Filter({ column }) {
           min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
           max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
           value={(columnFilterValue ? columnFilterValue[0] : "") ?? ""}
-          onChange={(e) => column.setFilterValue((old) => [e.target?.value, old?.[1]])}
-          placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] !== undefined ? `(${column.getFacetedMinMaxValues()?.[0]})` : ""
-            }`}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target?.value, old?.[1]])
+          }
+          placeholder={`Min ${
+            column.getFacetedMinMaxValues()?.[0] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[0]})`
+              : ""
+          }`}
           className="w-24 border shadow rounded"
         />
         <DebouncedInput
@@ -343,9 +413,14 @@ function Filter({ column }) {
           min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
           max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
           value={(columnFilterValue ? columnFilterValue[1] : "") ?? ""}
-          onChange={(e) => column.setFilterValue((old) => [old?.[0], e.target?.value])}
-          placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] !== undefined ? `(${column.getFacetedMinMaxValues()?.[1]})` : ""
-            }`}
+          onChange={(e) =>
+            column.setFilterValue((old) => [old?.[0], e.target?.value])
+          }
+          placeholder={`Max ${
+            column.getFacetedMinMaxValues()?.[1] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[1]})`
+              : ""
+          }`}
           className="w-24 border shadow rounded"
         />
       </div>
@@ -354,7 +429,12 @@ function Filter({ column }) {
   ) : null;
 }
 
-function DebouncedInput({ value: initialValue, onChange, debounce = 500, ...props }) {
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}) {
   const [value, setValue] = useState(initialValue);
   useEffect(() => {
     setValue(initialValue);
@@ -365,7 +445,13 @@ function DebouncedInput({ value: initialValue, onChange, debounce = 500, ...prop
     }, debounce);
     return () => clearTimeout(timeout);
   }, [value]);
-  return <input {...props} value={value} onChange={(e) => setValue(e.target.value)} />;
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
 }
 
 export default GetAllEmpAttendance;

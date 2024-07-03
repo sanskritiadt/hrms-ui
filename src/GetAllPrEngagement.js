@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Table, Modal, Form } from "react-bootstrap";
 import { EditOutlined as EditIcon } from "@mui/icons-material"; // Updated import
-import { Button, IconButton,Tooltip } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
@@ -456,10 +456,14 @@ function GetAllPrEngagement() {
       <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
         <h1 className="Heading1">Project Engagement</h1>
         <Tooltip title="Download project engagement data" arrow>
-          <IconButton onClick={exportToExcel} className="icon-button">
-            <FileDownloadOutlinedIcon />  
-          </IconButton>
-        </Tooltip><span>Download Excel</span>
+          <Button
+            onClick={exportToExcel}
+            variant="contained"
+            startIcon={<FileDownloadOutlinedIcon />}
+          >
+            Download
+          </Button>
+        </Tooltip>
         <div>
           <Table striped bordered hover className="custom-table">
             <thead className="table-danger table-striped">
