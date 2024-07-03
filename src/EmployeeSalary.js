@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Container, Table, Pagination, Form, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect, useMemo } from "react";
+import { Container, Table } from "react-bootstrap";
+import { Button } from "@mui/material";
 import "./Hrmscss/ExampleTable.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -9,18 +9,23 @@ import FileUpload from "./FileUpload";
 import LoadingPage from "./LoadingPage";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import {
+  useReactTable,
+  flexRender,
+  getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
+} from "@tanstack/react-table";
+
 function EmployeeSalary() {
-  // const token = localStorage.getItem("response-token");
   const token = useSelector((state) => state.auth.token);
   // const  EmpId = useSelector((state) => state.auth.empId);
   const [loading, setLoading] = useState(false);
   const [clientInfo, setClientInfo] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage] = useState(4);
-  const [year, setYear] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [searchName, setSearchName] = useState("");
-
+  const [columnFilters, setColumnFilters] = useState([]);
   useEffect(() => {
     setLoading(true);
     axios
@@ -44,98 +49,90 @@ function EmployeeSalary() {
         setLoading(false);
       });
   }, []);
-
-  // const indexOfLastRow = currentPage * rowsPerPage;
-  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-
-  // const filteredClientInfo = clientInfo.filter((client) =>
-  //   client.empName.toLowerCase().includes(searchName.toLowerCase())
-  // );
-
-  // const currentRows = filteredClientInfo.slice(indexOfFirstRow, indexOfLastRow);
-
-  // const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
-  // const handleYearChange = (event) => {
-  //   setYear(event.target.value);
-  // };
-
-  // const handleMonthChange = (event) => {
-  //   setSelectedMonth(event.target.value);
-  // };
-
-  // const handleNameChange = (event) => {
-  //   setSearchName(event.target.value);
-  // };
-
-  // const handleGeneratePaySlip = (empId) => {
-  //   const selectedEmployee = clientInfo.find(
-  //     (employee) => employee.empId === empId
-  //   );
-
-  //   if (selectedEmployee) {
-  //     const requestBody = {
-  //       empName: selectedEmployee.empName,
-  //       empId: selectedEmployee.empId,
-  //       email: selectedEmployee.email,
-  //       joinDate: selectedEmployee.joinDate,
-  //       bankName: selectedEmployee.bankName,
-  //       accountNumber: selectedEmployee.accountNumber,
-  //       role: selectedEmployee.role,
-  //       salary: selectedEmployee.salary,
-  //     };
-  //     setLoading(true);
-  //     axios
-  //       .post(
-  //         `/apigateway/payroll/viewPay?month=${selectedMonth}&year=${year}`,
-  //         requestBody,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       )
-  //       .then((response) => {
-  //         console.log(response.data);
-
-  //         var pdfData = response.data;
-
-  //         var url = `data:application/pdf;base64,${pdfData}`;
-
-  //         // Open the PDF in a new tab
-  //         var newTab = window.open(url, "_blank");
-
-  //         toast.success("Pay slip generated successfully.", {
-  //           position: "top-center",
-  //           theme: "colored",
-  //         });
-  //         setLoading(false);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         toast.error(error.response.data.message || "Error creating details");
-  //         setLoading(false);
-  //       });
-  //   }
-  // };
-  const years = Array.from(
-    new Array(10),
-    (val, index) => new Date().getFullYear() + index
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "empId",
+        header: "Emp ID",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employeeName",
+        header: "Employee Name",
+        meta: { filterVariant: "select" }
+      },
+      {
+        accessorKey: "bankName",
+        header: "Bank Name",
+        meta: { filterVariant: "select" }
+      },
+      {
+        accessorKey: "accountNo",
+        header: "Account No",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "netPay",
+        header: "Net Pay",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employerPf",
+        header: "Employer Pf",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employeePf",
+        header: "Employee Pf",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employerEsic",
+        header: "Employer Esic",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employeeEsic",
+        header: "Employee Esic",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "medicalAmount",
+        header: "Medical Amount",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "view",
+        header: "View",
+        meta: { filterable: false },
+        cell: (cell) => (
+          <Link to={`/view-salary-details/${cell.row.original.empId}`}>
+            <Button variant="contained" color="primary">
+              View
+            </Button>
+          </Link>
+        ),
+      },
+    ],
+    []
   );
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+
+  const table = useReactTable({
+    data: clientInfo,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
+  });
+
   return (
     <div className=" mt-3">
       {loading ? <LoadingPage /> : ""}
@@ -169,105 +166,157 @@ function EmployeeSalary() {
         <FileUpload />
         <Container>
           <h1 className="Heading1">Employee Salary</h1>
-          {/*<Form style={{ marginBottom: "20px" }}>
-             <Form.Group controlId="employeeName">
-              <Form.Label>Search by Employee Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Name"
-                value={searchName}
-                onChange={handleNameChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="selectedYear">
-              <Form.Label>Select Year</Form.Label>
-              <Form.Control
-                as="select"
-                placeholder="Enter Year"
-                value={year}
-                onChange={handleYearChange}
-              >
-                <option value="">Year</option>
-                {years.map((year, index) => (
-                  <option key={index} value={year}>
-                    {year}
-                  </option>
+          <div>
+            <Table striped bordered hover className="custom-table">
+              <thead className="table-danger table-striped">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th key={header.id} colSpan={header.colSpan}>
+                        {header.isPlaceholder ? null : (
+                          <>
+                            <div
+                              className={
+                                header.column.getCanSort()
+                                  ? "cursor-pointer select-none"
+                                  : ""
+                              }
+                              onClick={header.column.getToggleSortingHandler()}
+                            >
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                              {header.column.getIsSorted() === "asc"
+                                ? " 🔼"
+                                : header.column.getIsSorted() === "desc"
+                                ? " 🔽"
+                                : null}
+                            </div>
+                            {header.column.getCanFilter() ? (
+                              <div>
+                                <Filter column={header.column} />
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </th>
+                    ))}
+                  </tr>
                 ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="selectedMonth">
-              <Form.Label>Select Month</Form.Label>
-              <Form.Control
-                as="select"
-                value={selectedMonth}
-                onChange={handleMonthChange}
-              >
-                <option value="">Month</option>
-                {months.map((month, index) => (
-                  <option key={index} value={month}>
-                    {month}
-                  </option>
+              </thead>
+              <tbody className="body">
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-              </Form.Control>
-            </Form.Group>
-          </Form> */}
-          <Table striped bordered hover className="custom-table">
-            <thead>
-              <tr>
-                <th>Employee ID</th>
-                <th>Employee Name</th>
-                <th>Bank Name</th>
-                <th>Account Number</th>
-                <th>Net Pay</th>
-                <th>Employeer PF</th>
-                <th>Employee PF</th>
-                <th>Employeer ESIC</th>
-                <th>Employee ESIC</th>
-                <th>Medical Amount</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clientInfo.map((client) => (
-                <tr key={client.id}>
-                  <td>{client.empId}</td>
-                  <td>{client.employeeName}</td>
-                  <td>{client.bankName}</td>
-                  <td>{client.accountNo}</td>
-                  <td>{client.netPay}</td>
-                  <td>{client.employerPf}</td>
-                  <td>{client.employeePf}</td>
-                  <td>{client.employerEsic}</td>
-                  <td>{client.employeeEsic}</td>
-                  <td>{client.medicalAmount}</td>
-                  <td>
-                    <button onClick={() => handleGeneratePaySlip(client.empId)}>
-                      View details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody> 
-          </Table>
-          {/* <Pagination>
-            {Array.from({
-              length: Math.ceil(filteredClientInfo.length / rowsPerPage),
-            }).map((_, index) => (
-              <Pagination.Item
-                key={index + 1}
-                active={index + 1 === currentPage}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-          </Pagination> */}
+              </tbody>
+            </Table>
+          </div>
         </Container>
-
-        
       </div>
     </div>
   );
 }
 
+function Filter({ column }) {
+  const { filterVariant } = column.columnDef.meta || {};
+
+  const columnFilterValue = column.getFilterValue();
+
+  const sortedUniqueValues = useMemo(
+    () =>
+      filterVariant === "select"
+        ? Array.from(column.getFacetedUniqueValues().keys()).sort()
+        : [],
+    [column.getFacetedUniqueValues(), filterVariant]
+  );
+
+  return filterVariant === "select" ? (
+    <select
+      onChange={(e) => column.setFilterValue(e.target.value)}
+      value={columnFilterValue?.toString() || ""}
+    >
+      <option value="">All</option>
+      {sortedUniqueValues.map((value) => (
+        <option key={value} value={value}>
+          {value}
+        </option>
+      ))}
+    </select>
+  ) : filterVariant === "range" ? (
+    <div>
+      <div className="flex space-x-2">
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue ? columnFilterValue[0] : "") ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target?.value, old?.[1]])
+          }
+          placeholder={`Min ${
+            column.getFacetedMinMaxValues()?.[0] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[0]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
+        />
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue ? columnFilterValue[1] : "") ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target?.value, old?.[1]])
+          }
+          placeholder={`Max ${
+            column.getFacetedMinMaxValues()?.[1] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[1]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
+        />
+      </div>
+      <div className="h-1" />
+    </div>
+  ) : null;
+}
+
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}) {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value);
+    }, debounce);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}
 export default EmployeeSalary;

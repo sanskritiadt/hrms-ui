@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Table, Modal, Form } from "react-bootstrap";
 import { EditOutlined as EditIcon } from "@mui/icons-material"; // Updated import
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton,Tooltip } from "@mui/material";
+
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import LoadingPage from "./LoadingPage";
@@ -60,17 +62,17 @@ function RevenueDetailsModal({
     const numericValue = /^[+-]?([0-9]*[.])?[0-9]+$/;
 
     // Check if the entered value is a valid numeric value
-    if (name !== 'month' && (value === '' || numericValue.test(value))) {
+    if (name !== "month" && (value === "" || numericValue.test(value))) {
       // Update formData state with the new value
       setFormData({
         ...formData,
-        [name]: value
+        [name]: value,
       });
-    } else if (name === 'month') {
+    } else if (name === "month") {
       // Allow non-numeric values for month
       setFormData({
         ...formData,
-        [name]: value
+        [name]: value,
       });
     }
   };
@@ -251,7 +253,6 @@ function RevenueDetailsModal({
   );
 }
 
-
 function GetAllPrEngagement() {
   const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(true);
@@ -279,7 +280,30 @@ function GetAllPrEngagement() {
         setLoading(false);
       });
   }, [token]);
-
+  const exportToExcel = () => {
+    setLoading(true);
+    axios({
+      url: `/apigateway/hrms/engagement/getAllProjectEngagementExportToExcel`,
+      method: "GET",
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "ProjectEngData.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error.response?.data?.message || "Error uploading excel.");
+        setLoading(false);
+      });
+  };
   const handleRevenueDetailsClick = (projectId) => {
     axios
       .get(
@@ -431,6 +455,11 @@ function GetAllPrEngagement() {
       </div>
       <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
         <h1 className="Heading1">Project Engagement</h1>
+        <Tooltip title="Download project engagement data" arrow>
+          <IconButton onClick={exportToExcel} className="icon-button">
+            <FileDownloadOutlinedIcon />  
+          </IconButton>
+        </Tooltip><span>Download Excel</span>
         <div>
           <Table striped bordered hover className="custom-table">
             <thead className="table-danger table-striped">
@@ -505,234 +534,6 @@ function GetAllPrEngagement() {
     </div>
   );
 }
-
-
-
-// function RevenueDetailsModal({
-//   show,
-//   onHide,
-//   revenueDetails,
-//   currentDetail,
-//   projectId,
-//   token,
-//   onSave,
-//   handleAddNewRevenueDetail,
-//   handleEditRevenueDetail,
-// }) {
-//   const [formData, setFormData] = useState({
-//     year: "",
-//     month: "",
-//     projectRevenue: "",
-//     resourceExpense: "",
-//     contractorRevenue: "",
-//   });
-
-//   useEffect(() => {
-//     if (currentDetail) {
-//       setFormData({
-//         year: currentDetail.year || "",
-//         month: currentDetail.month || "",
-//         projectRevenue: currentDetail.projectRevenue || "",
-//         resourceExpense: currentDetail.resourceExpense || "",
-//         contractorRevenue: currentDetail.contractorRevenue || "",
-//       });
-//     }
-//   }, [currentDetail]);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-  
-//     // Regular expression to match integers and decimals
-//     const numericValue = /^[+-]?([0-9]*[.])?[0-9]+$/;
-  
-//     // Check if the entered value is a valid numeric value
-//     if (value === '' || numericValue.test(value)) {
-//       // Update formData state with the new value
-//       setFormData({
-//         ...formData,
-//         [name]: value
-//       });
-//     }
-//     // If the entered value is not a valid numeric value, do not update formData
-//     // This will prevent non-numeric values from being displayed
-//   };
-
-//   const handleSave = () => {
-//     const newId = currentDetail && currentDetail.id ? currentDetail.id : null;
-//     axios
-//       .post(
-//         `/apigateway/hrms/engagement/saveProjectRevenue`,
-//         {
-//           id: newId,
-//           projectEngagement: {
-//             projectId: projectId,
-//           },
-//           ...formData,
-//         },
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       )
-//       .then((response) => {
-//         console.log(response.data);
-//         toast.success(response.data, {
-//           position: "top-center",
-//           theme: "colored",
-//         });
-//         onSave();
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//         toast.error(
-//           error.response.data.message || "Error saving revenue detail"
-//         );
-//       });
-//   };
-
-//   return (
-//     <Modal
-//       show={show}
-//       onHide={onHide}
-//       style={{ maxWidth: "100%", margin: "auto" }}
-//     >
-//       <Modal.Header closeButton>
-//         <Modal.Title>Revenue Details</Modal.Title>
-//       </Modal.Header>
-//       <Modal.Body>
-//         <div style={{ overflowX: "auto" }}>
-//           <Table striped bordered hover style={{ minWidth: "100%" }}>
-//             <thead style={{ backgroundColor: "#f8d7da", textAlign: "center" }}>
-//               <tr>
-//                 <th style={{ width: "20%" }}>End Client</th>
-//                 <th style={{ width: "15%" }}>Year</th>
-//                 <th style={{ width: "15%" }}>Month</th>
-//                 <th style={{ width: "15%" }}>Project Revenue</th>
-//                 <th style={{ width: "15%" }}>Resource Expense</th>
-//                 <th style={{ width: "15%" }}>Contractor Expense</th>
-//                 <th style={{ width: "5%" }}>Edit</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {revenueDetails.map((detail) => (
-//                 <tr key={detail.id} style={{ textAlign: "center" }}>
-//                   <td>{detail.projectEngagement.endClient}</td>
-//                   <td>{detail.year}</td>
-//                   <td>{detail.month}</td>
-//                   <td>{detail.projectRevenue}</td>
-//                   <td>{detail.resourceExpense}</td>
-//                   <td>{detail.contractorRevenue}</td>
-//                   <td>
-//                     <Button
-//                       variant="contained"
-//                       color="primary"
-//                       onClick={() => handleEditRevenueDetail(detail)}
-//                     >
-//                       <EditIcon />
-//                     </Button>
-//                   </td>
-//                 </tr>
-//               ))}
-//               <tr style={{ textAlign: "center" }}>
-//                 <td colSpan={7}>
-//                   <Button
-//                     variant="contained"
-//                     color="primary"
-//                     onClick={handleAddNewRevenueDetail}
-//                   >
-//                     Add New
-//                   </Button>
-//                 </td>
-//               </tr>
-//             </tbody>
-//           </Table>
-//         </div>
-//         <Form>
-//           <Form.Group controlId="formYear">
-//             <Form.Label>Year</Form.Label>
-//             <Form.Control
-//               as="select"
-//               name="year"
-//               value={formData.year}
-//               onChange={handleChange}
-//             >
-//               <option value="">Select Year</option>
-//               {Array.from(
-//                 { length: 11 },
-//                 (_, i) => new Date().getFullYear() - 3 + i
-//               ).map((year) => (
-//                 <option key={year} value={year}>
-//                   {year}
-//                 </option>
-//               ))}
-//             </Form.Control>
-//           </Form.Group>
-//           <Form.Group controlId="formMonth">
-//             <Form.Label>Month</Form.Label>
-//             <Form.Control
-//               as="select"
-//               name="month"
-//               value={formData.month}
-//               onChange={handleChange}
-//             >
-//               <option value="">Select Month</option>
-//               {[
-//                 "January",
-//                 "February",
-//                 "March",
-//                 "April",
-//                 "May",
-//                 "June",
-//                 "July",
-//                 "August",
-//                 "September",
-//                 "October",
-//                 "November",
-//                 "December",
-//               ].map((month, index) => (
-//                 <option key={index} value={month}>
-//                   {month}
-//                 </option>
-//               ))}
-//             </Form.Control>
-//           </Form.Group>
-//           <Form.Group controlId="formProjectRevenue">
-//             <Form.Label>Project Revenue</Form.Label>
-//             <Form.Control
-//               type="text"
-//               name="projectRevenue"
-//               value={formData.projectRevenue}
-//               onChange={handleChange}
-//             />
-//           </Form.Group>
-//           <Form.Group controlId="formResourceExpense">
-//             <Form.Label>Resource Expense</Form.Label>
-//             <Form.Control
-//               type="text"
-//               name="resourceExpense"
-//               value={formData.resourceExpense}
-//               onChange={handleChange}
-//             />
-//           </Form.Group>
-//           <Form.Group controlId="formContractorExpense">
-//             <Form.Label>Contractor Expense</Form.Label>
-//             <Form.Control
-//               type="text"
-//               name="contractorRevenue"
-//               value={formData.contractorRevenue}
-//               onChange={handleChange}
-//             />
-//           </Form.Group>
-//           <Button variant="primary" onClick={handleSave}>
-//             Save
-//           </Button>
-//         </Form>
-//       </Modal.Body>
-//     </Modal>
-//   );
-// }
-
 function Filter({ column }) {
   const { filterVariant } = column.columnDef.meta || {};
 
