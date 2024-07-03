@@ -30,6 +30,7 @@ const GetAllEmpAttendance = () => {
   const [getData, setData] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
+  const [error, setError] = useState('');
   const [selectedEmployee, setSelectedEmployee] = useState([]); // New state for selected employee
 
   const submit = (e) => {
@@ -51,10 +52,23 @@ const GetAllEmpAttendance = () => {
       });
   };
 
+  // const handle = (e) => {
+  //   const newDate = { ...getAttendence };
+  //   newDate[e.target.id] = e.target.value;
+  //   setAttendence(newDate);
+  // };
+
   const handle = (e) => {
-    const newDate = { ...getAttendence };
-    newDate[e.target.id] = e.target.value;
-    setAttendence(newDate);
+    const { id, value } = e.target;
+    setAttendence(prevState => ({
+      ...prevState,
+      [id]: value
+    }));
+     if (id === 'toDate' && value < getAttendence.fromDate) {
+      setError('To Date cannot be less than From Date');
+    } else {
+      setError('');
+    }
   };
   const handleSelectChange = (options) => {
     setSelectedEmployee(options.map((option) => option.value));
@@ -89,9 +103,7 @@ const GetAllEmpAttendance = () => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
-
     window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -216,8 +228,9 @@ const GetAllEmpAttendance = () => {
                     <option key={employee} value={employee}>{employee}</option>
                   ))}
                 </select> */}
-                <button className='btn btn-outline-primary mt-0'>Get</button>
+                <button className='btn btn-outline-primary mt-0'  disabled={loading || !getAttendence.fromDate || !getAttendence.toDate}>Get</button>
               </div>
+              {error && <div className='alert alert-danger'>{error}</div>}
             </form>
             <button onClick={exportToExcel} className='btn btn-outline-primary mt-0'>Export to Excel</button>
 
