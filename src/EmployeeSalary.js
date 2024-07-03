@@ -21,29 +21,29 @@ function EmployeeSalary() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [searchName, setSearchName] = useState("");
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   axios
-  //     .get(`/apigateway/payroll/salary/getAllEmpSalary`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       setClientInfo(response.data);
-  //       console.log(response.data);
-  //       toast.success("Employee Salary found successfully!!", {
-  //         position: "top-center",
-  //         theme: "colored",
-  //       });
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       toast.error(error.response.data.message || "Error fetching details");
-  //       setLoading(false);
-  //     });
-  // }, []);
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`/apigateway/payroll/salarydetails/getAllMonthlySalaryDetails`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setClientInfo(response.data);
+        console.log(response.data);
+        toast.success("Employee Salary found successfully!!", {
+          position: "top-center",
+          theme: "colored",
+        });
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.response.data.message || "Error fetching details");
+        setLoading(false);
+      });
+  }, []);
 
   // const indexOfLastRow = currentPage * rowsPerPage;
   // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -56,17 +56,17 @@ function EmployeeSalary() {
 
   // const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleYearChange = (event) => {
-    setYear(event.target.value);
-  };
+  // const handleYearChange = (event) => {
+  //   setYear(event.target.value);
+  // };
 
-  const handleMonthChange = (event) => {
-    setSelectedMonth(event.target.value);
-  };
+  // const handleMonthChange = (event) => {
+  //   setSelectedMonth(event.target.value);
+  // };
 
-  const handleNameChange = (event) => {
-    setSearchName(event.target.value);
-  };
+  // const handleNameChange = (event) => {
+  //   setSearchName(event.target.value);
+  // };
 
   // const handleGeneratePaySlip = (empId) => {
   //   const selectedEmployee = clientInfo.find(
@@ -166,10 +166,11 @@ function EmployeeSalary() {
           height: "60rem",
         }}
       >
+        <FileUpload />
         <Container>
           <h1 className="Heading1">Employee Salary</h1>
-          <Form style={{ marginBottom: "20px" }}>
-            <Form.Group controlId="employeeName">
+          {/*<Form style={{ marginBottom: "20px" }}>
+             <Form.Group controlId="employeeName">
               <Form.Label>Search by Employee Name</Form.Label>
               <Form.Control
                 type="text"
@@ -209,7 +210,7 @@ function EmployeeSalary() {
                 ))}
               </Form.Control>
             </Form.Group>
-          </Form>
+          </Form> */}
           <Table striped bordered hover className="custom-table">
             <thead>
               <tr>
@@ -223,27 +224,30 @@ function EmployeeSalary() {
                 <th>Employeer ESIC</th>
                 <th>Employee ESIC</th>
                 <th>Medical Amount</th>
+                <th>View</th>
               </tr>
             </thead>
-            {/* <tbody>
-              {currentRows.map((client) => (
+            <tbody>
+              {clientInfo.map((client) => (
                 <tr key={client.id}>
                   <td>{client.empId}</td>
-                  <td>{client.employee.firstName}</td>
-                  <td>{client.email}</td>
-                  <td>{client.joinDate}</td>
+                  <td>{client.employeeName}</td>
                   <td>{client.bankName}</td>
-                  <td>{client.accountNumber}</td>
-                  <td>{client.role}</td>
-                  <td>{client.salary}</td>
+                  <td>{client.accountNo}</td>
+                  <td>{client.netPay}</td>
+                  <td>{client.employerPf}</td>
+                  <td>{client.employeePf}</td>
+                  <td>{client.employerEsic}</td>
+                  <td>{client.employeeEsic}</td>
+                  <td>{client.medicalAmount}</td>
                   <td>
                     <button onClick={() => handleGeneratePaySlip(client.empId)}>
-                      Generate_Slip
+                      View details
                     </button>
                   </td>
                 </tr>
               ))}
-            </tbody> */}
+            </tbody> 
           </Table>
           {/* <Pagination>
             {Array.from({
@@ -260,7 +264,7 @@ function EmployeeSalary() {
           </Pagination> */}
         </Container>
 
-        <FileUpload />
+        
       </div>
     </div>
   );
