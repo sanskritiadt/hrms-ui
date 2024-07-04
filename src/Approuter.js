@@ -311,6 +311,7 @@ const Approuter = () => {
               <Route path="/AddAppraisalDetails" element={<AddAppraisalDetails />} />
               <Route path="/GetAllEmpAppraisalDetails" element={<GetAllEmpAppraisalDetails />} />
               <Route path="/view-salary-details/:id" element={<ViewSalaryDetails />} />
+              <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
             </Routes>
           </SideBar>
         </div>
@@ -324,7 +325,7 @@ const Approuter = () => {
         <Route path="/login" element={<Login />} />
         {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
-        <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
+        <Route path="/NewpassForm" element={<NewpassForm />} />
       </Routes>
       {!isLoggedIn && <Footer />}
     </div>
