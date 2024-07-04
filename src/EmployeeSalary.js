@@ -36,7 +36,7 @@ function EmployeeSalary() {
       })
       .then((response) => {
         setClientInfo(response.data);
-        console.log(response.data);
+      //  console.log(response.data);
         toast.success("Employee Salary found successfully!!", {
           position: "top-center",
           theme: "colored",
