@@ -222,9 +222,9 @@ import CreatePayslip from './CreatePayslip';
 import UpdatePayrollSalary from "./UpdatePayrollSalary";
 import ManageRoles from "./ManageRoles";
 import EditPosition from "./EditPosition";
-import AddProjRevenue from'./AddProjRevenue';
 import AddAppraisalDetails from './AddAppraisalDetails';
 import GetAllEmpAppraisalDetails from './GetAllEmpAppraisalDetails';
+import ViewSalaryDetails from './ViewSalaryDetails'
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -280,7 +280,6 @@ const Approuter = () => {
               <Route path="/Capex" element={<Capex />} />
               <Route path="/NewpassForm" element={<NewpassForm />} />
               <Route path="/Getallexpenses" element={<Getallexpenses />} />
-              <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
               <Route path="/getcandidate" element={<CandidateDetails />} />
               <Route path="/createCandidate" element={<InterviewCandidate />} />
               <Route
@@ -309,9 +308,10 @@ const Approuter = () => {
               <Route path="/ManageRoles" element={<ManageRoles />} />
               <Route path="/EditPosition/:id" element={<EditPosition />} />
               <Route path="/RegisterUser" element={<RegisterUser />} />
-              <Route path="/add-proj-revenue" element={<AddProjRevenue />} />
               <Route path="/AddAppraisalDetails" element={<AddAppraisalDetails />} />
               <Route path="/GetAllEmpAppraisalDetails" element={<GetAllEmpAppraisalDetails />} />
+              <Route path="/view-salary-details/:id" element={<ViewSalaryDetails />} />
+              <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
             </Routes>
           </SideBar>
         </div>
@@ -325,6 +325,7 @@ const Approuter = () => {
         <Route path="/login" element={<Login />} />
         {/* <Route path="/RegisterUser" element={<RegisterUser />} /> */}
         <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/NewpassForm" element={<NewpassForm />} />
       </Routes>
       {!isLoggedIn && <Footer />}
     </div>

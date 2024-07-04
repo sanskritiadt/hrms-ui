@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Container, Table, Pagination, Form, Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect, useMemo } from "react";
+import { Container, Table } from "react-bootstrap";
+import { Button } from "@mui/material";
 import "./Hrmscss/ExampleTable.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -8,26 +8,28 @@ import "./Hrmscss/App.css";
 import FileUpload from "./FileUpload";
 import LoadingPage from "./LoadingPage";
 import { toast } from "react-toastify";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import {
+  useReactTable,
+  flexRender,
+  getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
+} from "@tanstack/react-table";
+
 function EmployeeSalary() {
-  // const token = localStorage.getItem("response-token");
-  const  token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.auth.token);
   // const  EmpId = useSelector((state) => state.auth.empId);
-
   const [loading, setLoading] = useState(false);
-  const EmpID = localStorage.getItem("EmpID");
   const [clientInfo, setClientInfo] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage] = useState(4);
-  const [year, setYear] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [searchName, setSearchName] = useState(""); 
-
-
+  const [columnFilters, setColumnFilters] = useState([]);
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`/apigateway/payroll/salary/getAllEmpSalary`, {
+      .get(`/apigateway/payroll/salarydetails/getAllMonthlySalaryDetails`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -47,84 +49,93 @@ function EmployeeSalary() {
         setLoading(false);
       });
   }, []);
-
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-
-  const filteredClientInfo = clientInfo.filter((client) =>
-    client.empName.toLowerCase().includes(searchName.toLowerCase())
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "empId",
+        header: "Emp ID",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employeeName",
+        header: "Employee Name",
+        meta: { filterVariant: "select" }
+      },
+      {
+        accessorKey: "bankName",
+        header: "Bank Name",
+        meta: { filterVariant: "select" }
+      },
+      {
+        accessorKey: "accountNo",
+        header: "Account No",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "netPay",
+        header: "Net Pay",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employerPf",
+        header: "Employer Pf",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employeePf",
+        header: "Employee Pf",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employerEsic",
+        header: "Employer Esic",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employeeEsic",
+        header: "Employee Esic",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "medicalAmount",
+        header: "Medical Amount",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "view",
+        header: " View Archive",
+        meta: { filterable: false },
+        cell: (cell) => (
+          <Link to={`/view-salary-details/${cell.row.original.empId}`}>
+            <Button variant="contained" color="primary">
+              View
+            </Button>
+          </Link>
+        ),
+      },
+    ],
+    []
   );
 
-  const currentRows = filteredClientInfo.slice(indexOfFirstRow, indexOfLastRow);
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
-
-  const handleYearChange = (event) => {
-    setYear(event.target.value);
-  };
-
-  const handleMonthChange = (event) => {
-    setSelectedMonth(event.target.value);
-  };
-
-  const handleNameChange = (event) => {
-    setSearchName(event.target.value);
-  };
-
-  const handleGeneratePaySlip = (empId) => {
-    const selectedEmployee = clientInfo.find(
-      (employee) => employee.empId === empId
-    );
-
-    if (selectedEmployee) {
-      const requestBody = {
-        empName: selectedEmployee.empName,
-        empId: selectedEmployee.empId,
-        email: selectedEmployee.email,
-        joinDate: selectedEmployee.joinDate,
-        bankName: selectedEmployee.bankName,
-        accountNumber: selectedEmployee.accountNumber,
-        role: selectedEmployee.role,
-        salary: selectedEmployee.salary,
-      };
-      setLoading(true);
-      axios
-        .post(
-          `/apigateway/payroll/viewPay?month=${selectedMonth}&year=${year}`,
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-
-          var pdfData = response.data;
-
-          var url = `data:application/pdf;base64,${pdfData}`;
-
-          // Open the PDF in a new tab
-          var newTab = window.open(url, "_blank");
-
-          toast.success("Pay slip generated successfully.", {
-            position: "top-center",
-            theme: "colored",
-          });
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error(error.response.data.message || "Error creating details");
-          setLoading(false);
-        });
-    }
-  };
+  const table = useReactTable({
+    data: clientInfo,
+    columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
+  });
 
   return (
     <div className=" mt-3">
-          {loading ? <LoadingPage/> : ''}
+      {loading ? <LoadingPage /> : ""}
       <nav
         aria-label="breadcrumb"
         style={{ "--bs-breadcrumb-divider": "'>>'" }}
@@ -152,119 +163,160 @@ function EmployeeSalary() {
           height: "60rem",
         }}
       >
+        <FileUpload />
         <Container>
           <h1 className="Heading1">Employee Salary</h1>
-          <Form style={{ marginBottom: "20px" }}>
-            <Form.Group controlId="employeeName">
-              <Form.Label>Search by Employee Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Name"
-                value={searchName}
-                onChange={handleNameChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="selectedYear">
-              <Form.Label>Select Year</Form.Label>
-              <Form.Control
-                as="select"
-                placeholder="Enter Year"
-                value={year}
-                onChange={handleYearChange}
-              >
-                <option value="">Enter Year</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
-                <option value="2031">2031</option>
-                <option value="2032">2032</option>
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="selectedMonth">
-              <Form.Label>Select Month</Form.Label>
-              <Form.Control
-                as="select"
-                value={selectedMonth}
-                onChange={handleMonthChange}
-              >
-                <option value="">Enter Month </option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-              </Form.Control>
-            </Form.Group>
-          </Form>
-          <Table striped bordered hover className="custom-table">
-            <thead>
-              <tr>
-                <th>Serial number</th>
-                <th>Employee ID</th>
-                <th>Employee Name</th>
-                <th>Email</th>
-                <th>Join Date</th>
-                <th>Bank Name</th>
-                <th>Account Number</th>
-                <th>Role</th>
-                <th>Salary</th>
-                <th>Payslip</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentRows.map((client) => (
-                <tr key={client.id}>
-                  <td>{client.serialNo}</td>
-                  <td>{client.empId}</td>
-                  <td>{client.empName}</td>
-                  <td>{client.email}</td>
-                  <td>{client.joinDate}</td>
-                  <td>{client.bankName}</td>
-                  <td>{client.accountNumber}</td>
-                  <td>{client.role}</td>
-                  <td>{client.salary}</td>
-                  <td>
-                    <button onClick={() => handleGeneratePaySlip(client.empId)}>
-                      Generate_Slip
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Pagination>
-            {Array.from({
-              length: Math.ceil(filteredClientInfo.length / rowsPerPage),
-            }).map((_, index) => (
-              <Pagination.Item
-                key={index + 1}
-                active={index + 1 === currentPage}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-          </Pagination>
+          <div>
+            <Table striped bordered hover className="custom-table">
+              <thead className="table-danger table-striped">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th key={header.id} colSpan={header.colSpan}>
+                        {header.isPlaceholder ? null : (
+                          <>
+                            <div
+                              className={
+                                header.column.getCanSort()
+                                  ? "cursor-pointer select-none"
+                                  : ""
+                              }
+                              onClick={header.column.getToggleSortingHandler()}
+                            >
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                              {header.column.getIsSorted() === "asc"
+                                ? " 🔼"
+                                : header.column.getIsSorted() === "desc"
+                                ? " 🔽"
+                                : null}
+                            </div>
+                            {header.column.getCanFilter() ? (
+                              <div>
+                                <Filter column={header.column} />
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className="body">
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         </Container>
-
-        <FileUpload />
       </div>
     </div>
   );
 }
 
+function Filter({ column }) {
+  const { filterVariant } = column.columnDef.meta || {};
+
+  const columnFilterValue = column.getFilterValue();
+
+  const sortedUniqueValues = useMemo(
+    () =>
+      filterVariant === "select"
+        ? Array.from(column.getFacetedUniqueValues().keys()).sort()
+        : [],
+    [column.getFacetedUniqueValues(), filterVariant]
+  );
+
+  return filterVariant === "select" ? (
+    <select
+      onChange={(e) => column.setFilterValue(e.target.value)}
+      value={columnFilterValue?.toString() || ""}
+    >
+      <option value="">All</option>
+      {sortedUniqueValues.map((value) => (
+        <option key={value} value={value}>
+          {value}
+        </option>
+      ))}
+    </select>
+  ) : filterVariant === "range" ? (
+    <div>
+      <div className="flex space-x-2">
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue ? columnFilterValue[0] : "") ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target?.value, old?.[1]])
+          }
+          placeholder={`Min ${
+            column.getFacetedMinMaxValues()?.[0] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[0]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
+        />
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue ? columnFilterValue[1] : "") ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target?.value, old?.[1]])
+          }
+          placeholder={`Max ${
+            column.getFacetedMinMaxValues()?.[1] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[1]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
+        />
+      </div>
+      <div className="h-1" />
+    </div>
+  ) : null;
+}
+
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}) {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value);
+    }, debounce);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}
 export default EmployeeSalary;

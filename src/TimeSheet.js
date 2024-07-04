@@ -751,7 +751,13 @@ const TimeSheet = () => {
   const prepareGraphData = (data) => {
       const dates = data.map((entry) => entry.date);
       const workingHours = data.map((entry) => {
-        return entry.workingHour ? parseInt(entry.workingHour) : 0;
+        if(entry.workingHour){
+          const [hours, minutes, seconds] = entry.workingHour.split(':').map(Number);
+          const totalHours = hours + (minutes / 60) + (seconds / 3600);
+          return parseFloat(totalHours.toFixed(2));
+        }else{
+          return 0;
+        }
    });    
       return {
         labels: dates,
@@ -766,6 +772,7 @@ const TimeSheet = () => {
         ],
       };
     };
+  const todayDate = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 
   return (
     <>
@@ -873,6 +880,7 @@ const TimeSheet = () => {
                   type="date"
                   className="form-control"
                   id="fromDate"
+                  max={todayDate}
                 />
                 <label className="pt-2 fs-5" htmlFor="todate">
                   ToDate:
@@ -885,6 +893,7 @@ const TimeSheet = () => {
                   type="date"
                   className="form-control"
                   id="toDate"
+                  max={todayDate}
                 />
                 <button
                   className=" btn btn-primary m-0"

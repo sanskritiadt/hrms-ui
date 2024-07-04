@@ -30,10 +30,13 @@ const CreateInterview = () => {
     rounds: "",
     date: "",
     status: "",
+    email: "",
+
   });
   const [technology, setTechnology] = useState([]);
   const [position, setPosition] = useState([]);
   const [candidate, setCandidate] = useState([]);
+  const [email, setEmail] = useState('');
   
   useEffect(() => {
 
@@ -96,7 +99,6 @@ const CreateInterview = () => {
       .post(
         `/apigateway/hrms/interview/saveInterviewNew`,
         {
-          interviewId: parseInt(data.interviewId),
           tech_id: parseInt(data.tech_id),
           marks: parseInt(data.marks),
           communication: parseInt(data.communication),
@@ -114,6 +116,7 @@ const CreateInterview = () => {
           position_id: parseInt(data.position_id),
           candidate_id: parseInt(data.candidate_id),
           status: data.status,
+          email: email,
         },
         {
           headers: {
@@ -160,6 +163,17 @@ const CreateInterview = () => {
     setData(newdata);
     console.log(newdata);
   }
+  const handleSelection = (event) => {
+    const selectedId = event.target.value;
+    const selectedCandidate = candidate.find(cand => cand.candidateId === parseInt(selectedId));
+    if (selectedCandidate) {
+      setEmail(selectedCandidate.emailId);
+    } else {
+      setEmail('');
+    }
+    const newData = { ...data, candidate_id: selectedId };
+    setData(newData);
+  };
   return (
     <div>
       <div className=" mt-3">
@@ -191,26 +205,31 @@ const CreateInterview = () => {
             >
               <div className="card-body">
                 <form className="container py-3  mb-3">
-                  <div className="row mb-3">
+                <div className="row mb-3">
                     <label
                       htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
-                      name="interviewId"
+                      name="candidate_id"
                     >
-                      Interview Id
+                      Candidate Name
                     </label>
                     <div className="col-sm-10">
-                      <input
-                        required
-                        onChange={(e) => {
-                          handle(e);
-                        }}
-                        value={data.interviewId}
-                        type="text"
-                        className="form-control"
-                        placeholder="enter the interview Id."
-                        id="interviewId"
-                      />
+                    <select required onChange={handleSelection} className="form-control" id="candidate_id" value={data.candidate_id}>
+                        <option defaultValue>Select Candidate</option>
+                        {candidate.map((user) => (
+                          <option key={user.candidateId} value={user.candidateId}>
+                            {user.candidateName}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <label className="col-sm-2 col-form-label">
+                      Email
+                    </label>
+                    <div className="col-sm-10">
+                      <input type="text" className="form-control" value={email} readOnly />
                     </div>
                   </div>
                   <div className="row mb-3">
@@ -235,36 +254,7 @@ const CreateInterview = () => {
                       />
                     </div>
                   </div>
-                  <div className="row mb-3">
-                    <label
-                      htmlFor="inputPassword3"
-                      className="col-sm-2 col-form-label"
-                      name="candidate_id"
-                    >
-                      Candidate Name
-                    </label>
-                    <div className="col-sm-10">
-                      <select
-                        required
-                        onChange={(e) => {
-                          handle(e);
-                        }}
-                        value={candidate.candidateId}
-                        className="form-control"
-                        id="candidate_id"
-                      >
-                        <option defaultValue>Select Candidate</option>
-                        {candidate.map((user) => (
-                          <option
-                            key={user.candidateId}
-                            value={user.candidateId}
-                          >
-                            {user.candidateName}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
+                  
                   <div className="row mb-3">
                     <label
                       htmlFor="inputEmail3"
