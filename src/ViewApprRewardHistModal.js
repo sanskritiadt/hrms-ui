@@ -27,9 +27,9 @@ function ViewApprRewardHistModal({ show, onHide, appraisalHistory, type }) {
                   <td>{appraisal.name}</td>
                   <td>{appraisal.appraisalDate}</td>
                   <td>{appraisal.amount}</td>
-                  <td>{appraisal.salary}</td>
-                  <td>{appraisal.bonus}</td>
-                  <td>{appraisal.variable}</td>
+                  {type === 'history' && <td>{appraisal.salary}</td>}
+                  {type === 'history' && <td>{appraisal.bonus}</td>}   
+                  {type === 'history' && <td>{appraisal.variable}</td>} 
                   {type === 'reward' && <td>{appraisal.rewardType}</td>}  
                 </tr>
               ))
