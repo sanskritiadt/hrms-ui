@@ -16,19 +16,16 @@ function FileUpload() {
   function handleEmailChange(event) {
     setEmail(event.target.value);
   }
-  
+
   function Submit(event) {
     event.preventDefault();
     setLoading(true);
     axios
-      .get(
-        `/apigateway/payroll/generatePaySlipForAll?emailInput=${email}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(`/apigateway/payroll/generatePaySlipForAll?emailInput=${email}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         console.log(response.data);
         alert(response.data);
@@ -68,19 +65,30 @@ function FileUpload() {
 
   return (
     <div className="d-flex ">
-      {" "}
       {loading ? <LoadingPage /> : ""}
       <form onSubmit={Submit}>
-        Email  <input type="email" onChange={handleEmailChange} placeholder="Enter Email."/> 
-        <button type="submit">
-          generate all Payslip from DB{" "}
+        Email
+        <input
+          type="email"
+          onChange={handleEmailChange}
+          placeholder="Enter Email."
+        />
+        <button type="submit" >
+          generate all Payslip from DB
         </button>
       </form>
-      <form onSubmit={handleSubmit} >
-      Email  <input type="email" onChange={handleEmailChange} placeholder="Enter Email."/> 
-        <input type="file" onChange={handleFileChange} className="mb-4" />
-
-        <button type="submit">generate all Payslip with excel</button>
+      <form onSubmit={handleSubmit}>
+        Email
+        <input
+          type="email"
+        
+          onChange={handleEmailChange}
+          placeholder="Enter Email."
+        />
+        <input type="file"  required onChange={handleFileChange} className="mb-4" />
+        <button type="submit" >
+          generate all Payslip with excel
+        </button>
       </form>
     </div>
   );

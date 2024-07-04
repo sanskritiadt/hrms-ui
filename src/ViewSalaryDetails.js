@@ -14,7 +14,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 function ViewSalaryDetails() {
   const { id } = useParams();
   const token = useSelector((state) => state.auth.token);
@@ -45,22 +45,35 @@ function ViewSalaryDetails() {
       {
         accessorKey: "employeePf",
         header: "Employee Pf",
-        meta: { filterable: true }
+        meta: { filterable: true },
       },
       {
         accessorKey: "employerPf",
         header: "Employer Pf",
-        meta: { filterable: true }
+        meta: { filterable: true },
       },
-      { accessorKey: "employerEsic", header: "Employer Esic", meta: { filterable: true } },
-      { accessorKey: "employeeEsic", header: "Employee Esic",   meta: { filterable: true } },
+      {
+        accessorKey: "employerEsic",
+        header: "Employer Esic",
+        meta: { filterable: true },
+      },
+      {
+        accessorKey: "employeeEsic",
+        header: "Employee Esic",
+        meta: { filterable: true },
+      },
       {
         accessorKey: "grossDeduction",
         header: "Gross Deduction",
         meta: { filterable: true },
       },
-      { accessorKey: "adhoc", header: "ADHOC",  meta: { filterable: true } },
-  
+      { accessorKey: "adhoc", header: "ADHOC", meta: { filterable: true } },
+      {
+        accessorKey: "month",
+        header: "Month",
+        meta: { filterVariant: "select" },
+      },
+      { accessorKey: "year", header: "Year", meta: { filterable: true } },
     ],
     []
   );
@@ -81,14 +94,13 @@ function ViewSalaryDetails() {
     debugColumns: false,
   });
 
-
   return (
     <div className="mt-3">
       {loading ? <LoadingPage /> : ""}
       <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
         <h1 className="Heading1">Salary Information</h1>
         <div>
-        <Table striped bordered hover className="custom-table">
+          <Table striped bordered hover className="custom-table">
             <thead className="table-danger table-striped">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -140,106 +152,103 @@ function ViewSalaryDetails() {
                 </tr>
               ))}
             </tbody>
-            </Table>
+          </Table>
         </div>
       </div>
     </div>
   );
 }
 
-
 function Filter({ column }) {
-    const { filterVariant } = column.columnDef.meta || {};
-  
-    const columnFilterValue = column.getFilterValue();
-  
-    const sortedUniqueValues = useMemo(
-      () =>
-        filterVariant === "select"
-          ? Array.from(column.getFacetedUniqueValues().keys()).sort()
-          : [],
-      [column.getFacetedUniqueValues(), filterVariant]
-    );
-  
-    return filterVariant === "select" ? (
-      <select
-        onChange={(e) => column.setFilterValue(e.target.value)}
-        value={columnFilterValue?.toString() || ""}
-      >
-        <option value="">All</option>
-        {sortedUniqueValues.map((value) => (
-          <option key={value} value={value}>
-            {value}
-          </option>
-        ))}
-      </select>
-    ) : filterVariant === "range" ? (
-      <div>
-        <div className="flex space-x-2">
-          <DebouncedInput
-            type="number"
-            min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
-            max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
-            value={(columnFilterValue ? columnFilterValue[0] : "") ?? ""}
-            onChange={(e) =>
-              column.setFilterValue((old) => [e.target?.value, old?.[1]])
+  const { filterVariant } = column.columnDef.meta || {};
+
+  const columnFilterValue = column.getFilterValue();
+
+  const sortedUniqueValues = useMemo(
+    () =>
+      filterVariant === "select"
+        ? Array.from(column.getFacetedUniqueValues().keys()).sort()
+        : [],
+    [column.getFacetedUniqueValues(), filterVariant]
+  );
+
+  return filterVariant === "select" ? (
+    <select
+      onChange={(e) => column.setFilterValue(e.target.value)}
+      value={columnFilterValue?.toString() || ""}
+    >
+      <option value="">All</option>
+      {sortedUniqueValues.map((value) => (
+        <option key={value} value={value}>
+          {value}
+        </option>
+      ))}
+    </select>
+  ) : filterVariant === "range" ? (
+    <div>
+      <div className="flex space-x-2">
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue ? columnFilterValue[0] : "") ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target?.value, old?.[1]])
           }
-          
-            placeholder={`Min ${
-              column.getFacetedMinMaxValues()?.[0] !== undefined
-                ? `(${column.getFacetedMinMaxValues()?.[0]})`
-                : ""
-            }`}
-            className="w-24 border shadow rounded"
-          />
-          <DebouncedInput
-            type="number"
-            min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
-            max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
-            value={(columnFilterValue ? columnFilterValue[1] : "") ?? ""}
-            onChange={(e) =>
-              column.setFilterValue((old) => [e.target?.value, old?.[1]])
+          placeholder={`Min ${
+            column.getFacetedMinMaxValues()?.[0] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[0]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
+        />
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue ? columnFilterValue[1] : "") ?? ""}
+          onChange={(e) =>
+            column.setFilterValue((old) => [e.target?.value, old?.[1]])
           }
-          
-            placeholder={`Max ${
-              column.getFacetedMinMaxValues()?.[1] !== undefined
-                ? `(${column.getFacetedMinMaxValues()?.[1]})`
-                : ""
-            }`}
-            className="w-24 border shadow rounded"
-          />
-        </div>
-        <div className="h-1" />
+          placeholder={`Max ${
+            column.getFacetedMinMaxValues()?.[1] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[1]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
+        />
       </div>
-    ) : null; 
-  }
-  
-  function DebouncedInput({
-    value: initialValue,
-    onChange,
-    debounce = 500,
-    ...props
-  }) {
-    const [value, setValue] = useState(initialValue);
-  
-    useEffect(() => {
-      setValue(initialValue);
-    }, [initialValue]);
-  
-    useEffect(() => {
-      const timeout = setTimeout(() => {
-        onChange(value);
-      }, debounce);
-  
-      return () => clearTimeout(timeout);
-    }, [value]);
-  
-    return (
-      <input
-        {...props}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-    );
-  }
+      <div className="h-1" />
+    </div>
+  ) : null;
+}
+
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}) {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value);
+    }, debounce);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}
 export default ViewSalaryDetails;
