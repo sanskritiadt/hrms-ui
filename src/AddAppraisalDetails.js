@@ -36,7 +36,7 @@ const initialappraisalData ={
 }
 const initalrewardsData={
   empId: "",
-  appraisalDate: null,
+  effectiveDate: null,
   amount: "",
   rewardType: "",
 }
@@ -199,9 +199,9 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                      onChange={(e) => {
                       handle(e);
                     }}
-                      value={rewardsData.appraisalDate}
+                      value={rewardsData. effectiveDate}
                       type="date"
-                      id="appraisalDate"
+                      id="effectiveDate"
                       className="form-control"
                     />
                   </div>

@@ -15,6 +15,8 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { useParams } from "react-router-dom";
+import { Button, Tooltip } from "@mui/material";
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 function ViewSalaryDetails() {
   const { id } = useParams();
   const token = useSelector((state) => state.auth.token);
@@ -39,6 +41,31 @@ function ViewSalaryDetails() {
         setLoading(false);
       });
   }, [token]);
+
+  const exportToExcel = () => {
+    setLoading(true);
+    axios({
+      url: `/apigateway/payroll/salarydetails/getAllMonthlySalaryDetailsExportToExcelById/${id}`,
+      method: "GET",
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "SalaryDetails.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.error(error.response?.data?.message || "Error uploading excel.");
+        setLoading(false);
+      });
+  };
 
   const columns = useMemo(
     () => [
@@ -99,6 +126,15 @@ function ViewSalaryDetails() {
       {loading ? <LoadingPage /> : ""}
       <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
         <h1 className="Heading1">Salary Information</h1>
+        <Tooltip title="Download All Monthly Salary Detail" arrow>
+          <Button
+            onClick={exportToExcel}
+            variant="contained"
+            startIcon={<FileDownloadOutlinedIcon />}
+          >
+            Download
+          </Button>
+        </Tooltip>
         <div>
           <Table striped bordered hover className="custom-table">
             <thead className="table-danger table-striped">
