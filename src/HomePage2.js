@@ -115,12 +115,9 @@ function HomePage2() {
                 </Card>
                 </Link>
               </Col>
-
             </Row>
-
         </Col>
         </Row>
-
       </Container>
     <Footer/>
     </>
