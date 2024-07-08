@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import handleAuthError from "./CommonErrorHandling";
@@ -13,20 +13,20 @@ import {
     Button,
     FormControl,
     FormLabel,
-    Box
+    Box,
+    Autocomplete
   } from '@mui/material';
 import { Padding } from "@mui/icons-material";
 const AddAppraisalDetails = () => {
-  // const token = localStorage.getItem("response-token");
-  // const empId = localStorage.getItem("EmpID");
   const  token = useSelector((state) => state.auth.token);
-  const  empId = useSelector((state) => state.auth.empId);
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState('appraisal');
+  const [suggestions, setSuggestions] = useState([]);
 
 const initialappraisalData ={ 
   empId: "",
-  appraisalDate: null,
+  appraisalDate: "",
+  initiatedDate: "",
   amount: "",
   year: "",
   month: "",
@@ -50,7 +50,7 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
       setLoading(true); 
       axios
         .post(
-          `/apigateway/payroll/salarydetails/addAppraisalDetails`,appraisalData,
+          `/apigateway/payroll/addAppraisalDetails`,appraisalData,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -64,12 +64,15 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
             theme: "colored",
           });
           setLoading(false);
-          setAppraisalData(initialappraisalData)
+          setAppraisalData(initialappraisalData);
+          clearSuggestions();
         })
         .catch((error) => {
           console.log(error);
           toast.error( error.response.data || "Error saving details." );
           setLoading(false); 
+          setAppraisalData(initialappraisalData);
+          clearSuggestions();
         });
   };
   const submitRewards = (e) => {
@@ -77,7 +80,7 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
       setLoading(true); 
       axios
         .post(
-          `/apigateway/payroll/salarydetails/saveRewardDetails`,
+          `/apigateway/payroll/saveRewardDetails`,
           rewardsData,
           {
             headers: {
@@ -92,13 +95,16 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
             theme: "colored",
           });
           setLoading(false); 
-          setRewardsData(initalrewardsData)
+          setRewardsData(initalrewardsData);
+          clearSuggestions();
+          setInputValue('');
         })
         .catch((error) => {
           console.log(error);
           toast.error( error.response.data.message || "Error saving details." );
           setLoading(false); 
-          setRewardsData(initalrewardsData)
+          setRewardsData(initalrewardsData);
+          clearSuggestions();
         });
   };
   const handleOptionChange = (event) => {
@@ -113,11 +119,52 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
     }else{
     const newdata = { ...rewardsData };
     newdata[e.target.id] = e.target.value;
-
     setRewardsData(newdata);
     console.log(newdata);
     }
   }
+
+  const handleName = useCallback((inputValue) => {
+  
+    axios
+      .get(
+        `/apigateway/payroll/getEmpNameByCharacter/${inputValue}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        toast.success(response.data, {
+          position: "top-center",
+          theme: "colored",
+        });
+        setLoading(false);
+        setSuggestions(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.response.data || "Enter valid keyword.");
+        setLoading(false);
+      });
+  });
+  // Function to clear suggestions
+  const clearSuggestions = () => {
+    setSuggestions([]);
+  };
+  const handleSuggestionClick = (suggestion) => {
+    if (suggestion != null) {
+      if (selectedOption === 'appraisal') {
+        setAppraisalData({ empId: suggestion.empId });
+      } else {
+        setRewardsData({ empId: suggestion.empId });
+      }
+    }
+     clearSuggestions();
+  };
   return (
     <div className="mt-3">
        {loading ? <LoadingPage/> : ''}
@@ -174,18 +221,17 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                   <>
                    <div className="row mb-3">
                   <label htmlFor="EmpId" className="col-sm-2 col-form-label">
-                    Emp ID
+                    Employee Name
                   </label>
-                  <div className="col-sm-10">
-                    <input
-                      onChange={handle}
-                      value={rewardsData.empId}
-                      type="text"
-                      id="empId"
-                      placeholder="Enter Emp id"
-                      className="form-control"
-                    />
-                  </div>
+                  <Autocomplete className="col-sm-10"
+                        options={suggestions}
+                        getOptionLabel={(option) => option.name}
+                        onInputChange={(event, value) => handleName(value)}
+                        onChange={(event, value) => handleSuggestionClick(value)}
+                        renderInput={(option) => (
+                          <TextField {...option} placeholder="Enter Employee Name" />
+                        )}
+                      />
                 </div>
                 <div className="row mb-3">
                   <label
@@ -257,16 +303,34 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                 {selectedOption === 'appraisal' && (
                   <>
                    <div className="row mb-3">
-                  <label htmlFor="EmpId" className="col-sm-2 col-form-label">
-                    Emp ID
+                  <label htmlFor="Empname" className="col-sm-2 col-form-label">
+                    Employee Name
+                  </label>
+                  <Autocomplete className="col-sm-10"
+                        options={suggestions}
+                        getOptionLabel={(option) => option.name}
+                        onInputChange={(event, value) => handleName(value)}
+                        onChange={(event, value) => handleSuggestionClick(value)}
+                        renderInput={(option) => (
+                          <TextField {...option} placeholder="Enter Employee Name" />
+                        )}
+                      />
+                </div>
+                <div className="row mb-3">
+                  <label
+                    htmlFor="details"
+                    className="col-sm-2 col-form-label"
+                  >
+                        Initiated Date   
                   </label>
                   <div className="col-sm-10">
                     <input
-                      onChange={handle}
-                      value={appraisalData.empId}
-                      type="text"
-                      id="empId"
-                      placeholder="Enter Emp id"
+                     onChange={(e) => {
+                      handle(e);
+                    }}
+                      value={appraisalData.initiatedDate}
+                      type="date"
+                      id="initiatedDate"
                       className="form-control"
                     />
                   </div>
@@ -332,27 +396,6 @@ const [appraisalData, setAppraisalData] = useState(initialappraisalData);
                                             </select>             
                   </div>  
                 </div>
-                {/* <div className="row mb-3">
-                  <label
-                    htmlFor="details"
-                    className="col-sm-2 col-form-label"
-                  >
-                    Month
-                  </label>
-                  <div className="col-sm-10">
-                  <select onChange={handle} value={appraisalData.month} className="form-select" id="month">
-                                                <option value="">Select Month</option>
-                                                {months.map((month, index) => (
-                                                    <option key={index} value={month}>{month}</option>
-                                                ))}
-                                            </select>
-                    {errors.month && (
-                      <div className="text-danger">
-                        {errors.month}
-                      </div>
-                    )}                
-                  </div>
-                </div> */}
                 <div className="row mb-3">
                   <label
                     htmlFor="details"
