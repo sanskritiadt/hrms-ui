@@ -17,7 +17,7 @@ const EditEmployee = () => {
   const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    employeeId: "",
+    adtId: "",
     firstName: "",
     lastName: "",
     maritalStatus: "",
@@ -68,7 +68,6 @@ const EditEmployee = () => {
   function handleSubmit(e) {
     setLoading(true);
     e.preventDefault();
-
     const body = {
       employeeId: data.employeeId,
       firstName: data.firstName,
@@ -109,7 +108,7 @@ const EditEmployee = () => {
         setLoading(false);
       });
   }
-  function HandleDelete() {
+  function HandleDelete(id) {
     if (
       !window.confirm("Are you sure you want to delete this Employee Data?")
     ) {
@@ -175,7 +174,7 @@ const EditEmployee = () => {
                           <div className="col-sm-10">
                             <input
                               disabled
-                              value={data.employeeId || ""}
+                              value={data.adtId || ""}
                               type="text"
                               className="form-control"
                               id="id"
@@ -400,7 +399,7 @@ const EditEmployee = () => {
                       <div className="d-grid gap-2 col-6 mx-auto">
                         <button
                           className="btn btn-outline-danger"
-                          onClick={HandleDelete}
+                          onClick={HandleDelete(data.adtId)}
                           type="submit"
                         >
                           Delete

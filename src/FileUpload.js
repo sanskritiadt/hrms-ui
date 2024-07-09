@@ -9,7 +9,7 @@ function FileUpload() {
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
-  const [email, setEmail] = useState(null);
+  const [email, setEmail] = useState();
   function handleFileChange(event) {
     setFile(event.target.files[0]);
   }
@@ -38,14 +38,44 @@ function FileUpload() {
       });
   }
 
+  // function handleSubmit(event) {
+  //   console.log(file);
+  //   event.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   setLoading(true);
+  //   axios
+  //     .post(`/apigateway/payroll/genPayAll?email=${email}`, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       alert(response.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       toast.error(error.response.data.message || "Error creating details");
+  //       setLoading(false);
+  //     });
+  // }
   function handleSubmit(event) {
     console.log(file);
     event.preventDefault();
     const formData = new FormData();
     formData.append("file", file);
+
+    let url = "/apigateway/payroll/genPayAll";
+    if (email) {
+      url += `?email=${email}`;
+    }
+
     setLoading(true);
     axios
-      .post(`/apigateway/payroll/genPayAll?email=${email}`, formData, {
+      .post(url, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -73,22 +103,22 @@ function FileUpload() {
           onChange={handleEmailChange}
           placeholder="Enter Email."
         />
-        <button type="submit" >
-          generate all Payslip from DB
-        </button>
+        <button type="submit">generate all Payslip from DB</button>
       </form>
       <form onSubmit={handleSubmit}>
         Email
         <input
           type="email"
-        
           onChange={handleEmailChange}
           placeholder="Enter Email."
         />
-        <input type="file"  required onChange={handleFileChange} className="mb-4" />
-        <button type="submit" >
-          generate all Payslip with excel
-        </button>
+        <input
+          type="file"
+          required
+          onChange={handleFileChange}
+          className="mb-4"
+        />
+        <button type="submit">generate all Payslip with excel</button>
       </form>
     </div>
   );

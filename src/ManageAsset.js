@@ -411,7 +411,7 @@ const ManageAsset = () => {
     }
     try {
       setLoading(true);
-      await axios.delete(
+      const response = await axios.delete(
         `/apigateway/hrms/masterAsset/deleteAssetTypeById/${assetTypeId}`,
         {
           headers: {
@@ -419,18 +419,49 @@ const ManageAsset = () => {
           },
         }
       );
-      setAssetTypeData(assetTypeData.filter((type) => type.id !== assetTypeId));
-      toast.success("Asset type deleted successfully");
-      fetchAssetTypeData();
+      if (response.data.status === "AlreadyAssociated") {
+        toast.error(`Cannot delete asset type: ${response.data.message}`);
+      } else {
+        setAssetTypeData(assetTypeData.filter((type) => type.id !== assetTypeId));
+        toast.success("Asset type deleted successfully");
+        fetchAssetTypeData();
+      }
       setLoading(false);
     } catch (error) {
       console.error("Error deleting asset type", error);
       toast.error(
-        error.response.data.message || "Failed to delete asset type"
+        error.response?.data?.message || "Failed to delete asset type"
       );
       setLoading(false);
     }
   };
+  
+//   const handleDeleteAssetType = async (assetTypeId) => {
+//     if (!window.confirm("Are you sure you want to delete this asset type?")) {
+//       return;
+//     }
+//     try {
+//       setLoading(true);
+//       await axios.delete(
+//         `/apigateway/hrms/masterAsset/deleteAssetTypeById/${assetTypeId}`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+//       setAssetTypeData(assetTypeData.filter((type) => type.id !== assetTypeId));
+//       toast.success("Asset type deleted successfully");
+//       fetchAssetTypeData();
+//       setLoading(false);
+//     } catch (error) {
+//       console.error("Error deleting asset type", error);
+//       toast.error(
+//         error.response.data.message || "Failed to delete asset type"
+//       );
+//       setLoading(false);
+//     }
+//   };
 
   const handleEditAssetType = (assetType) => {
     setEditingAssetType(assetType);
@@ -440,7 +471,7 @@ const ManageAsset = () => {
     try {
       setLoading(true);
       await axios.put(
-        `/apigateway/hrms/masterAsset/updateAssetTypeById/${editingAssetType.id}?assetTypeName=${editingAssetType.assetName}`,
+        `/apigateway/hrms/masterAsset/updateAssetTypeById/${editingAssetType.id}?assetTypeName=${editingAssetType.assetName}`,{},
         {
           headers: {
             Authorization: `Bearer ${token}`,
