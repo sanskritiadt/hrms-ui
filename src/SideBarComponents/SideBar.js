@@ -46,21 +46,21 @@ const routes = [
         name: "View Employee Attendence",
         icon: <FaClock />,
       },
-      {
-        path: "/CreateEmpAssets",
-        name: "Add Employee Asset",
-        icon: <FaLaptopMedical />,
-      },
+      // {
+      //   path: "/CreateEmpAssets",
+      //   name: "Add Employee Asset",
+      //   icon: <FaLaptopMedical />,
+      // },
       {
         path: "/GetAllAssets",
-        name: "View Employee Assets",
+        name: "Manage Assets",
         icon: <AiOutlineLaptop />,
       },
-      {
-        path: "/SearchEmpAssets",
-        name: "Search Employee Asset",
-        icon: <FaLaptopMedical />,
-      }
+      // {
+      //   path: "/SearchEmpAssets",
+      //   name: "Search Employee Asset",
+      //   icon: <FaLaptopMedical />,
+      // }
     ],
   },
   {

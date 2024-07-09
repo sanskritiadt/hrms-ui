@@ -58,7 +58,7 @@ function GetAllEmpAppraisalDetails() {
   const fetchAppraisal = async (page) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/apigateway/payroll/salarydetails/getAllEmployeesWithLatestAppraisal`, {
+      const response = await axios.get(`/apigateway/payroll/getAllEmployeesWithLatestAppraisal`, {
         params: {
           page: page - 1,
           size: 10, // assuming 10 employees per page
@@ -156,7 +156,7 @@ function GetAllEmpAppraisalDetails() {
   // }
   const handleAppraisalHistoryOnClick = (empId) => {
     axios
-      .get(`/apigateway/payroll/salarydetails/getAllAppraisalDetailsbyId/${empId}`, {
+      .get(`/apigateway/payroll/getAllAppraisalDetailsbyId/${empId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -174,7 +174,7 @@ function GetAllEmpAppraisalDetails() {
 
   const handleRewardHistoryOnClick = (empId) => {
     axios
-      .get(`/apigateway/payroll/salarydetails/getRewardDetails/${empId}`, {
+      .get(`/apigateway/payroll/getRewardDetails/${empId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
