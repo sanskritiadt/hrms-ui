@@ -10,13 +10,10 @@ import {
     FormControlLabel,
     Radio,
     TextField,
-    Button,
     FormControl,
     FormLabel,
-    Box,
     Autocomplete
   } from '@mui/material';
-import { Padding } from "@mui/icons-material";
 const AddAppraisalDetails = () => {
   const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);

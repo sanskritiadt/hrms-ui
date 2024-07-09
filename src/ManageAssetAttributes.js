@@ -367,9 +367,9 @@ const ManageAssetAttributes = ({ assetTypeId }) => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching asset attributes", error);
-      toast.error(
-        error.response?.data?.message || "Failed to fetch asset attributes"
-      );
+    //   toast.error(
+    //     error.response?.data?.message || "Failed to fetch asset attributes"
+    //   );
       setLoading(false);
     }
   };
@@ -378,11 +378,8 @@ const ManageAssetAttributes = ({ assetTypeId }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `/apigateway/hrms/masterAsset/addAssetAttribute`,
-        {
-          assetAttributeName: newAssetAttribute.assetAttributeName,
-          assetTypeId: assetTypeId,
-        },
+        `/apigateway/hrms/masterAsset/addAssetAttributeByAssetTypeId/${assetTypeId}?assetAttributeName=${newAssetAttribute.assetAttributeName}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -436,11 +433,8 @@ const ManageAssetAttributes = ({ assetTypeId }) => {
     try {
       setLoading(true);
       await axios.put(
-        `/apigateway/hrms/masterAsset/updateAssetAttributeById/${editingAttribute.id}`,
-        {
-          assetAttributeName: editingAttribute.assetAttributeName,
-          assetTypeId: assetTypeId,
-        },
+        `/apigateway/hrms/masterAsset/updateAssetAttributeById/${editingAttribute.id}?assetTypeId=${assetTypeId}&assetAttributeName=${editingAttribute.assetAttributeName}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
