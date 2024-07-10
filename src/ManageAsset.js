@@ -436,32 +436,6 @@ const ManageAsset = () => {
     }
   };
   
-//   const handleDeleteAssetType = async (assetTypeId) => {
-//     if (!window.confirm("Are you sure you want to delete this asset type?")) {
-//       return;
-//     }
-//     try {
-//       setLoading(true);
-//       await axios.delete(
-//         `/apigateway/hrms/masterAsset/deleteAssetTypeById/${assetTypeId}`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
-//       setAssetTypeData(assetTypeData.filter((type) => type.id !== assetTypeId));
-//       toast.success("Asset type deleted successfully");
-//       fetchAssetTypeData();
-//       setLoading(false);
-//     } catch (error) {
-//       console.error("Error deleting asset type", error);
-//       toast.error(
-//         error.response.data.message || "Failed to delete asset type"
-//       );
-//       setLoading(false);
-//     }
-//   };
 
   const handleEditAssetType = (assetType) => {
     setEditingAssetType(assetType);
@@ -540,7 +514,6 @@ const ManageAsset = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Asset Type ID</TableCell>
                   <TableCell>Asset Type Name</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
@@ -548,7 +521,6 @@ const ManageAsset = () => {
               <TableBody>
                 {assetTypeData.map((type) => (
                   <TableRow key={type.id}>
-                    <TableCell>{type.id}</TableCell>
                     <TableCell>
                       {editingAssetType && editingAssetType.id === type.id ? (
                         <TextField
