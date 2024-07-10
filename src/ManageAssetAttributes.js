@@ -508,7 +508,6 @@ const ManageAssetAttributes = ({ assetTypeId }) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Attribute ID</TableCell>
                   <TableCell>Attribute Name</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
@@ -516,7 +515,6 @@ const ManageAssetAttributes = ({ assetTypeId }) => {
               <TableBody>
                 {assetAttributes.map((attr) => (
                   <TableRow key={attr.id}>
-                    <TableCell>{attr.id}</TableCell>
                     <TableCell>
                       {editingAttribute && editingAttribute.id === attr.id ? (
                         <TextField

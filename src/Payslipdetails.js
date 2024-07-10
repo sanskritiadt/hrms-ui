@@ -20,10 +20,10 @@ function PaySlip() {
     const [adhoc, setadhoc] = useState();
     const [month, setMonth] = useState({});
     // const empid = useSelector((state) => state.data.empID);
-    console.log(month);
-    console.log(data)
-    console.log(year);
-    console.log(adhoc);
+    // console.log(month);
+    // console.log(data)
+    // console.log(year);
+    // console.log(adhoc);
     // console.log(empid);
     const handleMonth = (event) => {
         setData(event.target.value);
@@ -38,7 +38,7 @@ function PaySlip() {
         alert("your month is" + data)
         event.preventDefault()
         setLoading(true); 
-        axios.get(`/apigateway/payroll/slip?empId=${empID}&month=${data}&year=${year}`, {
+        axios.get(`/apigateway/payroll/viewPay?empId=${empID}&month=${data}&year=${year}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

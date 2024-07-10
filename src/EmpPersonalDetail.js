@@ -117,7 +117,7 @@ export default function EmpPersonalDetail() {
                                         <input value={data.email || ''}
                                             onChange={e => setData({ ...data, email: e.target.value })}
                                             type="text"
-                                            id="projectDescription"
+                                            id="email"
                                             className="form-control" />
                                     </div>
                                 </div>
