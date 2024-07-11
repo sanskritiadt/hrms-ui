@@ -123,13 +123,13 @@ const GetAllEmpAttendance = () => {
         meta: { filterVariant: "select" },
       },
       {
-        accessorKey: "checkOut",
-        header: "Check Out",
-        meta: { filterVariant: "select" },
-      },
-      {
         accessorKey: "checkIn",
         header: "Check In",
+        meta: { filterVariant: "select" },
+      }, 
+       {
+        accessorKey: "checkOut",
+        header: "Check Out",
         meta: { filterVariant: "select" },
       },
       {
@@ -156,17 +156,7 @@ const GetAllEmpAttendance = () => {
         accessorKey: "year",
         header: "Year",
         meta: { filterVariant: "select" },
-      },
-      {
-        accessorKey: "leaveInterval",
-        header: "Leave Interval",
-        meta: { filterVariant: "select" },
-      },
-      {
-        accessorKey: "intervalStatus",
-        header: "Interval Status",
-        meta: { filterVariant: "select" },
-      },
+      }
     ],
     []
   );

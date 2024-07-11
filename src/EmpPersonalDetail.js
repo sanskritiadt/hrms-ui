@@ -95,9 +95,9 @@ export default function EmpPersonalDetail() {
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={HandleSubmit}>
                             <div className="row mb-3">
-                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectId'>EmployeeId</label>
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name='projectId'>Emp Id</label>
                                     <div className="col-sm-10">
-                                        <input disabled value={data.employeeId || ''}
+                                        <input disabled value={data.adtId || ''}
                                             type="text" className="form-control"
                                             id="projectId" />
                                     </div>
@@ -117,7 +117,7 @@ export default function EmpPersonalDetail() {
                                         <input value={data.email || ''}
                                             onChange={e => setData({ ...data, email: e.target.value })}
                                             type="text"
-                                            id="projectDescription"
+                                            id="email"
                                             className="form-control" />
                                     </div>
                                 </div>
