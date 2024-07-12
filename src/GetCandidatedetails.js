@@ -98,6 +98,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Table } from "react-bootstrap";
 import { Edit as EditIcon } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
+import {Form, Dropdown } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -119,7 +120,20 @@ function CandidateDetails() {
   const [loading, setLoading] = useState(true);
   const [Candidates, setCandidate] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
-
+  const [columnVisibility, setColumnVisibility] = useState({
+    noticePeriod: false,
+    lastCTC: false,
+    address: false,
+    highestQualification: false,
+    dob: false,
+    candidateName: true,
+    emailId: true,
+    contactNo: true,
+    workExperience: true,
+    technicalStack: true,
+    cvShortlisted: true,
+    candidateId: true,
+  });
   useEffect(() => {
     axios
       .get(`/apigateway/hrms/interviewCandidate/allInterviewCandidate`, {
@@ -138,77 +152,110 @@ function CandidateDetails() {
       });
   }, [token]);
 
+  const toggleColumnVisibility = (columnName) => {
+    setColumnVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      [columnName]: !prevVisibility[columnName],
+    }));
+  };
+
+  const toggleAllColumns = (isVisible) => {
+    const updatedVisibility = {};
+    Object.keys(columnVisibility).forEach((key) => {
+      updatedVisibility[key] = isVisible;
+    });
+    setColumnVisibility(updatedVisibility);
+  };
+
   const columns = useMemo(
     () => [
       {
         accessorKey: "candidateName",
         header: "Candidate Name",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.candidateName,
       },
       {
         accessorKey: "emailId",
         header: "Email ID",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.emailId,
       },
       {
         accessorKey: "contactNo",
         header: "Contact No",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.contactNo,
       },
       {
         accessorKey: "address",
         header: "Address",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.address,
       },
       {
         accessorKey: "highestQualification",
         header: "Highest Qualification",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.highestQualification,
       },
       {
         accessorKey: "workExperience",
         header: "Work Experience",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.workExperience,
       },
       {
         accessorKey: "technicalStack",
         header: "Technical Stack",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.technicalStack,
       },
-      { accessorKey: "cvShortlisted", header: "CV Shortlisted",  meta: { filterable: true }},
+      { accessorKey: "cvShortlisted", 
+        header: "CV Shortlisted",  
+        isVisible: columnVisibility.cvShortlisted,
+        meta: { filterable: true }
+      
+      },
       {
         accessorKey: "lastCTC",
         header: "Last CTC",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.lastCTC,
       },
       {
         accessorKey: "noticePeriod",
         header: "Notice Period",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.noticePeriod,
       },
       {
         accessorKey: "dob",
         header: "Date of Birth",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.dob,
       },
       {
-        accessor: "edit",
+        accessorKey: "candidateId",
         header: "Edit",
         cell: (cell) => (
+          <div>
           <Link to={`/EditCandidate/${cell.row.original.candidateId}`}>
             <IconButton color="primary">
               <EditIcon />
             </IconButton>
           </Link>
+          </div>
         ),
+        isVisible: columnVisibility.candidateId,
       },
     ],
-    []
+    [columnVisibility]
   );
 
   const table = useReactTable({
     data: Candidates,
-    columns,
+    columns: columns.filter((col) => col.isVisible),
     state: { columnFilters },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -248,6 +295,35 @@ function CandidateDetails() {
       </div>
       <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
         <h1 className="Heading1">Candidate Information</h1>
+
+        <div className="mt-2">
+          <strong>Show/Hide Columns:</strong>
+          <Dropdown>
+            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+              Select Columns
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {Object.keys(columnVisibility).map((columnKey) => (
+                <Dropdown.Item key={columnKey}>
+                  <Form.Check
+                    type="checkbox"
+                    label={columnKey}
+                    checked={columnVisibility[columnKey]}
+                    onChange={() => toggleColumnVisibility(columnKey)}
+                  />
+                </Dropdown.Item>
+              ))}
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={() => toggleAllColumns(true)}>
+                Select All
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => toggleAllColumns(false)}>
+                Deselect All
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+
         <div>
           <Table striped bordered hover className="custom-table">
             <thead className="table-danger table-striped">

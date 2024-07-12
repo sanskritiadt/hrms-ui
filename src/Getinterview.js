@@ -108,6 +108,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Table } from "react-bootstrap";
 import { Edit as EditIcon } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
+import {Form, Dropdown } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -129,6 +130,24 @@ function Getinterviewdetails() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
+  const [columnVisibility, setColumnVisibility] = useState({
+    interviewerName: false,
+    description: false,
+    type: false,
+    offerAccepted: false,
+    date: false,
+    source: false,
+    marks: false,
+    communication: false,
+    enthusiasm: false,
+    candidateName: true,
+    positionName: true,
+    notes: true,
+    workExInYears: true,
+    clientName: true,
+    status: true,
+    interviewId: true,
+  });
 
   useEffect(() => {
     axios
@@ -148,82 +167,115 @@ function Getinterviewdetails() {
       });
   }, [token]);
 
+  const toggleColumnVisibility = (columnName) => {
+    setColumnVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      [columnName]: !prevVisibility[columnName],
+    }));
+  };
+
+  const toggleAllColumns = (isVisible) => {
+    const updatedVisibility = {};
+    Object.keys(columnVisibility).forEach((key) => {
+      updatedVisibility[key] = isVisible;
+    });
+    setColumnVisibility(updatedVisibility);
+  };
+
   const columns = useMemo(
     () => [
       {
         accessorKey: "candidate_id.candidateName",
         header: "Candidate Name",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.candidateName,
       },
       {
         accessorKey: "tech_id.description",
         header: "Tech Description",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.description,
       },
       {
         accessorKey: "position_id.positionName",
         header: "Position Name",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.positionName,
       },
      
-      { accessorKey: "marks", header: "Marks", meta: { filterable: true } },
+      { accessorKey: "marks", 
+        header: "Marks", 
+        isVisible: columnVisibility.marks,
+        meta: { filterable: true }
+      },
       {
         accessorKey: "communication",
         header: "Communication",
         meta: { filterable: true },
+        isVisible: columnVisibility.communication,
       },
       {
         accessorKey: "enthusiasm",
         header: "Enthusiasm",
         meta: { filterable: true },
+        isVisible: columnVisibility.enthusiasm,
       },
       {
         accessorKey: "notes",
         header: "Notes",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.notes,
       },
       {
         accessorKey: "workExInYears",
         header: "Work Experience (Years)",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.workExInYears,
       },
       {
         accessorKey: "interviewerName",
         header: "Interviewer Name",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.interviewerName,
       },
       {
         accessorKey: "source",
         header: "Source",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.source,
       },
       {
         accessorKey: "offerAccepted",
         header: "Offer Accepted",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.offerAccepted,
       },
       {
         accessorKey: "type",
         header: "Type",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.type,
       },
       {
         accessorKey: "clientName",
         header: "Client Name",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.clientName,
       },
       {
         accessorKey: "date",
         header: "Date",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.date,
       },
       {
         accessorKey: "status",
         header: "Status",
         meta: { filterVariant: "select" },
+        isVisible: columnVisibility.status,
       },
       {
-        accessor: "edit",
+        accessorKey: "interviewId",
         header: "Edit",
         cell: (cell) => (
           <Link
@@ -234,13 +286,14 @@ function Getinterviewdetails() {
             </IconButton>
           </Link>
         ),
+        isVisible: columnVisibility.interviewId,
       },
     ],
-    []
+    [columnVisibility]
   );
   const table = useReactTable({
     data: data,
-    columns,
+    columns: columns.filter((col) => col.isVisible),
     state: { columnFilters },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -280,6 +333,35 @@ function Getinterviewdetails() {
       </div>
       <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
         <h1 className="Heading1">Interview Details</h1>
+        
+        <div className="mt-2">
+          <strong>Show/Hide Columns:</strong>
+          <Dropdown>
+            <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+              Select Columns
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {Object.keys(columnVisibility).map((columnKey) => (
+                <Dropdown.Item key={columnKey}>
+                  <Form.Check
+                    type="checkbox"
+                    label={columnKey}
+                    checked={columnVisibility[columnKey]}
+                    onChange={() => toggleColumnVisibility(columnKey)}
+                  />
+                </Dropdown.Item>
+              ))}
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={() => toggleAllColumns(true)}>
+                Select All
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => toggleAllColumns(false)}>
+                Deselect All
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        
         <div>
           <Table striped bordered hover className="custom-table">
             <thead className="table-danger table-striped">
