@@ -49,12 +49,7 @@ const AssignRole = () => {
     setSearchValue(event.target.value);
   };
 
-  const handleSearch = async () => {
-    // if (!searchCriterion || !searchValue) {
-    //   toast.error("Please select a search criteria and enter a search value.");
-    //   return;
-    // }
-  
+  const handleSearch = async () => {  
     setLoading(true);
     try {
       const response = await axios.get(
