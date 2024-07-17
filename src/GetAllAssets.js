@@ -464,8 +464,6 @@
 import * as React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
 import Box from "@mui/material/Box";
 import "react-toastify/dist/ReactToastify.css";
 import ManageAsset from './ManageAsset';
@@ -474,22 +472,39 @@ import ManageUserAsset from "./ManageUserAsset";
 import Divider from "@mui/material/Divider";
 import ViewAssets from './ViewAssets'
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
 
 export default function GetAllAssets() {
   const  token = useSelector((state) => state.auth.token);
-  
-  const [open, setOpen] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  const [assetTypeData, setAssetTypeData] = useState([]);
+
+  useEffect(() => {
+    fetchAssetTypeData();
+  }, []);
+
+  const fetchAssetTypeData = async () => {
+    try {
+      setLoading(false);
+      const response = await axios.get(
+        `/apigateway/hrms/masterAsset/getAllAssetType`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAssetTypeData(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching asset type data", error);
+      toast.error(
+        error.response?.data?.message || "Failed to fetch asset type data"
+      );
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -519,12 +534,12 @@ export default function GetAllAssets() {
         height="30vh"
         marginRight='5vh'
       >
-        <ManageAsset/>
+        <ManageAsset assetTypeData={assetTypeData} fetchAssetTypeData={fetchAssetTypeData} setAssetTypeData={setAssetTypeData}/>
         <Divider orientation="vertical" flexItem sx={{  margin : "5vh", bgcolor: 'grey.700'}} />
-        <ManageUserAsset/>
+        <ManageUserAsset assetTypeData={assetTypeData} fetchAssetTypeData={fetchAssetTypeData} setAssetTypeData={setAssetTypeData}/>
       </Box>
       <Divider sx={{  width: '100%', bgcolor: 'grey.700', marginBottom:'10px'}} />
-      <ViewAssets/>
+      <ViewAssets assetTypeData={assetTypeData} fetchAssetTypeData={fetchAssetTypeData} setAssetTypeData={setAssetTypeData}/>
     </div>
   );
 }
