@@ -236,12 +236,12 @@ import { useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-const ViewAssets = () => {
-  const [loading, setLoading] = useState(true);
+const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
+  const [loading, setLoading] = useState(false);
   const [assets, setAssets] = useState([]);
   const [editingAsset, setEditingAsset] = useState(null);
   const [assetAttributes, setAssetAttributes] = useState([]);
-  const [assetTypes, setAssetTypes] = useState([]);
+  //  const [assetTypeData, setassetTypeData] = useState([]);
   const [selectedAssetType, setSelectedAssetType] = useState('');
   const [openModal, setOpenModal] = useState(false);
 
@@ -264,28 +264,28 @@ const ViewAssets = () => {
     }
   };
 
-  const fetchAssetTypes = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `/apigateway/hrms/masterAsset/getAllAssetType?page=0&size=10`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setAssetTypes(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching asset types", error);
-      toast.error(error.response?.data?.message || "Failed to fetch asset types");
-      setLoading(false);
-    }
-  };
+  // const fetchassetTypeData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await axios.get(
+  //       `/apigateway/hrms/masterAsset/getAllAssetType?page=0&size=10`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     setassetTypeData(response.data.data);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching asset types", error);
+  //     toast.error(error.response?.data?.message || "Failed to fetch asset types");
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchAssetTypes();
-  }, []);
+  // useEffect(() => {
+  //   fetchassetTypeData();
+  // }, []);
 
   const handleDeleteAsset = async (assetId) => {
     if (window.confirm("Are you sure you want to delete this asset?")) {
@@ -298,6 +298,7 @@ const ViewAssets = () => {
         });
         toast.success("Asset deleted successfully.");
         setAssets(assets.filter(asset => asset.assetId !== assetId));
+        fetchassetTypeData();
         setLoading(false);
       } catch (error) {
         console.error('Error deleting asset:', error);
@@ -350,6 +351,7 @@ const ViewAssets = () => {
   const handleAssetTypeChange = (event) => {
     setSelectedAssetType(event.target.value);
     fetchAssets(event.target.value);
+    
   };
 
   const handleCloseModal = () => {
@@ -360,9 +362,6 @@ const ViewAssets = () => {
   return (
     <Box sx={{ p: 2 }}>
       {loading && <LoadingPage />}
-      <Typography variant="h6" gutterBottom>
-        Asset Management
-      </Typography>
       <Box sx={{ mb: 2 }}>
         <TextField
           select
@@ -372,7 +371,7 @@ const ViewAssets = () => {
           variant="outlined"
           sx={{ width: '39vh', mr: 1 }}
         >
-          {assetTypes.map((type) => (
+          {assetTypeData.map((type) => (
             <MenuItem key={type.id} value={type.id}>
               {type.assetName}
             </MenuItem>

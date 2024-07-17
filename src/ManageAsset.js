@@ -340,46 +340,42 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const ManageAsset = () => {
+const ManageAsset = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
   const token = useSelector((state) => state.auth.token);
   const [newAssetType, setNewAssetType] = useState({
     assetName: ""
   });
   const [open, setOpen] = useState(false);
-  const [assetTypeData, setAssetTypeData] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  //const [assetTypeData, setAssetTypeData] = useState([]);
   const [editingAssetType, setEditingAssetType] = useState(null);
-  const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchAssetTypeData(page, rowsPerPage);
-  }, [page, rowsPerPage]);
-
-  const fetchAssetTypeData = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `/apigateway/hrms/masterAsset/getAllAssetType`,
-        {
-          params: { page, size: rowsPerPage },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setAssetTypeData(response.data.data);
-      setTotalElements(response.data.totalElements);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching asset type data", error);
-      toast.error(
-        error.response?.data?.message || "Failed to fetch asset type data"
-      );
-      setLoading(false);
-    }
-  };
+  // useEffect(() => {
+  //   fetchAssetTypeData(page, rowsPerPage);
+  // }, [page, rowsPerPage]);
+  // const fetchAssetTypeData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await axios.get(
+  //       `/apigateway/hrms/masterAsset/getAllAssetType`,
+  //       {
+  //         params: { page, size: rowsPerPage },
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     setAssetTypeData(response.data.data);
+  //     setTotalElements(response.data.totalElements);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching asset type data", error);
+  //     toast.error(
+  //       error.response?.data?.message || "Failed to fetch asset type data"
+  //     );
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleAddAssetType = async () => {
     try {
@@ -484,7 +480,7 @@ const ManageAsset = () => {
         Manage Asset Types
       </Button>
 
-      <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <BootstrapDialog   fullWidth onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         {loading && <LoadingPage />}
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           Manage Asset Types
