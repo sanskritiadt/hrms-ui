@@ -196,7 +196,7 @@ const CreateExpense = () => {
                       />
                     </div>
                   </div>
-                  <div className="row mb-3">
+                  {/* <div className="row mb-3">
                     <label
                       htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
@@ -216,7 +216,7 @@ const CreateExpense = () => {
                         id="createdBy"
                       />
                     </div>
-                  </div>
+                  </div> */}
                   <div className="row mb-3">
                     <label
                       htmlFor="inputPassword3"
@@ -277,7 +277,7 @@ const CreateExpense = () => {
                       </div>
                     </div>
                   </fieldset>
-                  <div className="row mb-3">
+                  {/* <div className="row mb-3">
                     <label
                       htmlFor="inputPassword3"
                       className="col-sm-2 col-form-label"
@@ -297,7 +297,7 @@ const CreateExpense = () => {
                       />
                     </div>
                   </div>
-                 
+                  */}
                   <div className="row mb-3">
                     <label
                       htmlFor="inputPassword3"
