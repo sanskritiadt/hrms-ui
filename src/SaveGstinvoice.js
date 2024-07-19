@@ -1,13 +1,13 @@
-import React, { useState } from "react";
 import axios from "axios";
-import handleAuthError from "./CommonErrorHandling";
-import { toast } from "react-toastify";
-import LoadingPage from './LoadingPage'
+import React, { useState } from "react";
 import { useSelector } from 'react-redux';
+import { toast } from "react-toastify";
+import LoadingPage from './LoadingPage';
+
 export default function SaveGstinvoice() {
-  // const token = localStorage.getItem("response-token");
-  const  token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
+  const [isOB, setIsOB] = useState(false); // State to track the toggle value
   const [data, setData] = useState({
     invoiceNumber: "",
     fy: "",
@@ -17,7 +17,7 @@ export default function SaveGstinvoice() {
     customerId: "",
     paidTo: "",
     taxableAmount: "",
-    tds: "",
+    // tds: "",
     gst: "",
     invoiceAmount: "",
     receivable: "",
@@ -25,8 +25,13 @@ export default function SaveGstinvoice() {
     dateReceived: "",
     invoiceBalance: "",
     status: "",
-    tdsCredited: "",
-    tdsBalance: "",
+    // tdsCredited: "",
+    // tdsBalance: "",
+    tdsDetails: {
+      tds: "",
+      tdsBalance: "",
+      tdsCredited: ""
+    }
   });
 
   function submit(e) {
@@ -36,7 +41,7 @@ export default function SaveGstinvoice() {
       .post(
         `/apigateway/expensemanagement/gst/saveGSTDetails`,
         {
-          invoiceNumber: data.invoiceNumber,
+          // invoiceNumber: data.invoiceNumber,
           fy: data.fy,
           invoiceDate: data.invoiceDate,
           gstPeriod: data.gstPeriod,
@@ -44,7 +49,7 @@ export default function SaveGstinvoice() {
           customerId: data.customerId,
           paidTo: data.paidTo,
           taxableAmount: parseInt(data.taxableAmount),
-          tds: parseInt(data.tds),
+          // tds: parseInt(data.tds),
           gst: parseInt(data.gst),
           invoiceAmount: parseInt(data.invoiceAmount),
           receivable: parseInt(data.receivable),
@@ -52,8 +57,14 @@ export default function SaveGstinvoice() {
           dateReceived: data.dateReceived,
           invoiceBalance: parseInt(data.invoiceBalance),
           status: data.status,
-          tdsCredited: parseInt(data.tdsCredited),
-          tdsBalance: parseInt(data.tdsBalance),
+          projectType: data.projectType,
+          // tdsCredited: parseInt(data.tdsCredited),
+          // tdsBalance: parseInt(data.tdsBalance),
+          tdsDetails: {
+            tds: parseFloat(data.tds), // Convert to float if necessary
+            tdsCredited: parseInt(data.tdsCredited),
+            tdsBalance: parseInt(data.tdsBalance)
+          }
         },
         {
           headers: {
@@ -70,11 +81,12 @@ export default function SaveGstinvoice() {
         setLoading(false);
       })
       .catch((error) => {
-        toast.error( error.response.data.message || "Error saving details" );
+        toast.error(error.response.data.message || "Error saving details");
         console.log(error);
         setLoading(false);
       });
   }
+
   function handle(e) {
     const newdata = { ...data };
     newdata[e.target.id] = e.target.value;
@@ -84,19 +96,9 @@ export default function SaveGstinvoice() {
 
   return (
     <div>
-      <div>  
-        {loading ? <LoadingPage/> : ''}
-        <nav
-          aria-label="breadcrumb"
-          style={{ "--bs-breadcrumb-divider": "'>>'" }}
-        >
-          {/* <ol className="breadcrumb" style={{  color: "white" }}>
-
-  <li className="breadcrumb-item"><Link to="/">Home</Link> </li>
-  <li className="breadcrumb-item"><a href="">Employee Management</a></li>
-  <li className="breadcrumb-item active" aria-current="page">Employee Position</li>
-</ol> */}
-        </nav>
+      <div>
+        {loading ? <LoadingPage /> : ''}
+        <h1 className="Heading1 my-4">GST INVOICE</h1>
         <div className="container pt-3">
           <div className="row">
             <div className="col-md-8 mx-auto">
@@ -105,29 +107,55 @@ export default function SaveGstinvoice() {
                 style={{
                   marginLeft: "100px",
                   width: "700px",
-                  height: "1050px",
+                  height: "1580px",
                 }}
               >
                 <div className="card-body">
                   <form
-                    className="container py-3  mb-3"
+                    className="container py-3 mb-3"
                     onSubmit={(e) => {
                       submit(e);
                     }}
                   >
+                    {/* Toggle for IB and OB */}
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputEmail3"
-                        className="col-sm-2 col-form-label"
-                        name="invoiceNumber"
-                      >
-                        Invoice No.
-                      </label>
+                      <label className="col-sm-2 col-form-label">Type</label>
+                      <div className="col-sm-10">
+                        <div className="form-check form-check-inline">
+                          <input
+                            onChange={() => setIsOB(false)}
+                            className="form-check-input"
+                            type="radio"
+                            name="typeOptions"
+                            id="typeIB"
+                            checked={!isOB}
+                          />
+                          <label className="form-check-label" htmlFor="typeIB">
+                            InBound
+                          </label>
+                        </div>
+                        <div className="form-check form-check-inline">
+                          <input
+                            onChange={() => setIsOB(true)}
+                            className="form-check-input"
+                            type="radio"
+                            name="typeOptions"
+                            id="typeOB"
+                            checked={isOB}
+                          />
+                          <label className="form-check-label" htmlFor="typeOB">
+                            OutBound
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Other input fields */}
+                    {/* <div className="row mb-3">
+                      <label htmlFor="invoiceNumber" className="col-sm-2 col-form-label">Invoice No.</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.invoiceNumber}
                           type="text"
                           id="invoiceNumber"
@@ -135,20 +163,12 @@ export default function SaveGstinvoice() {
                           className="form-control"
                         />
                       </div>
-                    </div>
+                    </div> */}
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputEmail3"
-                        className="col-sm-2 col-form-label"
-                        name="fy"
-                      >
-                        Financial Year
-                      </label>
+                      <label htmlFor="fy" className="col-sm-2 col-form-label">Financial Year</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.fy}
                           type="date"
                           id="fy"
@@ -157,18 +177,10 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputEmail3"
-                        className="col-sm-2 col-form-label"
-                        name="invoiceDate"
-                      >
-                        Invoice Date
-                      </label>
+                      <label htmlFor="invoiceDate" className="col-sm-2 col-form-label">Invoice Date</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.invoiceDate}
                           type="date"
                           id="invoiceDate"
@@ -177,18 +189,10 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputEmail3"
-                        className="col-sm-2 col-form-label"
-                        name="gstPeriod"
-                      >
-                        GST Period
-                      </label>
+                      <label htmlFor="gstPeriod" className="col-sm-2 col-form-label">GST Period</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.gstPeriod}
                           type="text"
                           id="gstPeriod"
@@ -197,18 +201,10 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="billingPeriod"
-                      >
-                        Billing Period
-                      </label>
+                      <label htmlFor="billingPeriod" className="col-sm-2 col-form-label">Billing Period</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.billingPeriod}
                           type="text"
                           className="form-control"
@@ -217,18 +213,10 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="customerId"
-                      >
-                        Cust ID
-                      </label>
+                      <label htmlFor="customerId" className="col-sm-2 col-form-label">Cust ID</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.customerId}
                           type="text"
                           className="form-control"
@@ -238,18 +226,10 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="paidTo"
-                      >
-                        Paid To
-                      </label>
+                      <label htmlFor="paidTo" className="col-sm-2 col-form-label">Paid To</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.paidTo}
                           type="text"
                           className="form-control"
@@ -259,18 +239,10 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="taxableAmount"
-                      >
-                        Taxable Amount
-                      </label>
+                      <label htmlFor="taxableAmount" className="col-sm-2 col-form-label">Taxable Amount</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.taxableAmount}
                           type="number"
                           step="0.1"
@@ -281,84 +253,53 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="tds"
-                      >
-                        TDS
-                      </label>
+                      <label htmlFor="tds" className="col-sm-2 col-form-label">TDS</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.tds}
                           type="number"
                           step="0.1"
                           className="form-control"
                           placeholder="Enter TDS"
                           id="tds"
+                          disabled={!isOB} // Disable TDS field if not OB
                         />
                       </div>
                     </div>
-
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="gst"
-                      >
-                        GST @ 18%
-                      </label>
+                      <label htmlFor="gst" className="col-sm-2 col-form-label">GST @ 18%</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.gst}
                           type="number"
                           step="0.1"
                           className="form-control"
-                          placeholder="Enter GST @ 18%"
+                          placeholder="Enter GST"
                           id="gst"
                         />
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="invoiceAmount"
-                      >
-                        Invoice Amt INR
-                      </label>
+                      <label htmlFor="invoiceAmount" className="col-sm-2 col-form-label">Invoice Amount</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.invoiceAmount}
-                          type="text"
+                          type="number"
+                          step="0.1"
                           className="form-control"
-                          placeholder="Enter Invoice Amt INR."
+                          placeholder="Enter Invoice Amount"
                           id="invoiceAmount"
                         />
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="receivable"
-                      >
-                        Receivable
-                      </label>
+                      <label htmlFor="receivable" className="col-sm-2 col-form-label">Receivable</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                          onChange={(e) => handle(e)}
                           value={data.receivable}
                           type="number"
                           step="0.1"
@@ -368,41 +309,27 @@ export default function SaveGstinvoice() {
                         />
                       </div>
                     </div>
-                    {/* <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="amountReceived"
-                      >
-                        Amount Received
-                      </label>
+                    <div className="row mb-3">
+                      <label htmlFor="amountReceived" className="col-sm-2 col-form-label">Amount Received</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                        disabled
+                          onChange={(e) => handle(e)}
                           value={data.amountReceived}
                           type="number"
                           step="0.1"
                           className="form-control"
-                          placeholder="Enter Invoice Amount Received"
+                          placeholder="Enter Amount Received"
                           id="amountReceived"
                         />
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="dateReceived"
-                      >
-                        Date Received
-                      </label>
+                      <label htmlFor="dateReceived" className="col-sm-2 col-form-label">Date Received</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                        disabled
+                          onChange={(e) => handle(e)}
                           value={data.dateReceived}
                           type="date"
                           className="form-control"
@@ -411,247 +338,17 @@ export default function SaveGstinvoice() {
                       </div>
                     </div>
                     <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="invoiceBalance"
-                      >
-                        Invoice Balance
-                      </label>
+                      <label htmlFor="invoiceBalance" className="col-sm-2 col-form-label">Invoice Balance</label>
                       <div className="col-sm-10">
                         <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
+                        disabled
+                          onChange={(e) => handle(e)}
                           value={data.invoiceBalance}
                           type="number"
                           step="0.1"
                           className="form-control"
                           placeholder="Enter Invoice Balance"
                           id="invoiceBalance"
-                        />
-                      </div>
-                    </div>
-                    <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="tdsCredited"
-                      >
-                        TDS Credited
-                      </label>
-                      <div className="col-sm-10">
-                        <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
-                          value={data.tdsCredited}
-                          type="number"
-                          step="0.1"
-                          className="form-control"
-                          placeholder="Enter TDS Credited"
-                          id="tdsCredited"
-                        />
-                      </div>
-                    </div>
-                    <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="tdsBalance"
-                      >
-                        TDS Balance
-                      </label>
-                      <div className="col-sm-10">
-                        <input
-                          onChange={(e) => {
-                            handle(e);
-                          }}
-                          value={data.tdsBalance}
-                          type="number"
-                          step="0.1"
-                          className="form-control"
-                          placeholder="Enter TDS Balance"
-                          id="tdsBalance"
-                        />
-                      </div>
-                    </div>
-                    <fieldset className="row mb-3">
-                      <legend className="col-form-label col-sm-2 pt-0">
-                        Status
-                      </legend>
-                      <div className="col-sm-10">
-                        <div className="form-check form-check-inline">
-                          <input
-                            onChange={(e) => {
-                              handle(e);
-                            }}
-                            value="Pending"
-                            className="form-check-input"
-                            type="radio"
-                            name="inlineRadioOptions"
-                            id="status"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="inlineRadio1"
-                          >
-                            Pending
-                          </label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                          <input
-                            onChange={(e) => {
-                              handle(e);
-                            }}
-                            value="Completed"
-                            className="form-check-input"
-                            type="radio"
-                            name="inlineRadioOptions"
-                            id="status"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="inlineRadio2"
-                          >
-                            Completed
-                          </label>
-                        </div>
-                      </div>
-                    </fieldset> */}
-                    <div className="d-grid gap-2 col-6 mx-auto">
-                      <button className="btn btn-outline-danger" type="submit">
-                        Submit
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-       
-        <div className="container pt-3">
-          <div className="row">
-            <div className="col-md-8 mx-auto">
-              <div
-                className="card border-0 shadow"
-                style={{
-                  marginLeft: "100px",
-                  width: "700px",
-                  height: "550px",
-                }}
-              >
-                <div className="card-body">
-                  <form
-                    className="container py-3  mb-3"
-                    onSubmit={(e) => {
-                      submit(e);
-                    }}
-                  >
-                    <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="amountReceived"
-                      >
-                        Amount Received
-                      </label>
-                      <div className="col-sm-10">
-                        <input disabled
-                          onChange={(e) => {
-                            handle(e);
-                          }}
-                          value={data.amountReceived}
-                          type="number"
-                          step="0.1"
-                          className="form-control"
-                          id="amountReceived"
-                        />
-                      </div>
-                    </div>
-                    <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="dateReceived"
-                      >
-                        Date Received
-                      </label>
-                      <div className="col-sm-10">
-                        <input disabled
-                          onChange={(e) => {
-                            handle(e);
-                          }}
-                          value={data.dateReceived}
-                          type="date"
-                          className="form-control"
-                          id="dateReceived"
-                        />
-                      </div>
-                    </div>
-                    <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="invoiceBalance"
-                      >
-                        Invoice Balance
-                      </label>
-                      <div className="col-sm-10">
-                        <input disabled
-                          onChange={(e) => {
-                            handle(e);
-                          }}
-                          value={data.invoiceBalance}
-                          type="number"
-                          step="0.1"
-                          className="form-control"
-                          id="invoiceBalance"
-                        />
-                      </div>
-                    </div>
-                    <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="tdsCredited"
-                      >
-                        TDS Credited
-                      </label>
-                      <div className="col-sm-10">
-                        <input disabled
-                          onChange={(e) => {
-                            handle(e);
-                          }}
-                          value={data.tdsCredited}
-                          type="number"
-                          step="0.1"
-                          className="form-control"
-                          id="tdsCredited"
-                        />
-                      </div>
-                    </div>
-                    <div className="row mb-3">
-                      <label
-                        htmlFor="inputPassword3"
-                        className="col-sm-2 col-form-label"
-                        name="tdsBalance"
-                      >
-                        TDS Balance
-                      </label>
-                      <div className="col-sm-10">
-                        <input disabled
-                          onChange={(e) => {
-                            handle(e);
-                          }}
-                          value={data.tdsBalance}
-                          type="number"
-                          step="0.1"
-                          className="form-control"
-                          id="tdsBalance"
                         />
                       </div>
                     </div>
@@ -698,11 +395,44 @@ export default function SaveGstinvoice() {
                         </div>
                       </div>
                     </fieldset>
-                    {/* <div className="d-grid gap-2 col-6 mx-auto">
-                      <button className="btn btn-outline-danger" type="submit">
+                    <div className="row mb-3">
+                      <label htmlFor="tdsCredited" className="col-sm-2 col-form-label">TDS Credited</label>
+                      <div className="col-sm-10">
+                        <input
+                        disabled
+                          onChange={(e) => handle(e)}
+                          value={data.tdsCredited}
+                          type="number"
+                          step="0.1"
+                          className="form-control"
+                          placeholder="Enter TDS Credited"
+                          id="tdsCredited"
+                        />
+                      </div>
+                    </div>
+                    <div className="row mb-3">
+                      <label htmlFor="tdsBalance" className="col-sm-2 col-form-label">TDS Balance</label>
+                      <div className="col-sm-10">
+                        <input
+                        disabled
+                          onChange={(e) => handle(e)}
+                          value={data.tdsBalance}
+                          type="number"
+                          step="0.1"
+                          className="form-control"
+                          placeholder="Enter TDS Balance"
+                          id="tdsBalance"
+                        />
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <button
+                        type="submit"
+                        className="btn btn-primary btn-lg w-50"
+                      >
                         Submit
                       </button>
-                    </div> */}
+                    </div>
                   </form>
                 </div>
               </div>

@@ -230,7 +230,7 @@ const EditGstDetails = () => {
                           }}
                           value={data.gstPeriod || ""}
                           disabled
-                          type="text"
+                          type="date"
                           className="form-control"
                           id="gstPeriod"
                         />
@@ -627,7 +627,7 @@ const EditGstDetails = () => {
                             setData({ ...data, dateReceived: e.target.value });
                           }}
                           value={data.dateReceived || ""}
-                          type="text"
+                          type="date"
                           className="form-control"
                           id="dateReceived"
                         />
