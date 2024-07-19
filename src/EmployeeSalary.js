@@ -102,6 +102,12 @@ function EmployeeSalary() {
         meta: { filterable: true },
       },
       {
+        accessorKey: "month",
+        header: "Month",
+        meta: { filterVariant: "select" },
+      },
+      { accessorKey: "year", header: "Year", meta: { filterable: true } },
+      {
         accessorKey: "view",
         header: " View Archive",
         meta: { filterable: false },

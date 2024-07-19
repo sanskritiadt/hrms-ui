@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Table } from "react-bootstrap";
+import { Table, Modal, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import LoadingPage from "./LoadingPage";
+import RegeneratePayslip from "./RegeneratePayslip";
 import {
   useReactTable,
   flexRender,
@@ -15,32 +16,63 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { useParams } from "react-router-dom";
-import { Button, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
+
 function ViewSalaryDetails() {
   const { id } = useParams();
   const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(true);
   const [salaryInfo, setSalaryInfo] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [updateRow, setNewData] = useState(null); 
 
   useEffect(() => {
-    axios
-      .get(`/apigateway/payroll/salarydetails/getSalaryDetailsById/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setSalaryInfo(response.data);
-        setLoading(false);
-      })
+    fetchSalaryDetails();
+    // axios
+    //   .get(`/apigateway/payroll/salarydetails/getSalaryDetailsById/${id}`, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     setSalaryInfo(response.data);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     toast.error(error.response.data.message || "Error fetching details");
+    //     setLoading(false);
+    //   });
+  }, [token, id]);
+
+  const handleRowClick = (row) => {
+    setNewData()
+
+    setSelectedRowData(row);
+    console.log("row data",row);
+    setShowModal(true);
+  };
+
+  const fetchSalaryDetails = async () => {
+    await axios
+          .get(`/apigateway/payroll/salarydetails/getSalaryDetailsById/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            setSalaryInfo(response.data);
+            setLoading(false);
+          })
       .catch((error) => {
-        console.log(error);
+        console.log(error); console.log(error);
         toast.error(error.response.data.message || "Error fetching details");
         setLoading(false);
-      });
-  }, [token]);
+      })
+  };
 
   const exportToExcel = () => {
     setLoading(true);
@@ -101,6 +133,22 @@ function ViewSalaryDetails() {
         meta: { filterVariant: "select" },
       },
       { accessorKey: "year", header: "Year", meta: { filterable: true } },
+      {
+        accessorKey: "updateSalary",
+        header: "Edit",
+        meta: { filterable: false },
+        cell: (cell) => (
+          <Button
+            id="update"
+            variant="primary"
+            color="primary"
+            size="small"
+            onClick={() => handleRowClick(cell.row.original)}
+          >
+            Edit
+          </Button>
+        ),
+      },
     ],
     []
   );
@@ -191,6 +239,12 @@ function ViewSalaryDetails() {
           </Table>
         </div>
       </div>
+      <RegeneratePayslip
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        salaryInfo={selectedRowData}
+        fetchSalaryDetails={fetchSalaryDetails}
+      />
     </div>
   );
 }
@@ -244,7 +298,7 @@ function Filter({ column }) {
           max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
           value={(columnFilterValue ? columnFilterValue[1] : "") ?? ""}
           onChange={(e) =>
-            column.setFilterValue((old) => [e.target?.value, old?.[1]])
+            column.setFilterValue((old) => [old?.[0], e.target?.value])
           }
           placeholder={`Max ${
             column.getFacetedMinMaxValues()?.[1] !== undefined
@@ -254,17 +308,11 @@ function Filter({ column }) {
           className="w-24 border shadow rounded"
         />
       </div>
-      <div className="h-1" />
     </div>
   ) : null;
 }
 
-function DebouncedInput({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}) {
+function DebouncedInput({ value: initialValue, onChange, debounce = 500, ...props }) {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -277,7 +325,7 @@ function DebouncedInput({
     }, debounce);
 
     return () => clearTimeout(timeout);
-  }, [value]);
+  }, [value, debounce, onChange]);
 
   return (
     <input
@@ -287,4 +335,6 @@ function DebouncedInput({
     />
   );
 }
+
 export default ViewSalaryDetails;
+
