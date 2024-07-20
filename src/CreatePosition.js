@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import LoadingPage from "./LoadingPage";
 import { useSelector } from 'react-redux';
+import ManageSkills from "./ManageSkills";
 
 export default function CreatePosition() {
   // const token = localStorage.getItem("response-token");
@@ -136,11 +137,12 @@ export default function CreatePosition() {
             <div className="col-md-8 mx-auto">
               <div
                 className="card border-0 shadow"
-                style={{ marginLeft: "100px", width: "700px", height: "750PX" }}
+                style={{ marginLeft: "100px", width: "700px", height: "800PX" }}
               >
                 <div className="card-body">
+                <ManageSkills/>
                   <form
-                    className="container py-3  mb-3"
+                    className="container mb-3"
                     onSubmit={(e) => {
                       submit(e);
                     }}
