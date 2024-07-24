@@ -343,39 +343,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const ManageAsset = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
   const token = useSelector((state) => state.auth.token);
   const [newAssetType, setNewAssetType] = useState({
-    assetName: ""
+    assetName: "",
+    assetAbbreviation:""
   });
   const [open, setOpen] = useState(false);
-  //const [assetTypeData, setAssetTypeData] = useState([]);
-  const [editingAssetType, setEditingAssetType] = useState(null);
+  const [editingAssetType, setEditingAssetType] = useState({
+    assetName: "",
+    assetAbbreviation:""
+  });
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   fetchAssetTypeData(page, rowsPerPage);
-  // }, [page, rowsPerPage]);
-  // const fetchAssetTypeData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await axios.get(
-  //       `/apigateway/hrms/masterAsset/getAllAssetType`,
-  //       {
-  //         params: { page, size: rowsPerPage },
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     setAssetTypeData(response.data.data);
-  //     setTotalElements(response.data.totalElements);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching asset type data", error);
-  //     toast.error(
-  //       error.response?.data?.message || "Failed to fetch asset type data"
-  //     );
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleAddAssetType = async () => {
     try {
@@ -390,7 +366,7 @@ const ManageAsset = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
         }
       );
       setAssetTypeData([...assetTypeData, response.data]);
-      setNewAssetType({ assetName: "" });
+      setNewAssetType({ assetName: "",assetAbbreviation:"" });
       toast.success("Asset type added successfully");
       fetchAssetTypeData();
       setLoading(false);
@@ -441,7 +417,7 @@ const ManageAsset = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
     try {
       setLoading(true);
       await axios.put(
-        `/apigateway/hrms/masterAsset/updateAssetTypeById/${editingAssetType.id}?assetTypeName=${editingAssetType.assetName}`,{},
+        `/apigateway/hrms/masterAsset/updateAssetTypeById/${editingAssetType.id}`,editingAssetType,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -502,6 +478,14 @@ const ManageAsset = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
               style={{ marginRight: "10px" }}
               fullWidth
             />
+            <TextField
+              label="Asset Abbreviation"
+              variant="outlined"
+              value={newAssetType.assetAbbreviation}
+              onChange={(e) => setNewAssetType({ ...newAssetType, assetAbbreviation: e.target.value })}
+              style={{ marginRight: "10px" }}
+              fullWidth
+            />
             <IconButton color="primary" onClick={handleAddAssetType}>
               <AddIcon />
             </IconButton>
@@ -511,6 +495,7 @@ const ManageAsset = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Asset Type Name</TableCell>
+                  <TableCell>Abbreviation</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -531,6 +516,22 @@ const ManageAsset = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
                         />
                       ) : (
                         <Typography>{type.assetName}</Typography>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {editingAssetType && editingAssetType.id === type.id ? (
+                        <TextField
+                          value={editingAssetType.assetAbbreviation}
+                          onChange={(e) =>
+                            setEditingAssetType({
+                              ...editingAssetType,
+                              assetAbbreviation: e.target.value,
+                            })
+                          }
+                          fullWidth
+                        />
+                      ) : (
+                        <Typography>{type.assetAbbreviation}</Typography>
                       )}
                     </TableCell>
                     <TableCell>
