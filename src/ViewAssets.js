@@ -264,29 +264,6 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
     }
   };
 
-  // const fetchassetTypeData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await axios.get(
-  //       `/apigateway/hrms/masterAsset/getAllAssetType?page=0&size=10`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     setassetTypeData(response.data.data);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching asset types", error);
-  //     toast.error(error.response?.data?.message || "Failed to fetch asset types");
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchassetTypeData();
-  // }, []);
-
   const handleDeleteAsset = async (assetId) => {
     if (window.confirm("Are you sure you want to delete this asset?")) {
       try {
@@ -385,6 +362,7 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
               <TableCell>Asset ID</TableCell>
               <TableCell>Asset Name</TableCell>
               <TableCell>Attributes</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -400,6 +378,7 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
                     </div>
                   ))}
                 </TableCell>
+                <TableCell>{asset.assetAttributeMappingList[0]?.assetInfo.assetStatus || 'N/A'}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEditAsset(asset)}>
                     <EditIcon />

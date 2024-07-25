@@ -628,8 +628,7 @@ const TimeSheet = () => {
   const checkIn = (e) => {
     e.preventDefault();
     setLoading(true); 
-    axios
-      .post(
+    axios.post(
         `/apigateway/payroll/timeSheet/checkIn/${empId}?Latitude=${latitude}&Longitude=${longitude}`,
         {},
         {
@@ -773,6 +772,7 @@ const TimeSheet = () => {
       };
     };
   const todayDate = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
 
   return (
     <>

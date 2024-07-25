@@ -16,10 +16,8 @@ import {
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
 import LoadingPage from "./LoadingPage";
-import { useSelector } from 'react-redux';
-import {
-  Close as CloseIcon,
-} from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { Close as CloseIcon } from "@mui/icons-material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -30,58 +28,44 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const ManageUserAsset = ({assetTypeData,fetchAssetTypeData}) => {
+const ManageUserAsset = ({ assetTypeData, fetchAssetTypeData }) => {
   const token = useSelector((state) => state.auth.token);
   const [open, setOpen] = useState(false);
-  //const [assetTypeData, setAssetTypeData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedAssetType, setSelectedAssetType] = useState("");
   const [assetAttributes, setAssetAttributes] = useState([]);
   const [attributeValues, setAttributeValues] = useState({});
-
-  // useEffect(() => {
-  //   fetchAssetTypeData();
-  // }, []);
-
-  // const fetchAssetTypeData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await axios.get(
-  //       `/apigateway/hrms/masterAsset/getAllAssetType`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     setAssetTypeData(response.data.data);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching asset type data", error);
-  //     toast.error(error.response?.data?.message || "Failed to fetch asset type data");
-  //     setLoading(false);
-  //   }
-  // };
+  const [assetStatus,setAssetStatus] = useState('')
+  const status = ["Allotted", "Available", "Defective", "Discarded"];
 
   const fetchAssetAttributes = async (assetTypeId) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.get(
-        `/apigateway/hrms/masterAsset/getAllAssetAttributesByAssetTypeId/${assetTypeId}`, {
+        `/apigateway/hrms/masterAsset/getAllAssetAttributesByAssetTypeId/${assetTypeId}`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
       setAssetAttributes(response.data.data);
-      setAttributeValues(response.data.data.reduce((acc, attr) => {
-        acc[attr.id] = "";
-        return acc;
-      },  fetchAssetTypeData(),
-      setLoading(false)
-      , {}));
+      setAttributeValues(
+        response.data.data.reduce(
+          (acc, attr) => {
+            acc[attr.id] = "";
+            return acc;
+          },
+          fetchAssetTypeData(),
+          setLoading(false),
+          {}
+        )
+      );
     } catch (error) {
       console.error("Error fetching asset attributes", error);
-      toast.error(error.response?.data?.message || "Failed to fetch asset attributes");
+      toast.error(
+        error.response?.data?.message || "Failed to fetch asset attributes"
+      );
       setLoading(false);
     }
   };
@@ -91,7 +75,7 @@ const ManageUserAsset = ({assetTypeData,fetchAssetTypeData}) => {
     setSelectedAssetType(assetTypeId);
     fetchAssetAttributes(assetTypeId);
   };
-
+ 
   const handleAttributeChange = (id, value) => {
     setAttributeValues({ ...attributeValues, [id]: value });
   };
@@ -99,33 +83,38 @@ const ManageUserAsset = ({assetTypeData,fetchAssetTypeData}) => {
   const handleSubmit = async () => {
     const payload = {
       assetTypeId: selectedAssetType,
+      assetStatus:assetStatus,
       assetAttributeMappingList: Object.keys(attributeValues).map((key) => ({
         asset_attribute_id: key,
         assetAttributeValue: attributeValues[key],
+
       })),
     };
 
     try {
-        setLoading(true);
-      await axios.post(
-        `/apigateway/hrms/masterAsset/saveAssetInfo`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      setLoading(true);
+      await axios.post(`/apigateway/hrms/masterAsset/saveAssetInfo`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       toast.success("Asset info saved successfully");
       fetchAssetTypeData();
       setLoading(false);
       setOpen(false);
-    
+      setSelectedAssetType("");
+      setAssetAttributes([]);
+      setAttributeValues({});
+      setAssetStatus("");
     } catch (error) {
-        setLoading(false);
+      setLoading(false);
       console.error("Error saving asset info", error);
       toast.error(error.response?.data?.message || "Failed to save asset info");
+      setSelectedAssetType("");
+      setAssetAttributes([]);
+      setAttributeValues({});
+      setAssetStatus("");
     }
   };
 
@@ -141,26 +130,41 @@ const ManageUserAsset = ({assetTypeData,fetchAssetTypeData}) => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+    >
       <Button variant="outlined" onClick={handleClickOpen}>
-        Assign Attribute
+        create asset
       </Button>
- 
-      <BootstrapDialog   fullWidth onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-      {loading && <LoadingPage />}
-        <DialogTitle   sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+
+      <BootstrapDialog
+        fullWidth
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        {loading && <LoadingPage />}
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           Manage Asset Attributes
           <IconButton
             aria-label="close"
             onClick={handleClose}
-            sx={{ position: "absolute", right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent dividers>
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Asset Type</InputLabel>
+          {/* <FormControl fullWidth margin="normal">
+            <InputLabel sx={{ m: 0, p: 2 }}>Asset Type</InputLabel>
             <Select
               value={selectedAssetType}
               onChange={handleSelectAssetType}
@@ -168,11 +172,68 @@ const ManageUserAsset = ({assetTypeData,fetchAssetTypeData}) => {
             >
               {assetTypeData.map((type) => (
                 <MenuItem key={type.id} value={type.id}>
-                  {type.assetName}
+                  {type.assetName}--{type.assetAbbreviation}
+                </MenuItem>
+              ))}
+            </Select>
+            <InputLabel sx={{ m: 0, p: 2 }}>Asset Status </InputLabel>
+            <Select
+              value={selectedAssetType}
+              onChange={handleSelectAssetType}
+              label="Asset Type"
+            >
+              {status.map((status,index) => (
+                <MenuItem key={index} value={status}>
+                  {status}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl> */}
+          <FormControl fullWidth margin="normal">
+            <InputLabel
+              sx={{
+                m: 0,
+                p: 2,
+                fontSize: "1 rem",
+              }}
+            >
+              Asset Type
+            </InputLabel>
+            <Select
+              value={selectedAssetType}
+              onChange={handleSelectAssetType}
+              label="Asset Type"
+            >
+              {assetTypeData.map((type) => (
+                <MenuItem key={type.id} value={type.id}>
+                  {type.assetName}--{type.assetAbbreviation}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
+          <FormControl fullWidth margin="normal">
+            <InputLabel
+              sx={{
+                m: 0,
+                p: 2,
+                fontSize: "1 rem",
+              }}
+            >
+              Asset Status
+            </InputLabel>
+            <Select
+              value={assetStatus}
+              onChange={(e) => setAssetStatus(e.target.value)}
+              label="Asset Status"
+            >
+              {status.map((status, index) => (
+                <MenuItem key={index} value={status}>
+                  {status}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           {assetAttributes.map((attr) => (
             <TextField
               key={attr.id}
