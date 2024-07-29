@@ -17,38 +17,13 @@ function FileUpload() {
     setEmail(event.target.value);
   }
 
-  function Submit(event) {
-    event.preventDefault();
-    setLoading(true);
-    axios
-      .get(`/apigateway/payroll/generatePaySlipForAll?emailInput=${email}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        alert(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error(error.response.data.message || "Error creating details");
-        setLoading(false);
-      });
-  }
-
-  // function handleSubmit(event) {
-  //   console.log(file);
+  // function Submit(event) {
   //   event.preventDefault();
-  //   const formData = new FormData();
-  //   formData.append("file", file);
   //   setLoading(true);
   //   axios
-  //     .post(`/apigateway/payroll/genPayAll?email=${email}`, formData, {
+  //     .get(`/apigateway/payroll/generatePaySlipForAll?emailInput=${email}`, {
   //       headers: {
   //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "multipart/form-data",
   //       },
   //     })
   //     .then((response) => {
@@ -62,6 +37,38 @@ function FileUpload() {
   //       setLoading(false);
   //     });
   // }
+
+
+
+
+  function Submit(event) {
+    event.preventDefault();
+
+    let url = "/apigateway/payroll/generatePaySlipForAll"
+    if (email) {
+      url += `?emailInput=${email}`;
+    }
+
+    setLoading(true);
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        alert(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error(error.response.data || "Error creating details");
+        setLoading(false);
+      });
+  }
+
+
   function handleSubmit(event) {
     console.log(file);
     event.preventDefault();
