@@ -275,7 +275,7 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
         });
         toast.success("Asset deleted successfully.");
         setAssets(assets.filter(asset => asset.assetId !== assetId));
-        fetchassetTypeData();
+        fetchAssetTypeData();
         setLoading(false);
       } catch (error) {
         console.error('Error deleting asset:', error);

@@ -829,7 +829,8 @@ const EditInterviewDetails = () => {
         tech_id: data.tech_id.techId,
         candidate_id: data.candidate_id.candidateId,
         position_id: data.position_id.positionId,
-        candidateName: data.candidateName 
+        candidateName: data.candidateName ,
+        email:email
       };
     axios
       .put(`/apigateway/hrms/interview/updateInterviewByIdAndRound`, payload, {
