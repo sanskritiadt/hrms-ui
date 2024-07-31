@@ -1232,7 +1232,7 @@ const EditInterviewDetails = () => {
                       id="rounds"
                       name="rounds"
                       value={data.rounds}
-                      onChange={handleChange}
+                      readOnly
                     />
                   </div>
                 </div>
