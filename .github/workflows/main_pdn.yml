@@ -2,7 +2,7 @@ name: Build HRMS UI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "sit" ]
 
 jobs:
   build:
@@ -35,4 +35,4 @@ jobs:
         context: .
         file: ./Dockerfile_pdn
         push: true
-        tags: ajaymishraadt/ui:0.0.1-RELEASE
+        tags: ajaymishraadt/ui:0.0.1-SNAPSHOT
