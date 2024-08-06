@@ -2,7 +2,7 @@ name: Build HRMS UI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "production" ]
 
 jobs:
   build:
