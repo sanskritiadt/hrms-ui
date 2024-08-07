@@ -41,6 +41,8 @@ export default function InterviewCandidate() {
             technicalStack: values.technicalStack,
             cvShortlisted: values.cvShortlisted,
             lastCTC: values.lastCTC,
+            expectedCTC: values.expectedCTC,
+            passingYear: values.passingYear,
             noticePeriod: parseInt(values.noticePeriod),
             dob: values.dob,
           },
@@ -96,7 +98,7 @@ export default function InterviewCandidate() {
             <div className="col-lg-8 col-md-8 mx-auto">
               <div
                 className="card border-0 shadow"
-                style={{ width: "700px", height: "1000px" }}
+                style={{ width: "700px", height: "1150px" }}
               >
                 <div className="card-body">
                   <form
@@ -353,6 +355,68 @@ export default function InterviewCandidate() {
                         {formik.touched.lastCTC && formik.errors.lastCTC ? (
                           <div className="invalid-feedback">
                             {formik.errors.lastCTC}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="row mb-3">
+                      <label
+                        htmlFor="expectedCTC"
+                        className="col-sm-2 col-form-label"
+                      >
+                        {" "}
+                        Expected CTC
+                      </label>
+                      <div className="col-sm-10">
+                        <input
+                          type="text"
+                          id="expectedCTC"
+                          name="expectedCTC"
+                          placeholder="Enter Expected CTC"
+                          className={`form-control ${
+                            formik.touched.expectedCTC && formik.errors.expectedCTC
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.expectedCTC}
+                        />
+                        {formik.touched.lastCTC && formik.errors.expectedCTC ? (
+                          <div className="invalid-feedback">
+                            {formik.errors.expectedCTC}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="row mb-3">
+                      <label
+                        htmlFor="passingYear "
+                        className="col-sm-2 col-form-label"
+                      >
+                        Passing Year
+                      </label>
+                      <div className="col-sm-10">
+                        <input
+                          type="text"
+                          id="passingYear"
+                          name="passingYear"
+                          step="0.1"
+                          placeholder="Enter Passing Year"
+                          className={`form-control ${
+                            formik.touched.passingYear &&
+                            formik.errors.passingYear
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.passingYear}
+                        />
+                        {formik.touched.passingYear &&
+                        formik.errors.passingYear ? (
+                          <div className="invalid-feedback">
+                            {formik.errors.passingYear}
                           </div>
                         ) : null}
                       </div>
