@@ -6,18 +6,20 @@ import { Link } from "react-router-dom";
 import LoadingPage from './LoadingPage';
 import { useSelector } from 'react-redux';
 const CreateExpense = () => {
-  // const token = localStorage.getItem("response-token");
+
   const  token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
+  const empid = useSelector((state) => state.auth.empId);
   const [data, setData] = useState({
+    empId: empid,
     amount: "",
     description: "",
     paymentMode: "",
     paymentDate: "",
-    createdBy: "",
+    // createdBy: "",
     category: "",
     gst: "",
-    paidBy: "",
+    // paidBy: "",
     comments: "",
   });
 
@@ -28,14 +30,15 @@ const CreateExpense = () => {
       .post(
         `/apigateway/expensemanagement/createExpenses`,
         {
+          empId:data.empId,
           amount: parseInt(data.amount),
           description: data.description,
           paymentMode: data.paymentMode,
           paymentDate: data.paymentDate,
-          createdBy: data.createdBy,
+          // createdBy: data.createdBy,
           category: data.category,
           gst: data.gst,
-          paidBy: data.paidBy,
+          // paidBy: data.paidBy,
           comments: data.comments,
         },
         {
