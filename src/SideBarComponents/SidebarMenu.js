@@ -2,7 +2,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-// import  './SideBar.css';
+import  './SideBar.css';
+import '../Hrmscss/App.css';
 const menuAnimation = {
   hidden: {
     opacity: 0,
@@ -79,7 +80,7 @@ const SidebarMenu = ({ route, showAnimation, isOpen, setIsOpen }) => {
             <FaAngleDown />
           </motion.div>
         )}
-      </div>{" "}
+      </div>
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -107,3 +108,4 @@ const SidebarMenu = ({ route, showAnimation, isOpen, setIsOpen }) => {
 };
 
 export default SidebarMenu;
+

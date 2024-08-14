@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Row, Col, Card } from "react-bootstrap";
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './Hrmscss/homepage.css'
+import './Hrmscss/App.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faHourglassHalf, faUsers, faMoneyBillAlt, faCalendarAlt, faUmbrellaBeach  } from '@fortawesome/free-solid-svg-icons';
 import Footer from './Footer';
