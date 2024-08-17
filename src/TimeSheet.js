@@ -930,9 +930,10 @@ const TimeSheet = () => {
             style={{ paddingLeft: "120px" }}
           >
             <Link
-              to="/Leave"
-              type="button"
-              className="btn btn-outline-dark btn-lg my-2"
+              // to="/Leave"
+              to="/GetEmpLeavesDetails"
+              type="button" 
+              className="btn btn-outline-dark btn-lg my-2" 
             >
               LeaveRequest
             </Link>
