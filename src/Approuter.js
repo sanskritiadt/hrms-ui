@@ -225,6 +225,7 @@ import EditPosition from "./EditPosition";
 import AddAppraisalDetails from './AddAppraisalDetails';
 import GetAllEmpAppraisalDetails from './GetAllEmpAppraisalDetails';
 import ViewSalaryDetails from './ViewSalaryDetails'
+import GetEmpLeavesDetails from './GetEmpLeavesDetails'
 
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -313,6 +314,7 @@ const Approuter = () => {
               <Route path="/GetAllEmpAppraisalDetails" element={<GetAllEmpAppraisalDetails />} />
               <Route path="/view-salary-details/:id" element={<ViewSalaryDetails />} />
               <Route path="/ChangepasswordForm" element={<ChangepasswordForm />} />
+              <Route path="/GetEmpLeavesDetails" element={<GetEmpLeavesDetails />} />
             </Routes>
           </SideBar>
         </div>
