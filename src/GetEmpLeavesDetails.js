@@ -9,20 +9,14 @@ import { useSelector } from 'react-redux';
 
 
 const GetEmpLeavesDetails = () => {
+
   const empId = useSelector((state) => state.auth.empId);
-  //   const  leaveId = useSelector((state) => state.auth.leaveId);
-  //   // const token = localStorage.getItem("response-token");
   const token = useSelector((state) => state.auth.token);
 
   const [loading, setLoading] = useState(false);
   const [leave, setLeave] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-
-
-  // useEffect(() => {
-  //   fetchEmpLeaveData();
-  // }, []);
 
   useEffect(() => {
     fetchEmpLeaveData(currentPage);
@@ -49,30 +43,8 @@ const GetEmpLeavesDetails = () => {
     });
   };
 
-  // const fetchEmployees = async (page) => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axios.get(`/apigateway/hrms/employee/getAllEmp`, {
-  //       params: {
-  //         page: page - 1,
-  //         size: 10, 
-  //       },
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     setEmployees(response.data.content);
-  //     setTotalPages(response.data.totalPages);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching employees:", error);
-  //     toast.error(error.response?.data?.message || "Error fetching details");
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
-    <div className="mt-3">
+    <div className="mt-2 align-items-center" >
       {loading ? <LoadingPage /> : ''}
       <nav aria-label="breadcrumb" style={{ "--bs-breadcrumb-divider": "'>>'" }}>
         <ol className="breadcrumb" style={{ color: "white", marginLeft: '20px' }}>
@@ -83,12 +55,27 @@ const GetEmpLeavesDetails = () => {
       </nav>
       <div style={{ margin: '100px 100px', height: '562px' }}>
         <h1 className="Heading1 mb-4 " >Employee Leave Details</h1>
-        <div class="text-center"><button
+        {/* <div class="text-center"><button
           type="button"
           className="btn btn-outline-dark btn-sm"
         >
           New Leave Request
-        </button></div>
+        </button></div> */}
+        <div
+          // className=" mb-2 d-grid gap-2 d-md-flex justify-content-center"
+          // style={{ paddingLeft: "120px" }}
+          class="text-center"
+        // className="btn btn-outline-dark btn-sm"
+        >
+          <Link
+            to="/Leave"
+            // to="/GetEmpLeavesDetails"
+            type="button"
+            className="btn btn-outline-dark btn-sm my-2"
+          >
+            New Leave Request
+          </Link>
+        </div>
         <Container>
           <Table striped bordered hover className="custom-table">
             <thead>
