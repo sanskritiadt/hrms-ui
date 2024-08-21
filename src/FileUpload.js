@@ -10,11 +10,24 @@ function FileUpload() {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [email, setEmail] = useState();
+  const [isDBSelected, setIsDBSelected] = useState(false);
   function handleFileChange(event) {
     setFile(event.target.files[0]);
   }
   function handleEmailChange(event) {
     setEmail(event.target.value);
+  }
+
+  var str2bool = (value) => {
+    if (value && typeof value === "string") {
+      if (value.toLowerCase() === "true") return true;
+      if (value.toLowerCase() === "false") return false;
+    }
+    return value;
+  };
+  function handleSelectType(event) {
+    setIsDBSelected(str2bool(event.target.value));
+    console.log(str2bool(event.target.value));
   }
 
   // function Submit(event) {
@@ -44,9 +57,10 @@ function FileUpload() {
   function Submit(event) {
     event.preventDefault();
 
-    let url = "/apigateway/payroll/generatePaySlipForAll"
+    let url = `/apigateway/payroll/generatePaySlipForAll?isDBSelected=${isDBSelected}`;
+
     if (email) {
-      url += `?emailInput=${email}`;
+      url += `&emailInput=${email}`;
     }
 
     setLoading(true);
@@ -104,6 +118,30 @@ function FileUpload() {
     <div className="d-flex ">
       {loading ? <LoadingPage /> : ""}
       <form onSubmit={Submit}>
+        Do you want to save the records in DB?
+        <label>
+          <input
+            type="radio"
+            name="type"
+            value="false"
+            id="db"
+            onChange={handleSelectType}
+            defaultChecked
+            defaultValue={isDBSelected}
+          />
+          Non-DB
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="type"
+            value="true"
+            id="db"
+            onChange={handleSelectType}
+            checked={isDBSelected === true}
+          />
+          DB
+        </label>
         Email
         <input
           type="email"
