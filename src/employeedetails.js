@@ -901,7 +901,7 @@ function Empfunc() {
       const response = await axios.get(`/apigateway/hrms/employee/getAllEmp`, {
         params: {
           page: page - 1,
-          size: 10, // assuming 10 employees per page
+          size: 10, 
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -1042,7 +1042,7 @@ function Empfunc() {
     <div style={{ margin: "25px 100px", width: "820px", height: "750px" }}>
       
       <div className="d-flex justify-content-center" style={{ width: "90%" }}>
-        <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+        <div style={{ paddingLeft: "200px", paddingRight: "20px" }}>
           <h1 className="Heading1 my-4">Employee Details</h1>
           <div className="d-flex justify-content-between">
           <div className="mt-2">
@@ -1164,6 +1164,7 @@ function Empfunc() {
                 ))}
               </tbody>
             </Table>
+            
           </div>
           <nav>
             <ul className="pagination justify-content-center mt-2">
