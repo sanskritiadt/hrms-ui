@@ -1018,8 +1018,9 @@ const TimeSheet = () => {
                   <th>CHECKOUT</th>
                   <th>WORKING HOUR</th>
                   <th>DATE</th>
+                  <th>DAY</th>
                   <th>STATUS</th>
-                  <th>LEAVE INTERVAL</th>
+                  {/* <th>LEAVE INTERVAL</th> */}
                 </tr>
               </thead>
               <tbody className="body">
@@ -1032,8 +1033,9 @@ const TimeSheet = () => {
                     <td>{date.checkOut}</td>
                     <td>{date.workingHour}</td>
                     <td>{date.date}</td>
+                    <td>{date.day}</td>
                     <td>{date.status}</td>
-                    <td>{date.leaveInterval}</td>
+                    {/* <td>{date.leaveInterval}</td> */}
                   </tr>
                 ))}
               </tbody>
