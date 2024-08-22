@@ -40,7 +40,7 @@ function EditHolidayCalender() {
       headers: {
         'Authorization': `Bearer ${token}`
       },
-      responseType: 'arraybuffer'  // Set the response type to 'arraybuffer'
+      responseType: 'arraybuffer' 
     }).then((response) => {
       const pdfData = new Uint8Array(response.data);
       const blob = new Blob([pdfData], { type: 'application/pdf' });

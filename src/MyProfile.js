@@ -42,7 +42,8 @@ export default function AccountMenu() {
   const fetchProfilePicture = async () => {
     try {
       const response = await axios.get(
-        `/apigateway/hrms/employee/profilePicture/${EmpId}`,
+            `/apigateway/hrms/employee/profilePicture/${EmpId}/personal_document`,
+        //`/apigateway/hrms/employee/profilePicture/${EmpId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
