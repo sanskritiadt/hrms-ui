@@ -5,7 +5,6 @@
 }
 
 .main-container1 {
-  /* padding-top: 55px; */
   display: flex;
   position:absolute;
 }
@@ -25,7 +24,7 @@ main {
   color: white;
   height: auto;
    flex: 0 0 auto;
-   /* z-index: 1; */
+
 }
 
 .top_section1 {
@@ -123,11 +122,11 @@ main {
 
 @media screen and (max-width: 768px) {
   .main-container1 {
-    flex-direction: column;
+    flex-direction: row;
   }
   .sidebar1 {
     width: 100%;
-    height: auto;
+    height: 100%;
   }
   .top_section1 {
     flex-direction: row;

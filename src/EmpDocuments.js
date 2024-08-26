@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import {
   Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Modal,
   Box,
   Select,
@@ -16,85 +9,191 @@ import {
   Typography,
   FormControl,
   Input,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import LoadingPage from "./LoadingPage";
-import { useSelector } from 'react-redux';
-export default function EmpDocuments() {
-  // const token = localStorage.getItem("response-token");
-  // const EmpId = localStorage.getItem("EmpID");
-  const  token = useSelector((state) => state.auth.token);
-  const  EmpId = useSelector((state) => state.auth.empId);
-
+import { useSelector } from "react-redux";
+import { CloudDownload, Delete,CloudUpload } from "@mui/icons-material";
+const useDocumentsByCategory = (token, category, setLoading) => {
   const [documents, setDocuments] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [documentTypes, setDocumentTypes] = useState([]);
-  const [selectedDocumentType, setSelectedDocumentType] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const fetchDocuments = useCallback(async () => {
+    if (!category) return;
+    setLoading({ type: "documents", value: true });
+    try {
+      const { data } = await axios.get(
+        `/apigateway/hrms/employee/getDocumentByCategory?documentCategoryType=${category}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setDocuments(data);
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Error fetching details");
+    } finally {
+      setLoading({ type: "documents", value: false });
+    }
+  }, [token, category, setLoading]);
 
   useEffect(() => {
-    const fetchDocuments = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get(
-          `/apigateway/hrms/employee/getAllDocumentDetailsByEmpId/${EmpId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setDocuments(data.map((item) => item.documentType));
-        setLoading(false); 
-      } catch (error) {
-        console.error(error);
-        toast.error( error.response.data.message || "Error fetching details" );
-        setLoading(false); 
-      }
-    };
-
-    const fetchDocumentTypes = async () => {
-      try {
-        const { data } = await axios.get(
-          `/apigateway/hrms/employee/getDocumentTypes`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setDocumentTypes(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchDocuments();
-    fetchDocumentTypes();
-  }, [token, EmpId]);
-  const handleDelete = async (documentId) => {
+  }, [fetchDocuments]);
+
+  return { documents, fetchDocuments };
+};
+
+const DocumentUploadModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  selectedDocumentType,
+  setSelectedDocumentType,
+  documents,
+  loading,
+}) => (
+  <Modal open={isOpen} onClose={onClose}>
+    <Box
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        bgcolor: "background.paper",
+        boxShadow: 24,
+        p: 4,
+        maxWidth: 400,
+      }}
+    >
+      <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
+        Upload Document
+      </Typography>
+      <form onSubmit={onSubmit}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <Typography variant="subtitle1" sx={{ mr: 2 }}>
+            Document Type:
+          </Typography>
+          <FormControl fullWidth>
+            <Select
+              value={selectedDocumentType}
+              onChange={(event) => setSelectedDocumentType(event.target.value)}
+            >
+              <MenuItem value="">
+                <em>Select document type</em>
+              </MenuItem>
+              {documents.map((doc) => (
+                <MenuItem key={doc.id} value={doc.id}>
+                  {doc.documentType}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <FormControl fullWidth>
+          <Input type="file" id="myfile" name="myfile" />
+        </FormControl>
+        <Box mt={2} display="flex" justifyContent="space-between">
+          <Button variant="contained" type="submit">
+            Upload
+          </Button>
+          <Button variant="contained" onClick={onClose}>
+            Close
+          </Button>
+        </Box>
+      </form>
+    </Box>
+  </Modal>
+);
+
+const DocumentUpload = () => {
+  const token = useSelector((state) => state.auth.token);
+  const EmpId = useSelector((state) => state.auth.empId);
+
+  const [selectedDocumentType, setSelectedDocumentType] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const [uploadedDocuments, setUploadedDocuments] = useState([]);
+  const [loading, setLoading] = useState({ type: "", value: false });
+
+  const categories = [
+    "kyc_document",
+    "personal_document",
+    "professional_document",
+    "academic_document",
+  ];
+
+  const { documents, fetchDocuments } = useDocumentsByCategory(
+    token,
+    categories[activeTab],
+    setLoading
+  );
+
+  const fetchUploadedDocuments = useCallback(async () => {
+    setLoading({ type: "uploadedDocs", value: true });
     try {
-      setLoading(true);
-      const { data } = await axios.delete(
-        `/apigateway/hrms/employee/deleteDocument/${EmpId}/${documentId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+      const { data } = await axios.get(
+        `/apigateway/hrms/employee/getAllDocumentDetailsByEmpId/${EmpId}/${categories[activeTab]}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-      setLoading(false);
-      toast.success(data, { position: "top-center", theme: "colored" });
-      setDocuments((prevDocs) =>
-        prevDocs.filter((doc) => doc.id !== documentId)
-      );
+      setUploadedDocuments(data);
     } catch (error) {
-      setLoading(false);
       console.error(error);
-      toast.error("Error while deleting the file.", {
-        position: "top-center",
-        theme: "colored",
-      });
+      toast.error("Error fetching uploaded documents");
+    } finally {
+      setLoading({ type: "uploadedDocs", value: false });
+    }
+  }, [token, EmpId, activeTab]);
+
+  useEffect(() => {
+    fetchUploadedDocuments();
+  }, [fetchUploadedDocuments]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading({ type: "upload", value: true });
+    const formData = new FormData();
+    const documentFile = document.getElementById("myfile").files[0];
+    formData.append("document", documentFile);
+
+    try {
+      const response = await axios.post(
+        `/apigateway/hrms/employee/uploadDocument/${EmpId}/${selectedDocumentType}/${categories[activeTab]}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success(response.data);
+      setIsModalOpen(false);
+      fetchDocuments();
+      fetchUploadedDocuments();
+    } catch (error) {
+      console.error(error);
+      toast.error("Error uploading document. Please try again.");
+    } finally {
+      setLoading({ type: "upload", value: false });
     }
   };
 
-  const handleDownload = async (documentId) => {
+  const handleDownload = async (id) => {
+    setLoading({ type: "download", value: true });
     try {
-      setLoading(true);
       const { data, headers } = await axios.get(
-        `/apigateway/hrms/employee/downloadDocument/${EmpId}/${documentId}`,
+        `/apigateway/hrms/employee/downloadDocument/${EmpId}/${id}/${categories[activeTab]}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: "arraybuffer",
@@ -115,196 +214,147 @@ export default function EmpDocuments() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        setLoading(false);
         toast.success("File downloaded successfully.", {
           position: "top-center",
           theme: "colored",
         });
       } else {
-        setLoading(false);
         toast.error("File not found.", {
           position: "top-center",
           theme: "colored",
         });
       }
     } catch (error) {
-      setLoading(false);
       console.error(error);
       toast.error("Error occurred, please try again later.", {
         position: "top-center",
         theme: "colored",
       });
+    } finally {
+      setLoading({ type: "download", value: false });
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    const formData = new FormData();
-    const documentFile = document.getElementById("myfile").files[0];
-
-    formData.append(
-      "emp",
-      JSON.stringify({ empId: EmpId, docTypeId: selectedDocumentType })
-    );
-    formData.append("document", documentFile);
-
+  const handleDelete = async (documentId) => {
+    setLoading({ type: "delete", value: true });
     try {
-      const { data } = await axios.post(
-        `/apigateway/hrms/employee/uploadDocument/${EmpId}/${selectedDocumentType}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+      await axios.delete(
+        `/apigateway/hrms/employee/deleteDocument/${EmpId}/${documentId}/${categories[activeTab]}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success(data, { position: "top-center", theme: "colored" });
-      setIsModalOpen(false);
-      const { data: updatedDocs } = await axios.get(
-        `/apigateway/hrms/employee/getAllDocumentDetailsByEmpId/${EmpId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setDocuments(updatedDocs.map((item) => item.documentType));
+      toast.success("Document deleted successfully");
+      fetchUploadedDocuments();
     } catch (error) {
       console.error(error);
-      toast.error("Error uploading document. Please try again.", {
-        position: "top-center",
-        theme: "colored",
-      });
+      toast.error("Error deleting document");
     } finally {
-      setLoading(false);
+      setLoading({ type: "delete", value: false });
     }
-  };
-
-  const styles = {
-    tableContainer: {
-      maxWidth: "700px",
-      margin: "0 auto",
-    },
   };
 
   return (
-    <div>
-      <Button
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          position: "absolute",
-          top: "50px",
-          right: "110px",
-          margin: "20px",
-        }}
-        variant="contained"
-        onClick={() => setIsModalOpen(true)}
-      >
-        Upload
-      </Button>
-      {loading ? (
+    <Box sx={{ width: "100%" }}>
+      {loading.value ? (
         <LoadingPage />
       ) : (
-        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              maxWidth: 400,
-            }}
+        <>
+          <Tabs
+            value={activeTab}
+            onChange={(_, newValue) => setActiveTab(newValue)}
           >
-            <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
-              Upload Document
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Typography variant="subtitle1" sx={{ mr: 2 }}>
-                  Document Type:
-                </Typography>
-                <FormControl fullWidth>
-                  <Select
-                    value={selectedDocumentType}
-                    onChange={(event) =>
-                      setSelectedDocumentType(event.target.value)
-                    }
-                  >
-                    <MenuItem value="">
-                      <em>Select document type</em>
-                    </MenuItem>
-                    {documentTypes.map((docType) => (
-                      <MenuItem key={docType.id} value={docType.id}>
-                        {docType.documentType}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
-              <FormControl fullWidth>
-                <Input type="file" id="myfile" name="myfile" />
-              </FormControl>
-              <Box mt={2} display="flex" justifyContent="space-between">
-                <Button variant="contained" type="submit">
-                  Upload
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => setIsModalOpen(false)}
-                >
-                  Close
-                </Button>
-              </Box>
-            </form>
-          </Box>
-        </Modal>
+            {categories.map((category, index) => (
+              <Tab key={index} label={category.replace("_", " ")} />
+            ))}
+          </Tabs>
+          <Button
+            variant="contained"
+            onClick={() => setIsModalOpen(true)}
+            sx={{ mt: 2 }}
+             size="small"
+            startIcon={<CloudUpload/>}
+          >
+            Upload Document
+          </Button>
+          <DocumentUploadModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSubmit={handleSubmit}
+            selectedDocumentType={selectedDocumentType}
+            setSelectedDocumentType={setSelectedDocumentType}
+            documents={documents}
+            loading={loading}
+          />
+          <TableContainer component={Paper} sx={{ mt: 2 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Document Type</TableCell>
+                  <TableCell>Mandatory</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {uploadedDocuments.map((doc) => (
+                  <TableRow key={doc.id}>
+                    <TableCell>{doc.documentType.documentType}</TableCell>
+                    <TableCell>
+                      {doc.documentType.mandatory ? "Yes" : "No"}
+                    </TableCell>
+                    {/* <TableCell>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleDownload(doc.documentType.id)}
+                      >
+                        {!loading.type === 'download' && 'Download'}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDelete(doc.documentType.id)}     
+                      >
+                        {!loading.type === 'delete' && 'Delete'}
+                      </Button>
+                    </TableCell> */}
+                    <TableCell>
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          startIcon={<CloudDownload />}
+                           size="small"
+                          onClick={() => handleDownload(doc.documentType.id)}
+                          // disabled={loading.type === "download"}
+                        >
+                          Download
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="error"
+                           size="small"
+                          startIcon={<Delete />}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                "Are you sure you wish to delete this item?"
+                              )
+                            ) {
+                              handleDelete(doc.documentType.id);
+                            }
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
       )}
-      <TableContainer component={Paper} style={styles.tableContainer}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Document Type</TableCell>
-              <TableCell>Download</TableCell>
-              <TableCell>Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          {documents.map((document) => (
-            <TableBody key={document.id}>
-              <TableRow>
-                <TableCell>{document.documentType}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleDownload(document.id)}
-                  >
-                    Download
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Are you sure you wish to delete this item?"
-                        )
-                      ) {
-                        handleDelete(document.id);
-                      }
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          ))}
-        </Table>
-      </TableContainer>
-    </div>
+    </Box>
   );
-}
+};
+
+export default DocumentUpload;

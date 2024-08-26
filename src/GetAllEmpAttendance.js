@@ -1,11 +1,32 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
-import { Tooltip, Button, Select, MenuItem, FormControl, InputLabel, Typography, Modal, Breadcrumbs, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Checkbox, FormControlLabel, ListItemText } from "@mui/material";
+import {
+  Tooltip,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Typography,
+  Modal,
+  Breadcrumbs,
+  Link,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  ListItemText,
+} from "@mui/material";
 import { Form, Dropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { toast } from "react-toastify";
-import Graph from './Graph';
+import Graph from "./Graph";
 import LoadingPage from "./LoadingPage";
 import {
   flexRender,
@@ -42,7 +63,8 @@ const GetAllEmpAttendance = () => {
     date: true,
     status: true,
     month: true,
-    year: true
+    year: true,
+    day: true,
   });
 
   const submit = (e) => {
@@ -128,8 +150,6 @@ const GetAllEmpAttendance = () => {
     }));
   };
 
-
-
   const toggleAllColumns = (isVisible) => {
     const updatedVisibility = {};
     Object.keys(columnVisibility).forEach((key) => {
@@ -138,7 +158,6 @@ const GetAllEmpAttendance = () => {
     setColumnVisibility(updatedVisibility);
   };
 
-
   const columns = useMemo(
     () => [
       {
@@ -146,7 +165,6 @@ const GetAllEmpAttendance = () => {
         header: "Employee Name",
         meta: { filterVariant: "select" },
         isVisible: columnVisibility.employeeName,
-
       },
       {
         accessorKey: "checkIn",
@@ -165,6 +183,12 @@ const GetAllEmpAttendance = () => {
         header: "Working Hour",
         meta: { filterVariant: "select" },
         isVisible: columnVisibility.workingHour,
+      },
+      {
+        accessorKey: "day",
+        header: "Day",
+        meta: { filterVariant: "select" },
+        isVisible: columnVisibility.day,
       },
       {
         accessorKey: "date",
@@ -217,7 +241,6 @@ const GetAllEmpAttendance = () => {
     );
   }, [selectedEmployee, getData]);
 
-
   const todayDate = new Date().toISOString().split("T")[0];
 
   const handleOpen = () => {
@@ -243,8 +266,25 @@ const GetAllEmpAttendance = () => {
         <Typography color="textPrimary">Employee Attendance</Typography>
       </Breadcrumbs>
       <div className="mt-3">
-        <div style={{ display: "flex", alignItems: "flex-start", width: "100%", marginBottom: '10px', marginLeft: "0px" }}>
-          <form onSubmit={submit} style={{ display: "flex", alignItems: "center", width: "100%", maxWidth: "920px", margin: "0 auto" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            width: "100%",
+            marginBottom: "10px",
+            marginLeft: "0px",
+          }}
+        >
+          <form
+            onSubmit={submit}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              maxWidth: "920px",
+              margin: "0 auto",
+            }}
+          >
             {loading && <LoadingPage />}
 
             <TextField
@@ -261,8 +301,8 @@ const GetAllEmpAttendance = () => {
               InputProps={{
                 style: {
                   height: "40px",
-                  padding: '0 14px',
-                }
+                  padding: "0 14px",
+                },
               }}
             />
 
@@ -280,17 +320,18 @@ const GetAllEmpAttendance = () => {
               InputProps={{
                 style: {
                   height: "40px",
-                  padding: '0 14px',
-                }
+                  padding: "0 14px",
+                },
               }}
             />
 
             <Button
               type="submit"
               variant="contained"
-              disabled={loading || !getAttendence.fromDate || !getAttendence.toDate}
+              disabled={
+                loading || !getAttendence.fromDate || !getAttendence.toDate
+              }
               style={{ marginRight: "20px", height: "40px", marginTop: "20px" }}
-
             >
               Get
             </Button>
@@ -300,7 +341,11 @@ const GetAllEmpAttendance = () => {
                 onClick={exportToExcel}
                 variant="contained"
                 startIcon={<FileDownloadOutlinedIcon />}
-                style={{ marginRight: "20px", height: "40px", marginTop: "20px" }}
+                style={{
+                  marginRight: "20px",
+                  height: "40px",
+                  marginTop: "20px",
+                }}
               >
                 Download
               </Button>
@@ -323,12 +368,30 @@ const GetAllEmpAttendance = () => {
             aria-labelledby="graph-modal-title"
             aria-describedby="graph-modal-description"
           >
-            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '80%', backgroundColor: 'white', padding: '20px', outline: 'none', boxShadow: 24 }}>
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "80%",
+                backgroundColor: "white",
+                padding: "20px",
+                outline: "none",
+                boxShadow: 24,
+              }}
+            >
               <Typography id="graph-modal-title" variant="h6" component="h2">
                 Attendance Graph
               </Typography>
               <Graph data={filteredData} />
-              <Button onClick={handleClose} variant="contained" style={{ marginTop: '20px' }}>Close</Button>
+              <Button
+                onClick={handleClose}
+                variant="contained"
+                style={{ marginTop: "20px" }}
+              >
+                Close
+              </Button>
             </div>
           </Modal>
         </div>
@@ -385,14 +448,29 @@ const GetAllEmpAttendance = () => {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id} colSpan={header.colSpan} style={{ backgroundColor: "lavenderblush" }}>
+                    <TableCell
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      style={{ backgroundColor: "lavenderblush" }}
+                    >
                       {header.isPlaceholder ? null : (
                         <div
-                          style={{ cursor: header.column.getCanSort() ? 'pointer' : 'default' }}
+                          style={{
+                            cursor: header.column.getCanSort()
+                              ? "pointer"
+                              : "default",
+                          }}
                           onClick={header.column.getToggleSortingHandler()}
                         >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {header.column.getIsSorted() === "asc" ? " ↑" : header.column.getIsSorted() === "desc" ? " ↓" : null}
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {header.column.getIsSorted() === "asc"
+                            ? " ↑"
+                            : header.column.getIsSorted() === "desc"
+                            ? " ↓"
+                            : null}
                         </div>
                       )}
                       {header.column.getCanFilter() && (
@@ -410,7 +488,10 @@ const GetAllEmpAttendance = () => {
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -420,7 +501,7 @@ const GetAllEmpAttendance = () => {
         </TableContainer>
       </div>
     </div>
-  )
+  );
 };
 
 function Filter({ column }) {
@@ -439,14 +520,13 @@ function Filter({ column }) {
       <Select
         value={columnFilterValue || ""}
         onChange={(e) => column.setFilterValue(e.target.value)}
-
         sx={{
-          height: '30px', // Adjust the height as needed
-          padding: '0 14px',
-          '& .MuiSelect-select': {
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
+          height: "30px", // Adjust the height as needed
+          padding: "0 14px",
+          "& .MuiSelect-select": {
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
           },
         }}
       >
@@ -467,7 +547,7 @@ function Filter({ column }) {
         onChange={(e) =>
           column.setFilterValue((old) => [e.target.value, old?.[1]])
         }
-        style={{ marginRight: '10px' }}
+        style={{ marginRight: "10px" }}
       />
       <TextField
         type="number"

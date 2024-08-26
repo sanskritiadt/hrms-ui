@@ -576,6 +576,7 @@ import { toast } from "react-toastify";
 import LoadingPage from './LoadingPage'
 import { useSelector } from 'react-redux';
 import { Line } from 'react-chartjs-2';
+import { Modal, Button, Form } from "react-bootstrap";  // Add these imports for the Modal
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -600,17 +601,21 @@ const TimeSheet = () => {
   const [checkindisable, setcheckinDisable] = useState(false);
   const [checkoutdisable, setcheckoutDisable] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [earlycheckoutdisable, setearlycheckoutDisable] = useState(false);
   const [getDate, setNewDate] = useState([]);
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [loading, setLoading] = useState(false);
   const [graphData, setGraphData] = useState(null);
+  const [earlyReason, setEarlyReason] = useState("");
+  const [earlyType, setEarlyType] = useState("");
+  const [showModal, setShowModal] = useState(false); // For managing modal visibility
+
 
   // const token = localStorage.getItem("response-token");
   // const empId = localStorage.getItem("EmpID");
   const  token = useSelector((state) => state.auth.token);
   const  empId = useSelector((state) => state.auth.empId);
-
 
   const [date, setDate] = useState({
     fromDate: "",
@@ -624,6 +629,38 @@ const TimeSheet = () => {
       setLongitude(position.coords.longitude);
     });
   }, []);
+
+  const handleOpenEarlyPopUp = () => setShowModal(true); // Function to show the modal
+  const handleCloseModal = () => setShowModal(false); // Function to close the modal
+
+  const handleEarlyCheckOut = () => {
+    setLoading(true);
+    axios
+      .put(
+        `/apigateway/payroll/timeSheet/earlyCheckOut/${empId}?Latitude=${latitude}&Longitude=${longitude}&reason=${earlyReason}&type=${earlyType}`,
+        { reason: earlyReason, type: earlyType },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        toast.success(response.data, {
+          position: "top-center",
+          theme: "colored",
+        });
+        setearlycheckoutDisable(true);
+        setLoading(false);
+        handleCloseModal(); // Close the modal upon successful submission
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message || "Error during early checkout");
+        console.log(error);
+        setLoading(false);
+      });
+  };
+
 
   const checkIn = (e) => {
     e.preventDefault();
@@ -653,7 +690,8 @@ const TimeSheet = () => {
         setLoading(false);
       });
   };
-  const checkOut = (e) => {
+
+  const checkOut = (e) => { 
     e.preventDefault();
     setLoading(true); 
     axios
@@ -710,6 +748,7 @@ const TimeSheet = () => {
         setLoading(false);
       });
   };
+  
 
   function submit(e) {
     e.preventDefault();
@@ -824,15 +863,77 @@ const TimeSheet = () => {
             >
               {isPaused ? "Play" : "Pause"}
             </button>
+            <button
+              disabled={earlycheckoutdisable}
+              onClick={handleOpenEarlyPopUp}
+              type="button"
+              className="btn btn-outline-dark btn-lg"
+            >
+              EARLY CHECK OUT
+            </button>
+            <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Early Check Out</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Form.Group controlId="earlyType" className="mb-4">
+                {/* <Form.Label>Type of Early Check Out</Form.Label> */}
+                {/* <Form.Control
+                  type="text"
+                  placeholder="Enter type for early check out"
+                  value={earlyType}
+                  onChange={(e) => setEarlyType(e.target.value)}
+                /> */}
+                {/* <Form.Label>Type of Early Check Out</Form.Label> */}
+      <Form.Select
+        value={earlyType}
+        onChange={(e) => setEarlyType(e.target.value)}
+      >
+        <option value="">Select type for early check out</option>
+        <option value="medical reason">Medical Reason</option>
+        <option value="personal reason">Personal Reason</option>
+        <option value="urgent work">Urgent Work</option>
+        {/* Add more options as needed */}
+      </Form.Select>
+              </Form.Group>
+              <Form.Group controlId="earlyReason">
+                {/* <Form.Label>Reason for Early Check Out</Form.Label> */}
+                <Form.Control
+                  type="text"
+                  placeholder="Enter reason for early check out"
+                  value={earlyReason}
+                  onChange={(e) => setEarlyReason(e.target.value)}
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer className="justify-content-center">
+              <Button variant="primary" onClick={() => 
+              {
+                  handleEarlyCheckOut();  // First, call the API
+                  handleCloseModal();     // Then, close the modal
+              }}>
+             Request
+               </Button>
+            </Modal.Footer>
+            {/* <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseModal}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleEarlyCheckOut} >
+                EARLY REQUEST SUBMIT
+              </Button>
+            </Modal.Footer> */}
+          </Modal>
           </div>
           <div
             className=" mb-2 d-grid gap-2 d-md-flex justify-content-center"
             style={{ paddingLeft: "120px" }}
           >
             <Link
-              to="/Leave"
-              type="button"
-              className="btn btn-outline-dark btn-lg my-2"
+              // to="/Leave"
+              to="/GetEmpLeavesDetails"
+              type="button" 
+              className="btn btn-outline-dark btn-lg my-2" 
             >
               LeaveRequest
             </Link>
@@ -917,8 +1018,9 @@ const TimeSheet = () => {
                   <th>CHECKOUT</th>
                   <th>WORKING HOUR</th>
                   <th>DATE</th>
+                  <th>DAY</th>
                   <th>STATUS</th>
-                  <th>LEAVE INTERVAL</th>
+                  {/* <th>LEAVE INTERVAL</th> */}
                 </tr>
               </thead>
               <tbody className="body">
@@ -931,8 +1033,9 @@ const TimeSheet = () => {
                     <td>{date.checkOut}</td>
                     <td>{date.workingHour}</td>
                     <td>{date.date}</td>
+                    <td>{date.day}</td>
                     <td>{date.status}</td>
-                    <td>{date.leaveInterval}</td>
+                    {/* <td>{date.leaveInterval}</td> */}
                   </tr>
                 ))}
               </tbody>

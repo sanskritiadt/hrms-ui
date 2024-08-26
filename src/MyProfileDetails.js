@@ -45,7 +45,7 @@ export default function MyProfileDetails() {
             <div>
              <EmpPayrollDetail />
              
-            </div>
+            </div>         
           )}
           {activeTab === "three" && (
             <div>

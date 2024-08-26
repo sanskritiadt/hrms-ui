@@ -45,7 +45,7 @@ function PaySlip() {
         })
             .then(response => {
                 console.log(response.data)
-                toast.success(response.data.message, { position: "top-center", theme: "colored" })
+                toast.success(response.data, { position: "top-center", theme: "colored" })
                 setMonth(response.data)
                 setLoading(false); 
             }).catch(error => {
