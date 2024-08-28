@@ -368,22 +368,23 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
           </TableHead>
           <TableBody>
             {assets.map((asset) => (
-              <TableRow key={asset.assetId}>
-                <TableCell>{asset.assetId}</TableCell>
-                <TableCell>{asset.assetAttributeMappingList[0]?.assetInfo.assetType.assetName || 'N/A'}</TableCell>
+              <TableRow key={asset.asset_Id}>
+                <TableCell>{asset.asset_Id}</TableCell>
+                <TableCell>{asset.assetTypeName}</TableCell>
+                {/* <TableCell>{asset.assetAttributeMappingList[0]?.assetAttributeName || 'N/A'}</TableCell> */}
                 <TableCell>
                   {asset.assetAttributeMappingList.map(attr => (
                     <div key={attr.id}>
-                      <strong>{attr.assetAttribute.assetAttributeName}:</strong> {attr.assetAttributeValue}
+                      <strong>{attr.assetAttributeName}:</strong> {attr.assetAttributeValue}
                     </div>
                   ))}
                 </TableCell>
-                <TableCell>{asset.assetAttributeMappingList[0]?.assetInfo.assetStatus || 'N/A'}</TableCell>
+                <TableCell>{asset.assetStatus|| 'N/A'}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEditAsset(asset)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDeleteAsset(asset.assetId)}>
+                  <IconButton onClick={() => handleDeleteAsset(asset.asset_Id)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -405,7 +406,7 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
             <Box key={index} sx={{ mb: 2 }}>
               <TextField
                 label="Attribute Name"
-                value={attr.assetAttribute.assetAttributeName || ''}
+                value={attr.assetAttributeName || ''}
                 variant="outlined"
                 sx={{ mr: 1 }}
                 disabled
