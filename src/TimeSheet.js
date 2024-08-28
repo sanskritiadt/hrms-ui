@@ -1921,7 +1921,7 @@ const TimeSheet = () => {
           <Table sx={{ minWidth: isMobile ? 300 : 650 }} aria-label="timesheet table">
             <TableHead>
               <TableRow>
-                {['EMPLOYEE ID','DATE', 'STATUS', 'WORKING HOUR','CHECKIN', 'CHECKOUT', 'LEAVEINTERVAL','DAY'].map((header, index) => (
+                {['DATE', 'STATUS', 'WORKING HOUR','CHECKIN', 'CHECKOUT', 'LEAVEINTERVAL','DAY'].map((header, index) => (
                   <TableCell key={index} sx={{ whiteSpace: 'nowrap', fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' } }}>
                     {header}
                   </TableCell>
@@ -1929,13 +1929,18 @@ const TimeSheet = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {getDate.map((date) => (
-                <TableRow key={date.employeeId}>
-                  {Object.values(date).map((value, index) => (
-                    <TableCell key={index} sx={{ whiteSpace: 'nowrap', fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' } }}>
-                      {value}
-                    </TableCell>
-                  ))}
+            {getDate.map((date, rowIndex) => (
+                <TableRow key={rowIndex}>
+                  {Object.entries(date).map(([key, value], cellIndex) => {
+                    if (key !== 'employeeId') {
+                      return (
+                        <TableCell key={cellIndex} sx={{ whiteSpace: 'nowrap', fontSize: { xs: '0.75rem', sm: '0.875rem', md: '1rem' } }}>
+                          {value}
+                        </TableCell>
+                      );
+                    }
+                    return null;
+                  })}
                 </TableRow>
               ))}
             </TableBody>
