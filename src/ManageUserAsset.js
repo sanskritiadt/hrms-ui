@@ -82,12 +82,12 @@ const ManageUserAsset = ({ assetTypeData, fetchAssetTypeData }) => {
 
   const handleSubmit = async () => {
     const payload = {
-      assetTypeId: selectedAssetType,
-      assetStatus:assetStatus,
-      assetAttributeMappingList: Object.keys(attributeValues).map((key) => ({
-        asset_attribute_id: key,
-        assetAttributeValue: attributeValues[key],
-
+      assetTypeName: assetTypeData.find((type) => type.id === selectedAssetType)
+        ?.assetName,
+      assetStatus: assetStatus,
+      assetAttributeMappingList: assetAttributes.map((attr) => ({
+        assetAttributeName: attr.assetAttributeName,
+        assetAttributeValue: attributeValues[attr.id] || "",
       })),
     };
 

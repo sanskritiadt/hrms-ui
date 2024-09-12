@@ -45,9 +45,6 @@
 //       }
 //     };
 
-
-
-
 //   useEffect(() => {
 //     fetchAssetTypeData();
 //   }, []);
@@ -211,7 +208,7 @@
 // };
 
 // export default ViewAssets;
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -228,21 +225,25 @@ import {
   IconButton,
   MenuItem,
   Modal,
-} from '@mui/material';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+} from "@mui/material";
+import axios from "axios";
+import { toast } from "react-toastify";
 import LoadingPage from "./LoadingPage";
-import { useSelector } from 'react-redux';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import { useSelector } from "react-redux";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
-const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
+const ViewAssets = ({
+  assetTypeData,
+  fetchAssetTypeData,
+  setAssetTypeData,
+}) => {
   const [loading, setLoading] = useState(false);
   const [assets, setAssets] = useState([]);
   const [editingAsset, setEditingAsset] = useState(null);
   const [assetAttributes, setAssetAttributes] = useState([]);
   //  const [assetTypeData, setassetTypeData] = useState([]);
-  const [selectedAssetType, setSelectedAssetType] = useState('');
+  const [selectedAssetType, setSelectedAssetType] = useState("");
   const [openModal, setOpenModal] = useState(false);
 
   const token = useSelector((state) => state.auth.token);
@@ -250,15 +251,18 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
   const fetchAssets = async (assetTypeId) => {
     try {
       setLoading(true);
-      const response = await axios.get(`/apigateway/hrms/masterAsset/getAllAssetInfoByAssetTypeIdAndPagination/${assetTypeId}?page0=0&size=10`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `/apigateway/hrms/masterAsset/getAllAssetInfoByAssetTypeIdAndPagination/${assetTypeId}?page0=0&size=10`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setAssets(response.data.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching assets:', error);
+      console.error("Error fetching assets:", error);
       toast.error(error.response?.data?.message || "Failed to fetch assets");
       setLoading(false);
     }
@@ -268,17 +272,21 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
     if (window.confirm("Are you sure you want to delete this asset?")) {
       try {
         setLoading(true);
-        await axios.delete(`/apigateway/hrms/masterAsset/deleteAssetInfoById/${assetId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.delete(
+          `/apigateway/hrms/masterAsset/deleteAssetInfoByAssetAdtId?assetAdtId=${assetId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         toast.success("Asset deleted successfully.");
-        setAssets(assets.filter(asset => asset.assetId !== assetId));
+        setAssets(assets.filter((asset) => asset.assetId !== assetId));
         fetchAssetTypeData();
+        fetchAssets(selectedAssetType);
         setLoading(false);
       } catch (error) {
-        console.error('Error deleting asset:', error);
+        console.error("Error deleting asset:", error);
         toast.error(error.response?.data?.message || "Failed to delete asset");
         setLoading(false);
       }
@@ -287,6 +295,7 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
 
   const handleEditAsset = (asset) => {
     setEditingAsset(asset);
+    console.log(asset);
     setAssetAttributes(asset.assetAttributeMappingList || []);
     setOpenModal(true);
   };
@@ -295,7 +304,7 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
     const updatedAttributes = [...assetAttributes];
     updatedAttributes[index] = {
       ...updatedAttributes[index],
-      [attribute]: value
+      [attribute]: value,
     };
     setAssetAttributes(updatedAttributes);
   };
@@ -304,22 +313,26 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
     try {
       setLoading(true);
       const updatedAsset = {
-        assetId: editingAsset.assetId,
-        assetAttributeMappingList: assetAttributes
+        assetAdtId: editingAsset.assetAdtId,
+        assetAttributeMappingList: assetAttributes,
       };
-      await axios.put('/apigateway/hrms/masterAsset/updateAssetAttributeMappingByAssetId', updatedAsset, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+      await axios.put(
+        "/apigateway/hrms/masterAsset/updateAssetAttributeMappingByAssetAdtId",
+        updatedAsset,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
       toast.success("Asset updated successfully.");
       setEditingAsset(null);
       setOpenModal(false);
       fetchAssets(selectedAssetType);
       setLoading(false);
     } catch (error) {
-      console.error('Error updating asset:', error);
+      console.error("Error updating asset:", error);
       toast.error(error.response?.data?.message || "Failed to update asset");
       setLoading(false);
     }
@@ -328,7 +341,6 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
   const handleAssetTypeChange = (event) => {
     setSelectedAssetType(event.target.value);
     fetchAssets(event.target.value);
-    
   };
 
   const handleCloseModal = () => {
@@ -346,7 +358,7 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
           value={selectedAssetType}
           onChange={handleAssetTypeChange}
           variant="outlined"
-          sx={{ width: '39vh', mr: 1 }}
+          sx={{ width: "39vh", mr: 1 }}
         >
           {assetTypeData.map((type) => (
             <MenuItem key={type.id} value={type.id}>
@@ -368,23 +380,26 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
           </TableHead>
           <TableBody>
             {assets.map((asset) => (
-              <TableRow key={asset.asset_Id}>
-                <TableCell>{asset.asset_Id}</TableCell>
+              <TableRow key={asset.assetAdtId}>
+                <TableCell>{asset.assetAdtId}</TableCell>
                 <TableCell>{asset.assetTypeName}</TableCell>
                 {/* <TableCell>{asset.assetAttributeMappingList[0]?.assetAttributeName || 'N/A'}</TableCell> */}
                 <TableCell>
-                  {asset.assetAttributeMappingList.map(attr => (
+                  {asset.assetAttributeMappingList.map((attr) => (
                     <div key={attr.id}>
-                      <strong>{attr.assetAttributeName}:</strong> {attr.assetAttributeValue}
+                      <strong>{attr.assetAttributeName}:</strong>{" "}
+                      {attr.assetAttributeValue}
                     </div>
                   ))}
                 </TableCell>
-                <TableCell>{asset.assetStatus|| 'N/A'}</TableCell>
+                <TableCell>{asset.assetStatus || "N/A"}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleEditAsset(asset)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDeleteAsset(asset.asset_Id)}>
+                  <IconButton
+                    onClick={() => handleDeleteAsset(asset.assetAdtId)}
+                  >
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -401,26 +416,39 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
         aria-describedby="modal-description"
       >
         <Box sx={{ ...modalStyle, width: 400 }}>
-          <Typography id="modal-title" variant="h6" gutterBottom>Edit Asset Attributes</Typography>
+        {loading && <LoadingPage />}
+          <Typography id="modal-title" variant="h6" gutterBottom>
+            Edit Asset Attributes
+          </Typography>
           {assetAttributes.map((attr, index) => (
             <Box key={index} sx={{ mb: 2 }}>
               <TextField
                 label="Attribute Name"
-                value={attr.assetAttributeName || ''}
+                value={attr.assetAttributeName || ""}
                 variant="outlined"
                 sx={{ mr: 1 }}
                 disabled
               />
               <TextField
                 label="Attribute Value"
-                value={attr.assetAttributeValue || ''}
-                onChange={(e) => handleAttributeChange(index, 'assetAttributeValue', e.target.value)}
+                value={attr.assetAttributeValue || ""}
+                onChange={(e) =>
+                  handleAttributeChange(
+                    index,
+                    "assetAttributeValue",
+                    e.target.value
+                  )
+                }
                 variant="outlined"
                 sx={{ mr: 1 }}
               />
             </Box>
           ))}
-          <Button variant="contained" color="primary" onClick={handleUpdateAsset}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdateAsset}
+          >
             Update Asset
           </Button>
         </Box>
@@ -430,14 +458,13 @@ const ViewAssets = ({assetTypeData,fetchAssetTypeData,setAssetTypeData}) => {
 };
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
 };
 
 export default ViewAssets;
-

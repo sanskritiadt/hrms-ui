@@ -226,6 +226,7 @@ import AddAppraisalDetails from './AddAppraisalDetails';
 import GetAllEmpAppraisalDetails from './GetAllEmpAppraisalDetails';
 import ViewSalaryDetails from './ViewSalaryDetails'
 import GetEmpLeavesDetails from './GetEmpLeavesDetails'
+import GetAllPriorTimeRequest from './GetAllPriorData';
 
 const Approuter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -258,9 +259,13 @@ const Approuter = () => {
                 path="/GetAllEmpAttendance"
                 element={<GetAllEmpAttendance />}
               />
+               <Route
+                path="/GetAllEmpAttendance"
+                element={<GetAllEmpAttendance />}
+              />
               <Route
-                path="/getallempattendence"
-                element={<GetAllAttendance />}
+                path="/GetAllPriorTimeRequest"
+                element={<GetAllPriorTimeRequest />}
               />
               <Route path="/createExpense" element={<CreateExpense />} />
               <Route path="/editexpenses/:id" element={<EditExpenses />} />
