@@ -634,7 +634,7 @@ const GetAllEmpAttendance = () => {
     employeeName: true,
     checkIn: true,
     checkOut: true,
-    workingHour: true,
+    totalWorkingHours: true,
     date: true,
     status: true,
     month: true,
@@ -754,10 +754,10 @@ const GetAllEmpAttendance = () => {
         isVisible: columnVisibility.checkOut,
       },
       {
-        accessorKey: "workingHour",
+        accessorKey: "totalWorkingHours",
         header: "Working Hour",
         meta: { filterVariant: "select" },
-        isVisible: columnVisibility.workingHour,
+        isVisible: columnVisibility.totalWorkingHours,
       },
       {
         accessorKey: "day",
