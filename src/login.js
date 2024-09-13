@@ -339,7 +339,7 @@ const Login = () => {
         // window.location.reload();
       })
       .catch((error) => {
-        toast.error(error, { position: "top-center", theme: "colored" });
+        toast.error(error.response?.data?.message || "Incorrect Credentials", { position: "top-center", theme: "colored" });
       });
   };
 
