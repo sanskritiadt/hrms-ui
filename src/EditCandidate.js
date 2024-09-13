@@ -10,7 +10,7 @@ const EditCandidate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     // const token = localStorage.getItem("response-token");
-    const  token = useSelector((state) => state.auth.token);
+    const token = useSelector((state) => state.auth.token);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState({
         candidateName: "",
@@ -22,12 +22,14 @@ const EditCandidate = () => {
         technicalStack: "",
         cvShortlisted: "",
         lastCTC: "",
+        expectedCTC: "",
+        passingYear: "",
         noticePeriod: "",
-        dob:""
+        dob: ""
     });
 
     useEffect(() => {
-        setLoading(true); 
+        setLoading(true);
         axios.get(`/apigateway/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -35,17 +37,18 @@ const EditCandidate = () => {
         })
             .then((response) => {
                 setData(response.data)
-               // console.log(response);
-                setLoading(false); 
+                // console.log(response);
+                setLoading(false);
             }).catch((error) => {
-                toast.error( error.response.data.message || "Error updating details" );
+                toast.error(error.response.data.message || "Error updating details");
                 // console.log(error);
                 // console.log(error.response.data)
-                setLoading(false); 
+                setLoading(false);
             })
     }, [])
     function HandleSubmit(e) {
         e.preventDefault();
+        setLoading(true);
         axios.put(`/apigateway/hrms/interviewCandidate/updateInterviewCandidate/${id}`, {
             candidateName: data.candidateName,
             emailId: data.emailId,
@@ -55,7 +58,9 @@ const EditCandidate = () => {
             workExperience: data.workExperience,
             technicalStack: data.technicalStack,
             cvShortlisted: data.cvShortlisted,
-            lastCTC: data.lastCTC,
+            lastCTC: parseFloat(data.lastCTC),
+            expectedCTC: parseFloat(data.expectedCTC),
+            passingYear: data.passingYear,
             noticePeriod: parseInt(data.noticePeriod),
             dob: data.dob
         }, {
@@ -64,20 +69,22 @@ const EditCandidate = () => {
             }
         }).then((response) => {
             console.log(response);
+            setLoading(false);
             // alert("Candidate data has been updated successfully.");
             toast.success("Candidate data has been updated successfully.", { position: 'top-center', theme: "colored" });
             navigate('/getcandidate');
         }).catch((error) => {
             handleAuthError(error);
             console.log(error);
+            setLoading(false);
             // toast.error("Something Bad happened try after sometime.", { position: 'top-center', theme: "colored" })
         })
     }
     function HandleDelete() {
         if (!window.confirm("Are you sure you want to delete this candidate?")) {
             return;
-          }
-          
+        }
+
         axios.delete(`/apigateway/hrms/interviewCandidate/interviewCandidateById/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -96,10 +103,10 @@ const EditCandidate = () => {
 
     return (
         <div className='container pt-3'>
-             {loading ? <LoadingPage/> : ''}
+            {loading ? <LoadingPage /> : ''}
             <div className='row'>
                 <div className='col-md-8 mx-auto'>
-                    <div className='card border-0 shadow'  style={{ width: "700px", height: "1050px" }}>
+                    <div className='card border-0 shadow' style={{ width: "700px", height: "1190px" }}>
                         <div className='card-body'>
                             <form className='container py-3  mb-3' onSubmit={HandleSubmit}>
                                 <div className="row mb-3">
@@ -118,7 +125,7 @@ const EditCandidate = () => {
                                             onChange={e => setData({ ...data, emailId: e.target.value })}
                                             type="email"
                                             id="emailId"
-                                            step='0.1' placeholder='enter amount'
+                                            step='0.1' placeholder='enter EmailId'
                                             className="form-control" />
                                     </div>
                                 </div>
@@ -156,7 +163,7 @@ const EditCandidate = () => {
                                         <input value={data.workExperience || ''}
                                             onChange={e => setData({ ...data, workExperience: e.target.value })}
                                             type="text" className="form-control"
-                                            placeholder='created By'
+                                            placeholder='Enter work Experience'
                                             id="workExperience" />
                                     </div>
                                 </div>
@@ -189,10 +196,31 @@ const EditCandidate = () => {
                                         <input value={data.lastCTC || ''}
                                             onChange={e => setData({ ...data, lastCTC: e.target.value })}
                                             type="number" className="form-control"
-                                            placeholder='paid By'
+                                            placeholder='enter Last CTC'
                                             id="lastCTC" />
                                     </div>
                                 </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="expectedCTC">Expected CTC</label>
+                                    <div className="col-sm-10">
+                                        <input value={data.expectedCTC || ''}
+                                            onChange={e => setData({ ...data, expectedCTC: e.target.value })}
+                                            type="number" className="form-control"
+                                            placeholder='enter expected CTC'
+                                            id="expectedCTC" />
+                                    </div>
+                                </div>
+                                <div className="row mb-3">
+                                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="passingYear">Passing Year </label>
+                                    <div className="col-sm-10">
+                                        <input value={data.passingYear || ''}
+                                            onChange={e => setData({ ...data, passingYear: e.target.value })}
+                                            type="text" className="form-control"
+                                            placeholder='enter passing year'
+                                            id="passingYear" />
+                                    </div>
+                                </div>
+
                                 <div className="row mb-3">
                                     <label htmlFor="inputPassword3" className="col-sm-2 col-form-label" name="noticePeriod">Notice Period </label>
                                     <div className="col-sm-10">
@@ -209,7 +237,7 @@ const EditCandidate = () => {
                                         <input value={data.dob || ''}
                                             onChange={e => setData({ ...data, dob: e.target.value })}
                                             type="date" className="form-control"
-                                            id="dob"/>
+                                            id="dob" />
                                     </div>
                                 </div>
                                 <div className="d-grid gap-2 col-6 mx-auto">
