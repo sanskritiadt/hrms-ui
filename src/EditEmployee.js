@@ -399,7 +399,7 @@ const EditEmployee = () => {
                       <div className="d-grid gap-2 col-6 mx-auto">
                         <button
                           className="btn btn-outline-danger"
-                          onClick={() => handleDelete(data.adtId)}
+                          onClick={() => handleDelete(data.employeeId)}
                           type="button"
                         >
                           Delete
