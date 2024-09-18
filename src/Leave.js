@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import LoadingPage from './LoadingPage'
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const LeaveForm = () => {
   const [loading, setLoading] = useState(false);
@@ -55,6 +57,13 @@ const LeaveForm = () => {
     setLeaveForm((prevState) => ({
       ...prevState,
       selectedDates: [...prevState.selectedDates, date],
+    }));
+  };
+
+  const removeDate = (dateToRemove) => {
+    setLeaveForm((prevState) => ({
+      ...prevState,
+      selectedDates: prevState.selectedDates.filter(date => format(date, "yyyy-MM-dd") !== format(dateToRemove, "yyyy-MM-dd")),
     }));
   };
 
@@ -193,7 +202,14 @@ const LeaveForm = () => {
                 />
                 <ul>
                   {selectedDates.map((date) => (
-                    <li key={date}>{format(date, "yyyy-MM-dd")}</li>
+                    <li key={date} style={{ display: "flex", alignItems: "center" }}>
+                      {format(date, "yyyy-MM-dd")}
+                      <FontAwesomeIcon
+                        icon={faTimes}
+                        onClick={() => removeDate(date)}
+                        style={{ marginLeft: '10px', cursor: 'pointer', color: 'red' }}
+                      />
+                    </li>
                   ))}
                 </ul>
                 <div style={{ display: "flex", justifyContent: "center" }}>
