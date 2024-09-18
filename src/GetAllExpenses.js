@@ -401,6 +401,11 @@ const Getallexpenses = () => {
         meta: { filterVariant: "select" },
       },
       {
+        accessorKey: "status",
+        header: "Status",
+        meta: { filterVariant: "select" },
+      },
+      {
         accessorKey: "edit",
         header: "Edit",
         meta: { filterable: false },
