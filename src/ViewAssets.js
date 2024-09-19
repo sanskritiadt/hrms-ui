@@ -208,6 +208,7 @@
 // };
 
 // export default ViewAssets;
+
 import React, { useState, useEffect } from "react";
 import {
   TextField,
@@ -225,6 +226,9 @@ import {
   IconButton,
   MenuItem,
   Modal,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -232,6 +236,8 @@ import LoadingPage from "./LoadingPage";
 import { useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
 
 const ViewAssets = ({
   assetTypeData,
@@ -294,8 +300,10 @@ const ViewAssets = ({
   };
 
   const handleEditAsset = (asset) => {
-    setEditingAsset(asset);
-    console.log(asset);
+    console.log("Editing asset:", asset.assetStatus);
+    const status =
+      asset.assetStatus || asset.status || asset.asset_status || "";
+    setEditingAsset({ ...asset, assetStatus: status });
     setAssetAttributes(asset.assetAttributeMappingList || []);
     setOpenModal(true);
   };
@@ -314,7 +322,14 @@ const ViewAssets = ({
       setLoading(true);
       const updatedAsset = {
         assetAdtId: editingAsset.assetAdtId,
-        assetAttributeMappingList: assetAttributes,
+        assetStatus: editingAsset.assetStatus,
+        assetAttributeMappingList: assetAttributes.filter(
+          (attr) =>
+            attr.assetAttributeValue !== "NULL" &&
+            attr.assetAttributeValue !== null &&
+            attr.assetAttributeValue !== "null" &&
+            attr.assetAttributeValue !== ""
+        ),
       };
       await axios.put(
         "/apigateway/hrms/masterAsset/updateAssetAttributeMappingByAssetAdtId",
@@ -336,6 +351,17 @@ const ViewAssets = ({
       toast.error(error.response?.data?.message || "Failed to update asset");
       setLoading(false);
     }
+  };
+  // const handleAddAttribute = () => {
+  //   setAssetAttributes([
+  //     ...assetAttributes,
+  //     { assetAttributeName: "", assetAttributeValue: "" },
+  //   ]);
+  // };
+
+  const handleRemoveAttribute = (index) => {
+    const updatedAttributes = assetAttributes.filter((_, i) => i !== index);
+    setAssetAttributes(updatedAttributes);
   };
 
   const handleAssetTypeChange = (event) => {
@@ -383,14 +409,21 @@ const ViewAssets = ({
               <TableRow key={asset.assetAdtId}>
                 <TableCell>{asset.assetAdtId}</TableCell>
                 <TableCell>{asset.assetTypeName}</TableCell>
-                {/* <TableCell>{asset.assetAttributeMappingList[0]?.assetAttributeName || 'N/A'}</TableCell> */}
                 <TableCell>
-                  {asset.assetAttributeMappingList.map((attr) => (
-                    <div key={attr.id}>
-                      <strong>{attr.assetAttributeName}:</strong>{" "}
-                      {attr.assetAttributeValue}
-                    </div>
-                  ))}
+                  {asset.assetAttributeMappingList
+                    .filter(
+                      (attr) =>
+                        attr.assetAttributeValue !== null &&
+                        attr.assetAttributeValue !== "null" &&
+                        attr.assetAttributeValue !== "NULL" &&
+                        attr.assetAttributeValue !== ""
+                    )
+                    .map((attr, index) => (
+                      <div key={index}>
+                        <strong>{attr.assetAttributeName}:</strong>
+                        {attr.assetAttributeValue}
+                      </div>
+                    ))}
                 </TableCell>
                 <TableCell>{asset.assetStatus || "N/A"}</TableCell>
                 <TableCell>
@@ -408,25 +441,50 @@ const ViewAssets = ({
           </TableBody>
         </Table>
       </TableContainer>
-
       <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        <Box sx={{ ...modalStyle, width: 400 }}>
-        {loading && <LoadingPage />}
+        <Box sx={{ ...modalStyle, width: 500 }}>
+          {loading && <LoadingPage />}
           <Typography id="modal-title" variant="h6" gutterBottom>
             Edit Asset Attributes
           </Typography>
+          {/* Status Field */}
+          {editingAsset && (
+            <FormControl fullWidth sx={{ mb: 3 }}>
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select
+                labelId="status-label"
+                id="status-select"
+                value={editingAsset?.assetStatus || ""}
+                label="Status"
+                onChange={(e) =>
+                  setEditingAsset((prev) => ({
+                    ...prev,
+                    assetStatus: e.target.value,
+                  }))
+                }
+              >
+                <MenuItem value="Available">Available</MenuItem>
+                <MenuItem value="Allotted">Allotted</MenuItem>
+                <MenuItem value="Defective">Defective</MenuItem>
+                <MenuItem value="Discarded">Discarded</MenuItem>
+              </Select>
+            </FormControl>
+          )}
           {assetAttributes.map((attr, index) => (
-            <Box key={index} sx={{ mb: 2 }}>
+            <Box
+              key={index}
+              sx={{ display: "flex", alignItems: "center", mb: 2 }}
+            >
               <TextField
                 label="Attribute Name"
                 value={attr.assetAttributeName || ""}
                 variant="outlined"
-                sx={{ mr: 1 }}
+                sx={{ mr: 1, flex: 1 }}
                 disabled
               />
               <TextField
@@ -440,17 +498,34 @@ const ViewAssets = ({
                   )
                 }
                 variant="outlined"
-                sx={{ mr: 1 }}
+                sx={{ flex: 1 }}
               />
+              <IconButton
+                color="error"
+                onClick={() => handleRemoveAttribute(index)} // Remove attribute
+              >
+                <CloseIcon />
+              </IconButton>
             </Box>
           ))}
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
-            onClick={handleUpdateAsset}
+            startIcon={<AddIcon />}
+            sx={{ mb: 2 }}
+            onClick={handleAddAttribute} // Add attribute
           >
-            Update Asset
-          </Button>
+            Add Attribute
+          </Button> */}
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleUpdateAsset}
+            >
+              Update Asset
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Box>
