@@ -281,7 +281,7 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
               <Form.Label style={{ color: 'black' }}>Adjustment</Form.Label>
               <Form.Control
                 type="number"
-                name="adjustment"
+                name="ajdustment"
                 value={formData.ajdustment}
                 onChange={handleChange}
                 placeholder="Enter amount"
