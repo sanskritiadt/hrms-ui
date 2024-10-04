@@ -563,9 +563,8 @@
 
 // export default GetAllEmpAttendance;
 
-
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import {
   Tooltip,
   Button,
@@ -585,16 +584,17 @@ import {
   TableRow,
   TextField,
   Checkbox,
-  FormControlLabel,
   ListItemText,
+  IconButton,
 } from "@mui/material";
+import {
+  Edit as EditIcon,
+  FileDownloadOutlined as FileDownloadOutlinedIcon,
+} from "@mui/icons-material";
 import { Form, Dropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { toast } from "react-toastify";
-import Graph from "./Graph";
-import LoadingPage from "./LoadingPage";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   flexRender,
   getCoreRowModel,
@@ -606,6 +606,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import Graph from "./Graph";
+import LoadingPage from "./LoadingPage";
+import CompOffLeaveSettlementModal from "./CompOffLeaveSettlementModal ";
 
 const GetAllEmpAttendance = () => {
   const token = useSelector((state) => state.auth.token);
@@ -622,14 +625,15 @@ const GetAllEmpAttendance = () => {
     navigate("/GetAllPriorTimeRequest");
   };
 
-
   const [loading, setLoading] = useState(false);
   const [getData, setData] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [showGraph, setShowGraph] = useState(false);
-  const [selectedColumns, setSelectedColumns] = useState([]);
   const [error, setError] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState([]);
+  const [updateRow, setNewData] = useState(null); 
+  const [selectedRowData, setSelectedRowData] = useState();
+
   const [columnVisibility, setColumnVisibility] = useState({
     employeeName: true,
     checkIn: true,
@@ -640,7 +644,9 @@ const GetAllEmpAttendance = () => {
     month: true,
     year: true,
     day: true,
+    edit: true,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const submit = (e) => {
     e.preventDefault();
@@ -725,6 +731,22 @@ const GetAllEmpAttendance = () => {
     }));
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleRowClick = (row) => {
+    setNewData()
+    setSelectedRowData(row);
+    console.log("row data",row);
+    console.log("row data",row.date);
+    console.log("row data",row.employeeId);
+    handleOpenModal();  
+  };
+
   const toggleAllColumns = (isVisible) => {
     const updatedVisibility = {};
     Object.keys(columnVisibility).forEach((key) => {
@@ -788,6 +810,20 @@ const GetAllEmpAttendance = () => {
         header: "Year",
         meta: { filterVariant: "select" },
         isVisible: columnVisibility.year,
+      },
+      {
+        accessorKey: "edit",
+        header: "Edit",
+        meta: { filterable: false },
+        cell: ({ row }) =>
+          row.original.status === "Comp_Off" ? (
+            <Tooltip title="Edit">
+              <IconButton color="primary"  onClick={() => handleRowClick(row.original)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          ) : null,
+        isVisible: columnVisibility.edit,
       },
     ],
     [columnVisibility]
@@ -925,15 +961,15 @@ const GetAllEmpAttendance = () => {
                 Download
               </Button>
             </Tooltip>
-          
-                <Button
-                  onClick={handlePriorTimeRequest}
-                  variant="contained"
-                  style={{ marginRight: "20px", height: "40px", marginTop: "20px" }}
-                >
-                Priortime Request  
-                </Button>
-              
+
+            <Button
+              onClick={handlePriorTimeRequest}
+              variant="contained"
+              style={{ marginRight: "20px", height: "40px", marginTop: "20px" }}
+            >
+              Priortime Request
+            </Button>
+
             <Button
               onClick={handleOpen}
               variant="contained"
@@ -1083,6 +1119,11 @@ const GetAllEmpAttendance = () => {
           </Table>
         </TableContainer>
       </div>
+      <CompOffLeaveSettlementModal
+        open={isModalOpen}
+        handleClose={handleCloseModal}
+        selectedRowData={selectedRowData}
+      />
     </div>
   );
 };
