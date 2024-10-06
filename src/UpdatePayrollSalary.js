@@ -1044,7 +1044,7 @@ const UpdatePayrollSalary = () => {
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleBasicBlur = () => {
+  const handleBasic = () => {
     const payload = {
       ...data,
       onlyBasic: true,
@@ -1283,11 +1283,12 @@ const UpdatePayrollSalary = () => {
                               value={data.basic || ""}
                               name="basic"
                               onChange={handleInputChange}
-                              onBlur={handleBasicBlur}
+                              // onBlur={handleBasicBlur}
                               type="number"
                               className="form-control"
                               id="basic"
                             />
+                            <button onClick={handleBasic}>calculate</button>
                           </div>
                         </div>
                         <div className="row mb-3">
