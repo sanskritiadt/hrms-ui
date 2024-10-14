@@ -24,6 +24,7 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
     absentDeduction: '',
     grossDeduction: '',
     ajdustment: '',
+    grossSalary:'',
     adhoc: '',
     netPay: '',
     year: '',
@@ -54,6 +55,7 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
         netPay: salaryInfo.netPay || 0,
         year: salaryInfo.year || '',
         month: salaryInfo.month || '',
+        grossSalary:salaryInfo.grossSalary|| 0,
         comment: '',
         employeeName:'',
         bankName:'',
@@ -86,6 +88,7 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
           medicalAmount: parseFloat(formData.medicalAmount || 0),
           absentDeduction: parseFloat(formData.absentDeduction || 0),
           grossDeduction: parseFloat(formData.grossDeduction || 0),
+          grossSalary: parseFloat(formData.grossSalary || 0),
           ajdustment: parseFloat(formData.ajdustment || 0),
           adhoc: parseFloat(formData.adhoc || 0),
           netPay: parseFloat(formData.netPay || 0),
@@ -96,6 +99,7 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
           bankName:'',
           accountNo:'',
         },
+        
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,6 +108,7 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
       )
       .then((response) => {
         toast.success(response.data);
+        console.log("Initial response:", response.data);
        // setLoading(false);
         const userConfirmed = window.confirm("Are you sure you want to proceed with this calculated net amount: "+ response.data.netSalary);
         if (userConfirmed) {
@@ -130,7 +135,7 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
           console.log('User cancelled the action');
         }
         //setNetSalaryConfirmation(userConfirmed);
-        console.log("response", response.data)
+        console.log("response is here after userConfirmation", response.data)
         //  handleConfirmation
         setShowModal(false);
         setLoading(false);  
@@ -287,9 +292,19 @@ function RegeneratePayslip({ show, onHide, salaryInfo, fetchSalaryDetails }) {
                 placeholder="Enter amount"
               />
             </Form.Group>
+            <Form.Group as={Col} controlId="formGridVariable">
+              <Form.Label style={{ color: 'black' }}> Gross Salary</Form.Label>
+              <Form.Control
+                type="number"
+                name="grossSalary"
+                value={formData.grossSalary}
+                onChange={handleChange}
+                placeholder="Enter amount"
+              />
+            </Form.Group>
             <Form.Group as={Col} controlId="formGridBonus">
               <Form.Label style={{ color: 'black' }}>Net Salary</Form.Label>
-              <Form.Control
+              <Form.Control   
                 type="number"
                 name="netPay"
                 value={formData.netPay}

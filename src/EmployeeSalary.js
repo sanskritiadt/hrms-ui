@@ -62,6 +62,15 @@ function EmployeeSalary() {
         meta: { filterVariant: "select" }
       },
       {
+        accessorKey: "grossSalary",
+        header: "Gross Salary",
+        meta: { filterable: true },
+        cell: (info) => {
+          const value = info.getValue();
+          return value !== null ? `₹${value.toFixed(2)}` : 'N/A';
+        },
+      },
+      {
         accessorKey: "bankName",
         header: "Bank Name",
         meta: { filterVariant: "select" }
@@ -96,11 +105,13 @@ function EmployeeSalary() {
         header: "Employee Esic",
         meta: { filterable: true },
       },
+      
       {
         accessorKey: "medicalAmount",
         header: "Medical Amount",
         meta: { filterable: true },
       },
+      
       {
         accessorKey: "month",
         header: "Month",

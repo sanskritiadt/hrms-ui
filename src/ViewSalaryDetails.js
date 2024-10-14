@@ -117,6 +117,11 @@ function ViewSalaryDetails() {
         meta: { filterable: true },
       },
       {
+        accessorKey: "netPay",
+        header: " NetPay",
+        meta: { filterable: true },
+      },
+      {
         accessorKey: "employeeEsic",
         header: "Employee Esic",
         meta: { filterable: true },
